@@ -6,42 +6,30 @@ namespace BigDataPathFinding.Models.Hadi
 {
     public class SearchData : ISearchData
     {
-        private readonly Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
+        public Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
         private readonly SortedSet<NodeData> _queue = new SortedSet<NodeData>();
 
-        public SearchData(NodeData source, NodeData target)
+        public SearchData(NodeData source , NodeData target)
         {
             _queue.Add(source);
-            _nodeSet[source.Id] = source;
-            _nodeSet[target.Id] = target;
+            NodeSet[source.Id] = source;
+            NodeSet[target.Id] = target;
         }
 
         public SearchData(NodeData source)
         {
             _queue.Add(source);
-            _nodeSet[source.Id] = source;
+            NodeSet[source.Id] = source;
         }
 
 
-        public void AddToNodeSet(NodeData node)
-        {
-            _nodeSet[node.Id] = node;
-        }
+        public void AddToNodeSet(NodeData node) => NodeSet[node.Id] = node;
 
-        public void AddToQueue(NodeData node)
-        {
-            _queue.Add(node);
-        }
+        public void AddToQueue(NodeData node) => _queue.Add(node);
 
-        public NodeData GetNode(Guid id)
-        {
-            return _nodeSet?[id];
-        }
+        public NodeData GetNode(Guid id) => NodeSet?[id];
 
-        public bool IsEmpty()
-        {
-            return _queue.Count == 0;
-        }
+        public bool IsEmpty() => _queue.Count == 0;
 
         public NodeData PopBestCurrentNode()
         {
