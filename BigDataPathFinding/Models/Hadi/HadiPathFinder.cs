@@ -8,11 +8,9 @@ namespace BigDataPathFinding.Models.Hadi
 {
     public class HadiPathFinder : PathFinder
     {
-
         private ISearchData searchData;
 
-
-        public HadiPathFinder(IDatabase database, IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(database, metadata, sourceId, targetId, directed)
+        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata, sourceId, targetId, directed)
         {
         }
 
@@ -85,5 +83,10 @@ namespace BigDataPathFinding.Models.Hadi
         }
 
         private NodeData GetNode(Guid node) => searchData.GetNode(node);
+
+        public override Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
