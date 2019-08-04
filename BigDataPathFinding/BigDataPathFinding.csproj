@@ -53,7 +53,7 @@
     <Compile Include="Models\Hadi\SearchData.cs" />
     <Compile Include="Models\IDatabase.cs" />
     <Compile Include="Models\IMetadata.cs" />
-    <Compile Include="Models\MahdiDictionary.cs" />
+    <Compile Include="Models\Mahdi\SearchData.cs" />
     <Compile Include="Models\PathFinder.cs" />
     <Compile Include="Models\ISearchData.cs" />
     <Compile Include="Models\Node.cs" />
