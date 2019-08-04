@@ -9,9 +9,8 @@ namespace BigDataPathFinding.Models.Hadi
     public class HadiPathFinder : PathFinder
     {
 
-        private ISearchData searchDate;
+        private ISearchData searchData;
 
-        public ISearchData SearchDate => searchDate;
 
         public HadiPathFinder(IDatabase database, IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(database, metadata, sourceId, targetId, directed)
         {
@@ -19,12 +18,12 @@ namespace BigDataPathFinding.Models.Hadi
 
         public override void FindPath()
         {
-            searchDate = new SearchData(new NodeData(SourceId, 0));
+            searchData = new SearchData(new NodeData(SourceId, 0));
 
 
-            while (!SearchDate.IsEmpty())
+            while (!searchData.IsEmpty())
             {
-                var node = SearchDate.PopBestCurrentNode();
+                var node = searchData.PopBestCurrentNode();
 
                 if (node.Explored)
                     continue;
@@ -76,7 +75,7 @@ namespace BigDataPathFinding.Models.Hadi
 
         private NodeData AddToNodeSet(Adjacent adjacent)
         {
-            searchDate.AddToNodeSet(new NodeData(adjacent.Id, Double.MaxValue));
+            searchData.AddToNodeSet(new NodeData(adjacent.Id, Double.MaxValue));
             return GetNode(adjacent.Id);
         }
 
@@ -85,6 +84,6 @@ namespace BigDataPathFinding.Models.Hadi
             return GetNode(TargetId) == null || node.Distance + adjacent.Weight < GetNode(TargetId).Distance;
         }
 
-        private NodeData GetNode(Guid node) => searchDate.GetNode(node);
+        private NodeData GetNode(Guid node) => searchData.GetNode(node);
     }
 }
