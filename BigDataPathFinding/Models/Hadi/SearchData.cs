@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BigDataPathFinding.Models.Hadi
+{
+    public class SearchData : ISearchData
+    {
+        private Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
+        private SortedSet<NodeData> _queue = new SortedSet<NodeData>();
+
+        public SearchData(NodeData source)
+        {
+            _queue.Add(source);
+            _nodeSet[source.Id] = source;
+        }
+
+        public void AddToNodeSet(NodeData node) => _nodeSet[node.Id] = node;
+
+        public void AddToQueue(NodeData node) => _queue.Add(node);
+
+        public NodeData GetNode(Guid id) => _nodeSet?[id];
+
+        public bool IsEmpty() => _queue.Count == 0;
+
+        public NodeData PopBestCurrentNode()
+        {
+            var first = _queue.First();
+            _queue.Remove(first);
+            return first;
+        }
+    }
+}

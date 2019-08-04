@@ -4,7 +4,7 @@ namespace BigDataPathFinding.Models
 {
     public interface ISearchData
     {
-        Guid PopBestCurrentNode();
+        NodeData PopBestCurrentNode();
 
         void AddToQueue(NodeData node);
 
