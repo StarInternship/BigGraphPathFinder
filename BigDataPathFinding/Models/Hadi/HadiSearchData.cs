@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace BigDataPathFinding.Models.Hadi
 {
-    class HadiSearchData : ISearchData
+    public class HadiSearchData : ISearchData
     {
+        private Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
+        private SortedSet<NodeData> _queue = new SortedSet<NodeData>();
+
+        public HadiSearchData(NodeData source)
+        {
+            _queue.Add(source);
+            _nodeSet[source.Id] = source;
+        }
+
         public void AddToNodeSet(NodeData node)
         {
             throw new NotImplementedException();
