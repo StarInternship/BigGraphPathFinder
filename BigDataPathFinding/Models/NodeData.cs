@@ -41,7 +41,7 @@ namespace BigDataPathFinding.Models
             Distance = distance;
         }
 
-        public void addAdjacent(Adjacent adjacent)
+        public void AddAdjacent(Adjacent adjacent)
         {
             PreviousAdjacents.Add(adjacent);
         }

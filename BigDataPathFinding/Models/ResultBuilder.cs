@@ -43,7 +43,7 @@ namespace BigDataPathFinding.Models
             {
                 if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
 
-                _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
+                _result.AddEdge(adjacent.Id, node.Id, adjacent.Weight);
                 currentNodes.Add(_nodeSet[adjacent.Id]);
             }
         }
