@@ -60,6 +60,7 @@
     <Compile Include="Models\NodeData.cs" />
     <Compile Include="Models\Mahdi\MahdiPathFinder.cs" />
     <Compile Include="Models\ResultBuilder.cs" />
+    <Compile Include="Models\ResultNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
