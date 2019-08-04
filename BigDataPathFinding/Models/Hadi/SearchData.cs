@@ -15,13 +15,25 @@ namespace BigDataPathFinding.Models.Hadi
             _nodeSet[source.Id] = source;
         }
 
-        public void AddToNodeSet(NodeData node) => _nodeSet[node.Id] = node;
+        public void AddToNodeSet(NodeData node)
+        {
+            _nodeSet[node.Id] = node;
+        }
 
-        public void AddToQueue(NodeData node) => _queue.Add(node);
+        public void AddToQueue(NodeData node)
+        {
+            _queue.Add(node);
+        }
 
-        public NodeData GetNode(Guid id) => _nodeSet?[id];
+        public NodeData GetNode(Guid id)
+        {
+            return _nodeSet?[id];
+        }
 
-        public bool IsEmpty() => _queue.Count == 0;
+        public bool IsEmpty()
+        {
+            return _queue.Count == 0;
+        }
 
         public NodeData PopBestCurrentNode()
         {

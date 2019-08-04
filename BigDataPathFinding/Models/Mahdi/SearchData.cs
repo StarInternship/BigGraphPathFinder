@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BigDataPathFinding.Models.Mahdi
 {
-    class SearchData
+    internal class SearchData
     {
         private readonly Dictionary<Guid, NodeData> _candidatesDictionary1 = new Dictionary<Guid, NodeData>();
 
@@ -15,9 +13,11 @@ namespace BigDataPathFinding.Models.Mahdi
 
         private readonly Dictionary<Guid, NodeData> _discoveries = new Dictionary<Guid, NodeData>();
 
-        public void MoveToDiscovery(Guid node)
+        public void MoveToDiscovery(Guid node, NodeData data)
         {
-            _discoveries.Add(node, _candidatesDictionary1[node]);
+            _candidatesDictionary1.Remove(node);
+            _candidatesDictionary2.Remove(data);
+            _discoveries.Add(node, data);
         }
 
         public void AddCandidate(Guid node, NodeData nodeData)
@@ -56,17 +56,9 @@ namespace BigDataPathFinding.Models.Mahdi
             return _candidatesDictionary1[node];
         }
 
-        public void RemoveBestCandidate()
-        {
-            var vertex = _candidatesDictionary2.First().Value;
-            var bestAccesses = _candidatesDictionary2.First().Key;
-            _candidatesDictionary1.Remove(vertex);
-            _candidatesDictionary2.Remove(bestAccesses);
-        }
-
         public bool HasCandidate()
         {
-            return _candidatesDictionary1.Count == 0;
+            return _candidatesDictionary1.Count > 0;
         }
 
         public void UpdateCandidate(Guid node, NodeData data)
