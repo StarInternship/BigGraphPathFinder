@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace ShortestPath_ElasticSearch.Models
+namespace BigDataPathFinding.Models
 {
     public interface ISearchData
     {
         Guid PopBestCurrentNode();
 
-        void AddNode(Guid id);
+        void AddToQueue(NodeData node);
+
+        void AddToNodeSet(NodeData node);
+
+        NodeData GetNode(Guid id);
 
         bool IsEmpty();
     }

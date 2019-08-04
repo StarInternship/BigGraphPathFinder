@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace BigDataPathFinding.Models
 {
-    public class Node
+    public class NodeData
     {
         public Guid Id { get; }
-        public string Name { get; }
-
-        public Node(Guid id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
-        //TODO: override methods
+        public bool Explored { get; set; }
+        public double Distance { get; set; }
+        public HashSet<Adjacent> PreviousAdjacents { get; } = new HashSet<Adjacent>();
     }
 }

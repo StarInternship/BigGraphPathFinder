@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShortestPath_ElasticSearch.Models
+namespace BigDataPathFinding.Models
 {
     public interface IDatabase
     {

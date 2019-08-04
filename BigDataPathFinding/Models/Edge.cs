@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ShortestPath_ElasticSearch.Models
+namespace BigDataPathFinding.Models
 {
     public class Edge
     {
@@ -17,5 +17,7 @@ namespace ShortestPath_ElasticSearch.Models
             TargetId = targetId;
             Weight = weight;
         }
+
+        //TODO: override methods
     }
 }
