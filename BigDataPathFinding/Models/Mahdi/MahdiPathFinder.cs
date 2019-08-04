@@ -85,5 +85,10 @@ namespace BigDataPathFinding.Models.Mahdi
             }
             HashSet<>
         }
+
+        public override Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

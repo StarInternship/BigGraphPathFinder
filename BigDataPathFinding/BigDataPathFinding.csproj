@@ -50,7 +50,7 @@
     <Compile Include="Models\FileGraph\FileNode.cs" />
     <Compile Include="Models\Graph.cs" />
     <Compile Include="Models\Hadi\HadiPathFinder.cs" />
-    <Compile Include="Models\Hadi\HadiSearchData.cs" />
+    <Compile Include="Models\Hadi\SearchData.cs" />
     <Compile Include="Models\IDatabase.cs" />
     <Compile Include="Models\IMetadata.cs" />
     <Compile Include="Models\Mahdi\SearchData.cs" />
@@ -59,6 +59,7 @@
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeData.cs" />
     <Compile Include="Models\Mahdi\MahdiPathFinder.cs" />
+    <Compile Include="Models\ResultBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
