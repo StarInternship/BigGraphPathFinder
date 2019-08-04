@@ -8,8 +8,8 @@ namespace BigDataPathFinding.Models
 {
     public class Graph
     {
-        private readonly HashSet<Node> nodes = new HashSet<Node>();
-        private readonly HashSet<Edge> edges = new HashSet<Edge>();
+        public HashSet<Node> nodes { get; } = new HashSet<Node>();
+        public HashSet<Edge> edges { get; } = new HashSet<Edge>();
 
         public void AddEdge(Node source, Node target, double weight)
         {
