@@ -17,6 +17,16 @@ namespace BigDataPathFinding.Models
             Name = name;
         }
 
-        //TODO: override methods
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj) return true;
+            return obj is Node node && node.Id.Equals(Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }
