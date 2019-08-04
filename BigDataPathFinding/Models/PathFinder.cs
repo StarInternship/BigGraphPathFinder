@@ -4,17 +4,17 @@ namespace BigDataPathFinding.Models
 {
     public abstract class PathFinder
     {
-        protected readonly bool directed;
-        protected readonly IMetadata metadata;
-        protected readonly Guid sourceId;
-        protected readonly Guid targetId;
+        protected readonly bool Directed;
+        protected readonly IMetadata Metadata;
+        protected readonly Guid SourceId;
+        protected readonly Guid TargetId;
 
         protected PathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
         {
-            this.metadata = metadata;
-            this.sourceId = sourceId;
-            this.targetId = targetId;
-            this.directed = directed;
+            Metadata = metadata;
+            SourceId = sourceId;
+            TargetId = targetId;
+            Directed = directed;
         }
 
         public Graph Result { get; } = new Graph();

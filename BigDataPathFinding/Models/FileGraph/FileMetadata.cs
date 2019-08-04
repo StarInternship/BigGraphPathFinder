@@ -5,12 +5,21 @@ namespace BigDataPathFinding.Models.FileGraph
 {
     public class FileMetadata : IMetadata
     {
-        private readonly IDatabase database;
+        private readonly FileGraph _database;
 
-        public FileMetadata(IDatabase database) => this.database = database;
+        public FileMetadata(FileGraph database)
+        {
+            _database = database;
+        }
 
-        public IEnumerable<Adjacent> GetInputAdjacents(Guid id) => ((FileNode)database.GetNode(id)).InputAdjucents;
+        public IEnumerable<Adjacent> GetInputAdjacents(Guid id)
+        {
+            return ((FileNode) _database.GetNode(id)).InputAdjucents;
+        }
 
-        public IEnumerable<Adjacent> GetOutputAdjacents(Guid id) => ((FileNode)database.GetNode(id)).OutputAdjucents;
+        public IEnumerable<Adjacent> GetOutputAdjacents(Guid id)
+        {
+            return ((FileNode) _database.GetNode(id)).OutputAdjucents;
+        }
     }
 }
