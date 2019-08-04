@@ -15,7 +15,7 @@ namespace BigDataPathFinding.Models.Hadi
 
         public override void FindPath()
         {
-            throw new NotImplementedException();
+            var 
         }
     }
 }
