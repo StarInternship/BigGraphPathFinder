@@ -5,21 +5,17 @@ namespace BigDataPathFinding.Models
 {
     public class NodeData : IComparable<NodeData>
     {
-        public NodeData(Guid id)
-        {
-            Id = id;
-        }
+        public Guid Id { get; }
+        public bool Explored { get; set; } = false;
+        public double Distance { get; set; }
+        public HashSet<Adjacent> PreviousAdjacents { get; } = new HashSet<Adjacent>();
+
 
         public NodeData(Guid id, double distance)
         {
             Id = id;
             Distance = distance;
         }
-
-        public Guid Id { get; }
-        public bool Explored { get; set; }
-        public double Distance { get; set; }
-        public HashSet<Adjacent> PreviousAdjacents { get; } = new HashSet<Adjacent>();
 
         public int CompareTo(NodeData other)
         {
@@ -38,5 +34,19 @@ namespace BigDataPathFinding.Models
         {
             return Id.GetHashCode();
         }
+
+        public void ClearAdjacentsAndUpdateDistance(Adjacent adjacent , double distance)
+        {
+            PreviousAdjacents.Clear();
+            PreviousAdjacents.Add(adjacent);
+            Distance = distance;
+        }
+
+        public void addAdjacent(Adjacent adjacent)
+        {
+            PreviousAdjacents.Add(adjacent);
+        }
+
+       
     }
 }
