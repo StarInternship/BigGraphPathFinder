@@ -55,6 +55,7 @@
     <Compile Include="Models\ISearchData.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeData.cs" />
+    <Compile Include="Models\MahdiPathFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
