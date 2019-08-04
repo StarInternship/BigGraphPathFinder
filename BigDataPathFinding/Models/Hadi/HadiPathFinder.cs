@@ -9,13 +9,17 @@ namespace BigDataPathFinding.Models.Hadi
     public class HadiPathFinder : PathFinder
     {
 
-        public HadiPathFinder(IDatabase database, IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(database, metadata, sourceId, targetId, directed)
+        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata, sourceId, targetId, directed)
         {
         }
 
         public override void FindPath()
         {
-            var 
+        }
+
+        public override Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            throw new NotImplementedException();
         }
     }
 }

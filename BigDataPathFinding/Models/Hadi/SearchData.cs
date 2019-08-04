@@ -6,8 +6,8 @@ namespace BigDataPathFinding.Models.Hadi
 {
     public class SearchData : ISearchData
     {
-        private Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
-        private SortedSet<NodeData> _queue = new SortedSet<NodeData>();
+        private readonly Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
+        private readonly SortedSet<NodeData> _queue = new SortedSet<NodeData>();
 
         public SearchData(NodeData source)
         {
