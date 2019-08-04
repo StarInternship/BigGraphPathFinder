@@ -9,11 +9,19 @@ namespace BigDataPathFinding.Models.Hadi
         private Dictionary<Guid, NodeData> _nodeSet = new Dictionary<Guid, NodeData>();
         private SortedSet<NodeData> _queue = new SortedSet<NodeData>();
 
+        public SearchData(NodeData source , NodeData target)
+        {
+            _queue.Add(source);
+            _nodeSet[source.Id] = source;
+            _nodeSet[target.Id] = target;
+        }
+
         public SearchData(NodeData source)
         {
             _queue.Add(source);
             _nodeSet[source.Id] = source;
         }
+
 
         public void AddToNodeSet(NodeData node) => _nodeSet[node.Id] = node;
 
