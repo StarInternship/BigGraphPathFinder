@@ -24,6 +24,11 @@ namespace BigDataPathFinding.Models.FileGraph
             return _nodes?[id];
         }
 
+        public Guid GetId(string name)
+        {
+            return !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
+        }
+
         private void ReadEdge(string edge)
         {
             var groups = Regex.Matches(edge)[0].Groups;

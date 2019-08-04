@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigDataPathFinding", "BigDataPathFinding\BigDataPathFinding.csproj", "{0A14D064-D88E-43D0-BB4F-A567A44BDB82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigDataPathFindingTests", "BigDataPathFindingTests\BigDataPathFindingTests.csproj", "{5CC16626-CEAA-407B-B4A8-68E7770FEF22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0A14D064-D88E-43D0-BB4F-A567A44BDB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A14D064-D88E-43D0-BB4F-A567A44BDB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A14D064-D88E-43D0-BB4F-A567A44BDB82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CC16626-CEAA-407B-B4A8-68E7770FEF22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CC16626-CEAA-407B-B4A8-68E7770FEF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CC16626-CEAA-407B-B4A8-68E7770FEF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CC16626-CEAA-407B-B4A8-68E7770FEF22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

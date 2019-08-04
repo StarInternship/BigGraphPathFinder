@@ -15,6 +15,10 @@ namespace BigDataPathFinding.Models
         public Guid TargetId { get; }
         public double Weight { get; }
 
-        //TODO: override methods
+        public override bool Equals(object obj)
+        {
+            if (this == obj) return true;
+            return obj is Edge edge && SourceId.Equals(edge.SourceId) && TargetId.Equals(edge.TargetId) && Math.Abs(Weight - edge.Weight) < 0.01;
+        }
     }
 }
