@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.Mahdi
 {
-    internal class MahdiPathFinder : PathFinder
+    public class MahdiPathFinder : PathFinder
     {
         private readonly SearchData _searchData = new SearchData();
         private double _checkingDistance;

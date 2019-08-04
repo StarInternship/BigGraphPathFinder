@@ -13,7 +13,7 @@ namespace BigDataPathFindingTests.Models.Hadi
         private const string resultFilesPath = @"../../../results/";
 
         [TestMethod()]
-        public void FilePathFinderTest()
+        public void HadiPathFinderTest()
         {
             var database = new FileGraph(testFilesPath + "K3AllPathSearch.csv");
             var metadata = new FileMetadata(database);
