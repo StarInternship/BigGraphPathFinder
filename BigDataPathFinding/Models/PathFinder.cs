@@ -5,10 +5,10 @@ namespace BigDataPathFinding.Models
 {
     public abstract class PathFinder
     {
+        protected readonly bool Directed;
         protected readonly IMetadata Metadata;
         protected readonly Guid SourceId;
         protected readonly Guid TargetId;
-        protected readonly bool Directed;
 
         protected PathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
         {

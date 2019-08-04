@@ -8,7 +8,10 @@ namespace BigDataPathFinding.Models
         public Dictionary<Guid, ResultNode> Nodes { get; } = new Dictionary<Guid, ResultNode>();
         public HashSet<Edge> Edges { get; } = new HashSet<Edge>();
 
-        public void AddEdge(Guid source, Guid target, double weight) => AddEdge(GetNode(source), GetNode(target), weight);
+        public void AddEdge(Guid source, Guid target, double weight)
+        {
+            AddEdge(GetNode(source), GetNode(target), weight);
+        }
 
         private ResultNode GetNode(Guid id) => Nodes?[id];
 
