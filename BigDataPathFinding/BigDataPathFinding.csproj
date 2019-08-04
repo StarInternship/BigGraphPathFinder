@@ -45,9 +45,9 @@
   <ItemGroup>
     <Compile Include="Models\Adjacent.cs" />
     <Compile Include="Models\Edge.cs" />
-    <Compile Include="Models\FileGraph.cs" />
-    <Compile Include="Models\FileMetadata.cs" />
-    <Compile Include="Models\FileNode.cs" />
+    <Compile Include="Models\FileGraph\FileGraph.cs" />
+    <Compile Include="Models\FileGraph\FileMetadata.cs" />
+    <Compile Include="Models\FileGraph\FileNode.cs" />
     <Compile Include="Models\Graph.cs" />
     <Compile Include="Models\IDatabase.cs" />
     <Compile Include="Models\IMetadata.cs" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.FileGraph
 {
     public class FileGraph : IDatabase
     {
