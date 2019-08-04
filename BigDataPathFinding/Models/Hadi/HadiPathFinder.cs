@@ -8,7 +8,7 @@ namespace BigDataPathFinding.Models.Hadi
 {
     public class HadiPathFinder : PathFinder
     {
-        private ISearchData searchData;
+        private SearchData searchData;
 
         public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata, sourceId, targetId, directed)
         {
@@ -40,7 +40,7 @@ namespace BigDataPathFinding.Models.Hadi
                         UpdateInAdjacent(node, adjacent);
                     }
                 }
-            }
+            } 
         }
 
 
@@ -59,13 +59,13 @@ namespace BigDataPathFinding.Models.Hadi
 
             if (node.Distance + adjacent.Weight < outAdjacent.Distance)
             {
-                outAdjacent.ClearAdjacentsAndUpdateDistance(adjacent, node.Distance + adjacent.Weight);
+                outAdjacent.ClearAdjacentsAndUpdateDistance(new Adjacent(node.Id, adjacent.Weight), node.Distance + adjacent.Weight);
             }
 
 
             else if (node.Distance + adjacent.Weight == outAdjacent.Distance)
             {
-                outAdjacent.addAdjacent(adjacent);
+                outAdjacent.addAdjacent(new Adjacent(node.Id, adjacent.Weight));
             }
 
 
@@ -86,7 +86,7 @@ namespace BigDataPathFinding.Models.Hadi
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet()
         {
-            throw new NotImplementedException();
+            return searchData.NodeSet;
         }
     }
 }
