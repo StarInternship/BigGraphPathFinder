@@ -18,13 +18,10 @@ namespace BigDataPathFinding.Models
 
         public Graph Build(Guid targetId)
         {
-            if (!_nodeSet.ContainsKey(targetId))
-            {
-                return _result;
-            }
+            if (!_nodeSet.ContainsKey(targetId)) return _result;
 
             _result.AddNode(new ResultNode(_database.GetNode(targetId)));
-            var currentNodes = new HashSet<NodeData> { _nodeSet[targetId] };
+            var currentNodes = new HashSet<NodeData> {_nodeSet[targetId]};
 
             while (currentNodes.Count > 0)
             {
@@ -44,10 +41,7 @@ namespace BigDataPathFinding.Models
         {
             foreach (var adjacent in node.PreviousAdjacents)
             {
-                if (!_result.ContainsNode(adjacent.Id))
-                {
-                    _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
-                }
+                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
 
                 _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
                 currentNodes.Add(_nodeSet[adjacent.Id]);
