@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.FileGraph
 {
     public class FileGraph : IDatabase
     {
         private static readonly Regex Regex = new Regex(@"^(.+),(.+),(\d+.?\d*)$");
-        private readonly Dictionary<Guid, FileNode> nodes = new Dictionary<Guid, FileNode>();
-        private readonly Dictionary<string, Guid> ids = new Dictionary<string, Guid>();
+        private readonly Dictionary<string, Guid> _ids = new Dictionary<string, Guid>();
+        private readonly Dictionary<Guid, FileNode> _nodes = new Dictionary<Guid, FileNode>();
 
         public FileGraph(string path)
         {
             if (!File.Exists(path)) return;
             var edges = File.ReadAllLines(path);
 
-            foreach (var edge in edges)
-            {
-                ReadEdge(edge);
-            }
+            foreach (var edge in edges) ReadEdge(edge);
+        }
+
+        public Node GetNode(Guid id)
+        {
+            return _nodes?[id];
         }
 
         private void ReadEdge(string edge)
@@ -35,21 +37,19 @@ namespace BigDataPathFinding.Models
 
         private void AddEdge(string sourceName, string targetName, double weight)
         {
-            if (!ids.ContainsKey(sourceName)) AddNode(sourceName);
-            if (!ids.ContainsKey(targetName)) AddNode(targetName);
+            if (!_ids.ContainsKey(sourceName)) AddNode(sourceName);
+            if (!_ids.ContainsKey(targetName)) AddNode(targetName);
 
-            nodes[ids[sourceName]].AddOutput(ids[targetName], weight);
-            nodes[ids[targetName]].AddInput(ids[sourceName], weight);
+            _nodes[_ids[sourceName]].AddOutput(_ids[targetName], weight);
+            _nodes[_ids[targetName]].AddInput(_ids[sourceName], weight);
         }
 
         private void AddNode(string name)
         {
             var id = Guid.NewGuid();
             var node = new FileNode(id, name);
-            ids[name] = id;
-            nodes[id] = node;
+            _ids[name] = id;
+            _nodes[id] = node;
         }
-
-        public Node GetNode(Guid id) => nodes?[id];
     }
 }
