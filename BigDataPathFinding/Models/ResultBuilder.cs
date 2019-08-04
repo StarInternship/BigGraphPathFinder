@@ -23,6 +23,7 @@ namespace BigDataPathFinding.Models
                 return _result;
             }
 
+            _result.AddNode(new ResultNode(_database.GetNode(targetId)));
             var currentNodes = new HashSet<NodeData> { _nodeSet[targetId] };
 
             while (currentNodes.Count > 0)
@@ -33,24 +34,24 @@ namespace BigDataPathFinding.Models
                 if (_result.Explored(node.Id)) continue;
                 _result.Explore(node.Id);
 
-                if (!_result.ContainsNode(node.Id))
-                {
-                    _result.AddNode(new ResultNode(_database.GetNode(node.Id)));
-                }
-
-                foreach (var adjacent in node.PreviousAdjacents)
-                {
-                    if (!_result.ContainsNode(adjacent.Id))
-                    {
-                        _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
-                    }
-
-                    _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
-                    currentNodes.Add(_nodeSet[adjacent.Id]);
-                }
+                AddAdjacents(node, currentNodes);
             }
 
             return _result;
+        }
+
+        private void AddAdjacents(NodeData node, HashSet<NodeData> currentNodes)
+        {
+            foreach (var adjacent in node.PreviousAdjacents)
+            {
+                if (!_result.ContainsNode(adjacent.Id))
+                {
+                    _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
+                }
+
+                _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
+                currentNodes.Add(_nodeSet[adjacent.Id]);
+            }
         }
     }
 }
