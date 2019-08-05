@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace BigDataPathFinding.Models.Hadi
 {
-    
     public class SearchData : ISearchData
     {
+        private readonly SortedDictionary<double, HashSet<NodeData>> _queue =
+            new SortedDictionary<double, HashSet<NodeData>>();
 
-        private readonly SortedDictionary<double, HashSet<NodeData>> _queue = new SortedDictionary<double, HashSet<NodeData>>();
         public Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
 
 
@@ -27,7 +27,23 @@ namespace BigDataPathFinding.Models.Hadi
             }
             else
             {
-                _queue[node.Distance] = new HashSet<NodeData> { node };
+                _queue[node.Distance] = new HashSet<NodeData> {node};
+            }
+        }
+
+        public void RemoveToQueue(NodeData node)
+        {
+            if (!_queue.ContainsKey(node.Distance)) return;
+
+            var set = _queue[node.Distance];
+
+            if (!set.Contains(node)) return;
+
+            set.Remove(node);
+
+            if (set.Count == 0)
+            {
+                _queue.Remove(node.Distance);
             }
         }
 
@@ -41,10 +57,9 @@ namespace BigDataPathFinding.Models.Hadi
             {
                 _queue.Remove(first.Key);
             }
+
             return firstNode;
         }
-
-
 
 
         public void AddToNodeSet(NodeData node)
