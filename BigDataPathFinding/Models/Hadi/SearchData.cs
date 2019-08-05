@@ -31,7 +31,7 @@ namespace BigDataPathFinding.Models.Hadi
             }
         }
 
-        public void RemoveToQueue(NodeData node)
+        public void RemoveFromQueue(NodeData node)
         {
             if (!_queue.ContainsKey(node.Distance)) return;
 

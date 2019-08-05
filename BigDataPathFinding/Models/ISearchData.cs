@@ -7,7 +7,7 @@ namespace BigDataPathFinding.Models
         NodeData PopBestCurrentNode();
 
         void AddToQueue(NodeData node);
-        void RemoveToQueue(NodeData node);
+        void RemoveFromQueue(NodeData node);
 
         void AddToNodeSet(NodeData node);
 
