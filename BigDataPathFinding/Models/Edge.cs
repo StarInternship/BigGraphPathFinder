@@ -24,7 +24,12 @@ namespace BigDataPathFinding.Models
 
         public override int GetHashCode()
         {
-            return SourceId.GetHashCode();//----------------------------------
+            return ToString().GetHashCode();
+        }
+
+        public override string ToString() //TODO: Change
+        {
+            return FileGraph.FileGraph.Instance.GetNode(SourceId).Name + "," + FileGraph.FileGraph.Instance.GetNode(TargetId).Name + "," + Weight;
         }
     }
 }
