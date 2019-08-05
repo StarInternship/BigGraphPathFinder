@@ -45,5 +45,7 @@ namespace BigDataPathFinding.Models
         {
             PreviousAdjacents.Add(adjacent);
         }
+
+        public override string ToString() => FileGraph.FileGraph.Instance.GetNode(Id).Name; //TODO: change
     }
 }
