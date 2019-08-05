@@ -24,22 +24,13 @@ namespace BigDataPathFinding.Models.Hadi
         public Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
 
 
-        public void AddToNodeSet(NodeData node)
-        {
-            NodeSet[node.Id] = node;
-        }
+        public void AddToNodeSet(NodeData node) => NodeSet[node.Id] = node;
 
-        public void AddToQueue(NodeData node)
-        {
-            _queue.Add(node);
-        }
+        public void AddToQueue(NodeData node) => _queue.Add(node);
 
         public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
 
-        public bool IsEmpty()
-        {
-            return _queue.Count == 0;
-        }
+        public bool IsEmpty() => _queue.Count == 0;
 
         public NodeData PopBestCurrentNode()
         {

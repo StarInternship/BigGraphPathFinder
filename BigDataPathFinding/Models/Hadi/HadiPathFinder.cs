@@ -5,21 +5,21 @@ namespace BigDataPathFinding.Models.Hadi
 {
     public class HadiPathFinder : PathFinder
     {
-        private SearchData searchData;
+        private SearchData _searchData;
 
-        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata,
-            sourceId, targetId, directed)
+        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
+            : base(metadata, sourceId, targetId, directed)
         {
         }
 
         public override void FindPath()
         {
-            searchData = new SearchData(new NodeData(SourceId, 0));
+            _searchData = new SearchData(new NodeData(SourceId, 0));
 
 
-            while (!searchData.IsEmpty())
+            while (!_searchData.IsEmpty())
             {
-                var node = searchData.PopBestCurrentNode();
+                var node = _searchData.PopBestCurrentNode();
 
                 if (node.Explored)
                     continue;
@@ -39,39 +39,30 @@ namespace BigDataPathFinding.Models.Hadi
         {
             if (!PossiblePath(node, adjacent)) return;
 
-            var outAdjacent = GetNode(adjacent.Id);
-
-            if (outAdjacent == null) outAdjacent = AddToNodeSet(adjacent);
-
+            var outAdjacent = GetNode(adjacent.Id) ?? AddToNodeSet(adjacent);
 
             if (node.Distance + adjacent.Weight < outAdjacent.Distance)
+            {
                 outAdjacent.ClearAdjacentsAndUpdateDistance(new Adjacent(node.Id, adjacent.Weight),
                     node.Distance + adjacent.Weight);
+                searchData.AddToQueue(outAdjacent);
+            }
 
 
-            else if (node.Distance + adjacent.Weight == outAdjacent.Distance)
+            else if (Math.Abs(node.Distance + adjacent.Weight - outAdjacent.Distance) < 0.01)
                 outAdjacent.AddAdjacent(new Adjacent(node.Id, adjacent.Weight));
         }
 
         private NodeData AddToNodeSet(Adjacent adjacent)
         {
-            searchData.AddToNodeSet(new NodeData(adjacent.Id, double.MaxValue));
+            _searchData.AddToNodeSet(new NodeData(adjacent.Id, double.MaxValue));
             return GetNode(adjacent.Id);
         }
 
-        private bool PossiblePath(NodeData node, Adjacent adjacent)
-        {
-            return GetNode(TargetId) == null || node.Distance + adjacent.Weight < GetNode(TargetId).Distance;
-        }
+        private bool PossiblePath(NodeData node, Adjacent adjacent) => GetNode(TargetId) == null || node.Distance + adjacent.Weight < GetNode(TargetId).Distance;
 
-        private NodeData GetNode(Guid node)
-        {
-            return searchData.GetNode(node);
-        }
+        private NodeData GetNode(Guid node) => _searchData.GetNode(node);
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet()
-        {
-            return searchData.NodeSet;
-        }
+        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.NodeSet;
     }
 }
