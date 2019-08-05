@@ -23,16 +23,9 @@ namespace BigDataPathFinding.Models
             return Distance - other.Distance > 0 ? 1 : -1;
         }
 
-        public override bool Equals(object obj)
-        {
-            if (this == obj) return true;
-            return obj is NodeData nodeData && Id.Equals(nodeData.Id);
-        }
+        public override bool Equals(object obj) => (this == obj) || (obj is NodeData nodeData && Id.Equals(nodeData.Id));
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+        public override int GetHashCode() => Id.GetHashCode();
 
         public void ClearAdjacentsAndUpdateDistance(Adjacent adjacent, double distance)
         {
@@ -41,10 +34,7 @@ namespace BigDataPathFinding.Models
             Distance = distance;
         }
 
-        public void AddAdjacent(Adjacent adjacent)
-        {
-            PreviousAdjacents.Add(adjacent);
-        }
+        public void AddAdjacent(Adjacent adjacent) => PreviousAdjacents.Add(adjacent);
 
         public override string ToString() => FileGraph.FileGraph.Instance.GetNode(Id).Name; //TODO: change
     }
