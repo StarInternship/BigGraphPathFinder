@@ -8,40 +8,80 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace BigDataPathFindingTests.Models
 {
     [TestClass]
-    public class FilePathFinderTests
+    public class Mahdi
     {
-        private const string testFilesPath = @"../../../TestFiles/";
-        private const string resultFilesPath = @"../../../results/";
+        private const string TestFilesPath = @"../../../TestFiles/";
 
         [TestMethod]
-        public void FilePathFinderTest()
+        public void EasyGraph()
         {
-            var database = new FileGraph(testFilesPath + "K3AllPathSearch.csv");
+            var database = new FileGraph(TestFilesPath + "EasyGraph.csv");
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
-            var targetId = database.GetId("1");
+            var targetId = database.GetId("4");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
             var expected = new HashSet<Edge>
             {
-                new Edge(database.GetId("0"), database.GetId("1"), 1)
+                new Edge(database.GetId("0"), database.GetId("1"), 1),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("0"), database.GetId("3"), 2),
+                new Edge(database.GetId("3"), database.GetId("4"), 1)
             };
-            Assert.IsTrue(actual.Count == expected.Count);
+            Assert.IsTrue(expected.SetEquals(actual));
         }
-    }
-
-    [TestClass]
-    public class Mahdi1
-    {
-        private const string testFilesPath = @"../../../TestFiles/";
-        private const string resultFilesPath = @"../../../results/";
 
         [TestMethod]
-        public void FilePathFinderTest()
+        public void BigGraph()
         {
-            var database = new FileGraph(testFilesPath + "mahdi1.txt");
+            var database = new FileGraph(TestFilesPath + "BigGraph.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("648"), 20),
+                new Edge(database.GetId("648"), database.GetId("3"), 13),
+                new Edge(database.GetId("3"), database.GetId("731"), 1),
+                new Edge(database.GetId("731"), database.GetId("525"), 8),
+                new Edge(database.GetId("525"), database.GetId("4"), 8),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod]
+        public void ALittleComplicated()
+        {
+            var database = new FileGraph(TestFilesPath + "ALittleComplicated.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, false);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("2"), 1),
+                new Edge(database.GetId("0"), database.GetId("1"), 1),
+                new Edge(database.GetId("0"), database.GetId("3"), 2),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("2"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 1),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod]
+        public void MahdiGraph()
+        {
+            var database = new FileGraph(TestFilesPath + "mahdi.csv");
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("A");
             var targetId = database.GetId("F");
@@ -51,18 +91,38 @@ namespace BigDataPathFindingTests.Models
             var actual = resultBuilder.Build(targetId).Edges;
             Assert.IsTrue(actual.Count == 6);
         }
+
+        [TestMethod]
+        public void VisitedGraph()
+        {
+            var database = new FileGraph(TestFilesPath + "VisitedGraph.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("2"), 1),
+                new Edge(database.GetId("2"), database.GetId("1"), 1),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 20),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
     }
 
     [TestClass]
     public class Hadi
     {
-        private const string testFilesPath = @"../../../TestFiles/";
-        private const string resultFilesPath = @"../../../results/";
+        private const string TestFilesPath = @"../../../TestFiles/";
 
         [TestMethod]
-        public void FilePathFinderTest()
+        public void EasyGraph()
         {
-            var database = new FileGraph(testFilesPath + "EasyGraph.csv");
+            var database = new FileGraph(TestFilesPath + "EasyGraph.csv");
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
@@ -76,6 +136,86 @@ namespace BigDataPathFindingTests.Models
                 new Edge(database.GetId("1"), database.GetId("3"), 1),
                 new Edge(database.GetId("0"), database.GetId("3"), 2),
                 new Edge(database.GetId("3"), database.GetId("4"), 1)
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod]
+        public void ALittleComplicated()
+        {
+            var database = new FileGraph(TestFilesPath + "ALittleComplicated.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, false);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("2"), 1),
+                new Edge(database.GetId("0"), database.GetId("1"), 1),
+                new Edge(database.GetId("0"), database.GetId("3"), 2),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("2"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 1),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod]
+        public void BigGraph()
+        {
+            var database = new FileGraph(TestFilesPath + "BigGraph.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("648"), 20),
+                new Edge(database.GetId("648"), database.GetId("3"), 13),
+                new Edge(database.GetId("3"), database.GetId("731"), 1),
+                new Edge(database.GetId("731"), database.GetId("525"), 8),
+                new Edge(database.GetId("525"), database.GetId("4"), 8),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod]
+        public void MahdiGraph()
+        {
+            var database = new FileGraph(TestFilesPath + "mahdi.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("A");
+            var targetId = database.GetId("F");
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            Assert.IsTrue(actual.Count == 6);
+        }
+
+        [TestMethod]
+        public void VisitedGraph()
+        {
+            var database = new FileGraph(TestFilesPath + "VisitedGraph.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("2"), 1),
+                new Edge(database.GetId("2"), database.GetId("1"), 1),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 20),
             };
             Assert.IsTrue(expected.SetEquals(actual));
         }

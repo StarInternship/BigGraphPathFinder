@@ -43,8 +43,9 @@ namespace BigDataPathFinding.Models.Hadi
 
             if (node.Distance + adjacent.Weight < outAdjacent.Distance)
             {
-                _searchData.RemoveToQueue(outAdjacent);
-                outAdjacent.ClearAdjacentsAndUpdateDistance(new Adjacent(node.Id, adjacent.Weight), node.Distance + adjacent.Weight);
+                _searchData.RemoveFromQueue(outAdjacent);
+                outAdjacent.ClearAdjacentsAndUpdateDistance(new Adjacent(node.Id, adjacent.Weight),
+                    node.Distance + adjacent.Weight);
                 _searchData.AddToQueue(outAdjacent);
             }
 
