@@ -24,5 +24,10 @@ namespace BigDataPathFinding.Models
         public bool Explored(Guid id) => ContainsNode(id) && Nodes[id].Explored;
 
         public void Explore(Guid id) => GetNode(id).Explored = true;
+        public override bool Equals(object obj)
+        {
+            if (this == obj) return true;
+            return obj is Graph graph && Edges.SetEquals(graph.Edges);
+        }
     }
 }

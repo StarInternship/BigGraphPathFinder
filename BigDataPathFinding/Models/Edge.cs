@@ -18,7 +18,13 @@ namespace BigDataPathFinding.Models
         public override bool Equals(object obj)
         {
             if (this == obj) return true;
-            return obj is Edge edge && SourceId.Equals(edge.SourceId) && TargetId.Equals(edge.TargetId) && Math.Abs(Weight - edge.Weight) < 0.01;
+            return obj is Edge edge && SourceId.Equals(edge.SourceId) && TargetId.Equals(edge.TargetId) &&
+                   Math.Abs(Weight - edge.Weight) < 0.01;
+        }
+
+        public override int GetHashCode()
+        {
+            return SourceId.GetHashCode();//----------------------------------
         }
     }
 }

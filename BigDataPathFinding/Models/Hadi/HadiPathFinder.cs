@@ -50,7 +50,7 @@ namespace BigDataPathFinding.Models.Hadi
 
 
             else if (node.Distance + adjacent.Weight == outAdjacent.Distance)
-                outAdjacent.addAdjacent(new Adjacent(node.Id, adjacent.Weight));
+                outAdjacent.AddAdjacent(new Adjacent(node.Id, adjacent.Weight));
         }
 
         private NodeData AddToNodeSet(Adjacent adjacent)
