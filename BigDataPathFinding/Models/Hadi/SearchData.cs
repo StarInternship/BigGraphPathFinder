@@ -31,6 +31,10 @@ namespace BigDataPathFinding.Models.Hadi
 
         public void AddToQueue(NodeData node)
         {
+            if (_queue.Contains(node))
+            {
+                _queue.Remove(node);
+            }
             _queue.Add(node);
         }
 
