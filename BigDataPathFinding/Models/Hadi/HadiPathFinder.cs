@@ -26,19 +26,20 @@ namespace BigDataPathFinding.Models.Hadi
                 node.Explored = true;
 
 
-                foreach (var adjacent in Metadata.GetOutputAdjacents(node.Id)) UpdateInAdjacent(node, adjacent);
+                foreach (var adjacent in Metadata.GetOutputAdjacents(node.Id)) UpdateAdjacent(node, adjacent);
 
                 if (!Directed)
                     foreach (var adjacent in Metadata.GetInputAdjacents(node.Id))
-                        UpdateInAdjacent(node, adjacent);
+                        UpdateAdjacent(node, adjacent);
             }
         }
 
 
-        private void UpdateInAdjacent(NodeData node, Adjacent adjacent)
+        private void UpdateAdjacent(NodeData node, Adjacent adjacent)
         {
-            var outAdjacent = GetNode(adjacent.Id);
             if (!PossiblePath(node, adjacent)) return;
+
+            var outAdjacent = GetNode(adjacent.Id);
 
             if (outAdjacent == null) outAdjacent = AddToNodeSet(adjacent);
 
