@@ -56,7 +56,7 @@ namespace BigDataPathFindingTests.Models
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
-            Assert.IsTrue(actual.Count == 4);
+            Assert.IsTrue(actual.Count == 6);
         }
     }
 }
