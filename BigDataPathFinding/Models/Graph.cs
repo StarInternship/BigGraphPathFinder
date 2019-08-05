@@ -8,10 +8,7 @@ namespace BigDataPathFinding.Models
         public Dictionary<Guid, ResultNode> Nodes { get; } = new Dictionary<Guid, ResultNode>();
         public HashSet<Edge> Edges { get; } = new HashSet<Edge>();
 
-        public void AddEdge(Guid source, Guid target, double weight)
-        {
-            AddEdge(GetNode(source), GetNode(target), weight);
-        }
+        public void AddEdge(Guid source, Guid target, double weight) => AddEdge(GetNode(source), GetNode(target), weight);
 
         private ResultNode GetNode(Guid id) => !ContainsNode(id) ? null : Nodes[id];
 
@@ -24,10 +21,7 @@ namespace BigDataPathFinding.Models
         public bool Explored(Guid id) => ContainsNode(id) && Nodes[id].Explored;
 
         public void Explore(Guid id) => GetNode(id).Explored = true;
-        public override bool Equals(object obj)
-        {
-            if (this == obj) return true;
-            return obj is Graph graph && Edges.SetEquals(graph.Edges);
-        }
+
+        public override bool Equals(object obj) => (this == obj) || (obj is Graph graph && Edges.SetEquals(graph.Edges));
     }
 }
