@@ -34,10 +34,7 @@ namespace BigDataPathFinding.Models.Hadi
             _queue.Add(node);
         }
 
-        public NodeData GetNode(Guid id)
-        {
-            return NodeSet?[id];
-        }
+        public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
 
         public bool IsEmpty()
         {

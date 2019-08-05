@@ -13,7 +13,7 @@ namespace BigDataPathFinding.Models
             AddEdge(GetNode(source), GetNode(target), weight);
         }
 
-        private ResultNode GetNode(Guid id) => Nodes?[id];
+        private ResultNode GetNode(Guid id) => !ContainsNode(id) ? null : Nodes[id];
 
         public bool ContainsNode(Guid id) => Nodes.ContainsKey(id);
 

@@ -22,10 +22,7 @@ namespace BigDataPathFinding.Models
                    Math.Abs(Weight - edge.Weight) < 0.01;
         }
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+        public override int GetHashCode() => ToString().GetHashCode();
 
         public override string ToString() //TODO: Change
         {
