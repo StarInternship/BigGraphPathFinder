@@ -21,7 +21,8 @@ namespace BigDataPathFinding
             var stopWatch = new Stopwatch();
 
             stopWatch.Start();
-            PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
+
+            PathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -31,12 +32,10 @@ namespace BigDataPathFinding
             var actual = resultBuilder.Build(targetId).Edges;
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             foreach (var edge in actual) Console.WriteLine(edge);
+            Console.WriteLine("******** Hadi ********\n\n");
 
-            Console.WriteLine("******* Mahdi *********\n\n");
 
-            stopWatch.Reset();
-            stopWatch.Start();
-            pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
+            pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -46,7 +45,11 @@ namespace BigDataPathFinding
             actual = resultBuilder.Build(targetId).Edges;
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             foreach (var edge in actual) Console.WriteLine(edge);
-            Console.WriteLine("******** Hadi ********");
+            Console.WriteLine("******* Mahdi *********");
+
+            stopWatch.Reset();
+            stopWatch.Start();
+
             Console.ReadKey();
         }
     }
