@@ -13,9 +13,15 @@ namespace BigDataPathFinding.Models
         public Guid Id { get; }
         public string Name { get; }
 
-        public override bool Equals(object obj) => (this == obj) || (obj is Node node && node.Id.Equals(Id));
+        public override bool Equals(object obj)
+        {
+            return this == obj || obj is Node node && node.Id.Equals(Id);
+        }
 
-        public override int GetHashCode() => Id.GetHashCode();
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
 
         public override string ToString() //TODO: Change
         {

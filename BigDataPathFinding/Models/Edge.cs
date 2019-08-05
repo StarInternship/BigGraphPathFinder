@@ -22,11 +22,15 @@ namespace BigDataPathFinding.Models
                    Math.Abs(Weight - edge.Weight) < 0.01;
         }
 
-        public override int GetHashCode() => ToString().GetHashCode();
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
 
         public override string ToString() //TODO: Change
         {
-            return FileGraph.FileGraph.Instance.GetNode(SourceId).Name + "," + FileGraph.FileGraph.Instance.GetNode(TargetId).Name + "," + Weight;
+            return FileGraph.FileGraph.Instance.GetNode(SourceId).Name + "," +
+                   FileGraph.FileGraph.Instance.GetNode(TargetId).Name + "," + Weight;
         }
     }
 }

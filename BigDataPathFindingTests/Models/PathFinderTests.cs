@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BigDataPathFindingTests.Models
 {
-    [TestClass()]
+    [TestClass]
     public class FilePathFinderTests
     {
         private const string testFilesPath = @"../../../TestFiles/";
         private const string resultFilesPath = @"../../../results/";
 
-        [TestMethod()]
+        [TestMethod]
         public void FilePathFinderTest()
         {
             var database = new FileGraph(testFilesPath + "K3AllPathSearch.csv");
@@ -28,17 +28,17 @@ namespace BigDataPathFindingTests.Models
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 1)
             };
-            Assert.IsTrue(actual.Count==expected.Count);
+            Assert.IsTrue(actual.Count == expected.Count);
         }
     }
 
-    [TestClass()]
+    [TestClass]
     public class Mahdi1
     {
         private const string testFilesPath = @"../../../TestFiles/";
         private const string resultFilesPath = @"../../../results/";
 
-        [TestMethod()]
+        [TestMethod]
         public void FilePathFinderTest()
         {
             var database = new FileGraph(testFilesPath + "mahdi1.txt");
@@ -53,13 +53,13 @@ namespace BigDataPathFindingTests.Models
         }
     }
 
-    [TestClass()]
+    [TestClass]
     public class Hadi
     {
         private const string testFilesPath = @"../../../TestFiles/";
         private const string resultFilesPath = @"../../../results/";
 
-        [TestMethod()]
+        [TestMethod]
         public void FilePathFinderTest()
         {
             var database = new FileGraph(testFilesPath + "EasyGraph.csv");

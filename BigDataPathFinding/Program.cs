@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.FileGraph;
@@ -13,15 +12,15 @@ namespace BigDataPathFinding
         private static void Main(string[] args)
         {
             const string testFilesPath = @"../../../TestFiles/";
-            var database = new FileGraph(testFilesPath + "hosein2.txt");
+            var database = new FileGraph(testFilesPath + "mahdi1.txt");
             var metadata = new FileMetadata(database);
-            var sourceId = database.GetId("1");
-            var targetId = database.GetId("2");
+            var sourceId = database.GetId("A");
+            var targetId = database.GetId("F");
 
             var stopWatch = new Stopwatch();
 
             stopWatch.Start();
-            PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, false);
+            PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -30,16 +29,13 @@ namespace BigDataPathFinding
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-            foreach (var edge in actual)
-            {
-                Console.WriteLine(edge);
-            }
+            foreach (var edge in actual) Console.WriteLine(edge);
 
             Console.WriteLine("******* Mahdi *********\n\n");
 
             stopWatch.Reset();
             stopWatch.Start();
-            pathFinder = new HadiPathFinder(metadata, sourceId, targetId, false);
+            pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -48,10 +44,7 @@ namespace BigDataPathFinding
             resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             actual = resultBuilder.Build(targetId).Edges;
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-            foreach (var edge in actual)
-            {
-                Console.WriteLine(edge);
-            }
+            foreach (var edge in actual) Console.WriteLine(edge);
             Console.WriteLine("******** Hadi ********");
             Console.ReadKey();
         }

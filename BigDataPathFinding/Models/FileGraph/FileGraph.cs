@@ -7,7 +7,6 @@ namespace BigDataPathFinding.Models.FileGraph
 {
     public class FileGraph : IDatabase
     {
-        public static FileGraph Instance { get; private set; }
         private static readonly Regex Regex = new Regex(@"^(.+),(.+),(\d+.?\d*)$");
         private readonly Dictionary<string, Guid> _ids = new Dictionary<string, Guid>();
         private readonly Dictionary<Guid, FileNode> _nodes = new Dictionary<Guid, FileNode>();
@@ -21,9 +20,17 @@ namespace BigDataPathFinding.Models.FileGraph
             foreach (var edge in edges) ReadEdge(edge);
         }
 
-        public Node GetNode(Guid id) => !_nodes.ContainsKey(id) ? null : _nodes[id];
+        public static FileGraph Instance { get; private set; }
 
-        public Guid GetId(string name) => !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
+        public Node GetNode(Guid id)
+        {
+            return !_nodes.ContainsKey(id) ? null : _nodes[id];
+        }
+
+        public Guid GetId(string name)
+        {
+            return !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
+        }
 
         private void ReadEdge(string edge)
         {

@@ -13,7 +13,7 @@ namespace BigDataPathFinding.Models.Mahdi
         public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata,
             sourceId, targetId, directed)
         {
-            _searchData.AddCandidate(sourceId,new NodeData(sourceId,0));
+            _searchData.AddCandidate(sourceId, new NodeData(sourceId, 0));
         }
 
         private void Go()
@@ -35,7 +35,7 @@ namespace BigDataPathFinding.Models.Mahdi
             foreach (var adjacent in Metadata.GetOutputAdjacents(bestCandidate))
             {
                 var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
-                newNodeData.AddAdjacent(new Adjacent(bestCandidate,adjacent.Weight));
+                newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
                 if (_searchData.ContainsDiscovery(adjacent.Id))
                 {
                     var currentData = _searchData.GetDiscoveryData(adjacent.Id);
@@ -56,7 +56,8 @@ namespace BigDataPathFinding.Models.Mahdi
 
                 _searchData.AddCandidate(adjacent.Id, newNodeData);
             }
-            if(base.Directed)
+
+            if (Directed)
                 return;
             foreach (var adjacent in Metadata.GetInputAdjacents(bestCandidate))
             {

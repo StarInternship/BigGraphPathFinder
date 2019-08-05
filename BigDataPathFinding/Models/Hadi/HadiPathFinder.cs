@@ -45,12 +45,14 @@ namespace BigDataPathFinding.Models.Hadi
             {
                 outAdjacent.ClearAdjacentsAndUpdateDistance(new Adjacent(node.Id, adjacent.Weight),
                     node.Distance + adjacent.Weight);
-                searchData.AddToQueue(outAdjacent);
+                _searchData.AddToQueue(outAdjacent);
             }
 
 
             else if (Math.Abs(node.Distance + adjacent.Weight - outAdjacent.Distance) < 0.01)
+            {
                 outAdjacent.AddAdjacent(new Adjacent(node.Id, adjacent.Weight));
+            }
         }
 
         private NodeData AddToNodeSet(Adjacent adjacent)
@@ -59,10 +61,19 @@ namespace BigDataPathFinding.Models.Hadi
             return GetNode(adjacent.Id);
         }
 
-        private bool PossiblePath(NodeData node, Adjacent adjacent) => GetNode(TargetId) == null || node.Distance + adjacent.Weight < GetNode(TargetId).Distance;
+        private bool PossiblePath(NodeData node, Adjacent adjacent)
+        {
+            return GetNode(TargetId) == null || node.Distance + adjacent.Weight < GetNode(TargetId).Distance;
+        }
 
-        private NodeData GetNode(Guid node) => _searchData.GetNode(node);
+        private NodeData GetNode(Guid node)
+        {
+            return _searchData.GetNode(node);
+        }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.NodeSet;
+        public override Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            return _searchData.NodeSet;
+        }
     }
 }
