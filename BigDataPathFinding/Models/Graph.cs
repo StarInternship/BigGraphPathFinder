@@ -8,7 +8,8 @@ namespace BigDataPathFinding.Models
         public Dictionary<Guid, ResultNode> Nodes { get; } = new Dictionary<Guid, ResultNode>();
         public HashSet<Edge> Edges { get; } = new HashSet<Edge>();
 
-        public void AddEdge(Guid source, Guid target, double weight) => AddEdge(GetNode(source), GetNode(target), weight);
+        public void AddEdge(Guid source, Guid target, double weight) =>
+            AddEdge(GetNode(source), GetNode(target), weight);
 
         private ResultNode GetNode(Guid id) => !ContainsNode(id) ? null : Nodes[id];
 
@@ -16,7 +17,8 @@ namespace BigDataPathFinding.Models
 
         public void AddNode(ResultNode node) => Nodes[node.Id] = node;
 
-        public void AddEdge(ResultNode source, ResultNode target, double weight) => Edges.Add(new Edge(source.Id, target.Id, weight));
+        public void AddEdge(ResultNode source, ResultNode target, double weight) =>
+            Edges.Add(new Edge(source.Id, target.Id, weight));
 
         public bool Explored(Guid id) => ContainsNode(id) && Nodes[id].Explored;
 

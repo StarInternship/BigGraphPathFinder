@@ -25,7 +25,7 @@ namespace BigDataPathFinding.Models.Hadi
             }
             else
             {
-                _queue[node.Distance] = new HashSet<NodeData> { node };
+                _queue[node.Distance] = new HashSet<NodeData> {node};
             }
         }
 

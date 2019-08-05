@@ -59,7 +59,7 @@ namespace BigDataPathFinding.Models.Hadi
             return GetNode(adjacent.Id);
         }
 
-        private bool PossiblePath(NodeData node, Adjacent adjacent) => 
+        private bool PossiblePath(NodeData node, Adjacent adjacent) =>
             GetNode(TargetId) == null || node.Distance + adjacent.Weight <= GetNode(TargetId).Distance;
 
         private NodeData GetNode(Guid node) => _searchData.GetNode(node);
