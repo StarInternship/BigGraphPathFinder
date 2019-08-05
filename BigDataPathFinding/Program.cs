@@ -12,7 +12,7 @@ namespace BigDataPathFinding
         private static void Main(string[] args)
         {
             const string testFilesPath = @"../../../TestFiles/";
-            var database = new FileGraph(testFilesPath + "BigGraphAllpathSearch.csv");
+            var database = new FileGraph(testFilesPath + "BigGraph.csv");
             var metadata = new FileMetadata(database);
 
             while (true)
