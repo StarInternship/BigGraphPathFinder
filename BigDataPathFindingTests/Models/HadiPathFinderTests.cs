@@ -62,10 +62,10 @@ namespace BigDataPathFindingTests.Models
         [TestMethod()]
         public void FilePathFinderTest()
         {
-            var database = new FileGraph(testFilesPath + "mahdi1.txt");
+            var database = new FileGraph(testFilesPath + "EasyGraph.csv");
             var metadata = new FileMetadata(database);
-            var sourceId = database.GetId("A");
-            var targetId = database.GetId("F");
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
@@ -74,12 +74,10 @@ namespace BigDataPathFindingTests.Models
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 1),
                 new Edge(database.GetId("1"), database.GetId("3"), 1),
-                new Edge(database.GetId("0"), database.GetId("3"), 1),
+                new Edge(database.GetId("0"), database.GetId("3"), 2),
                 new Edge(database.GetId("3"), database.GetId("4"), 1)
             };
-            //Assert.AreEqual(actual,expected);
-            //Assert.IsTrue(actual.SetEquals(expected));
-            Assert.IsTrue(actual.Count == expected.Count);
+            Assert.IsTrue(expected.SetEquals(actual));
         }
     }
 }
