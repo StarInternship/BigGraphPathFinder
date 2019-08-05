@@ -12,15 +12,16 @@ namespace BigDataPathFinding
         private static void Main(string[] args)
         {
             const string testFilesPath = @"../../../TestFiles/";
-            var database = new FileGraph(testFilesPath + "mahdi1.txt");
+            var database = new FileGraph(testFilesPath + "BigGraphAllpathSearch.csv");
             var metadata = new FileMetadata(database);
-            var sourceId = database.GetId("A");
-            var targetId = database.GetId("F");
+            var sourceId = database.GetId("142");
+            var targetId = database.GetId("975");
+            var directed = true;
 
             var stopWatch = new Stopwatch();
 
             stopWatch.Start();
-            PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -35,7 +36,7 @@ namespace BigDataPathFinding
 
             stopWatch.Reset();
             stopWatch.Start();
-            pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
             pathFinder.FindPath();
             stopWatch.Stop();
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
