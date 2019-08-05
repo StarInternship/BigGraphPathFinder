@@ -10,8 +10,8 @@ namespace BigDataPathFinding.Models.Mahdi
         private double _minDistance = int.MaxValue;
         private bool _shouldContinue = true;
 
-        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata,
-            sourceId, targetId, directed)
+        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) 
+            : base(metadata, sourceId, targetId, directed)
         {
             _searchData.AddCandidate(sourceId, new NodeData(sourceId, 0));
         }
@@ -90,9 +90,6 @@ namespace BigDataPathFinding.Models.Mahdi
             while (_shouldContinue) Go();
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet()
-        {
-            return _searchData.GetDiscoveries();
-        }
+        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.GetDiscoveries();
     }
 }

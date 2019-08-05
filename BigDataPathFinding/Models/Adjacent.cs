@@ -12,10 +12,5 @@ namespace BigDataPathFinding.Models
 
         public Guid Id { get; }
         public double Weight { get; }
-
-        public override string ToString()
-        {
-            return FileGraph.FileGraph.Instance.GetNode(Id).Name + ", Weight: " + Weight;
-        }
     }
 }

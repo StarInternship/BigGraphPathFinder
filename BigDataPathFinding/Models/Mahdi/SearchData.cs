@@ -26,40 +26,19 @@ namespace BigDataPathFinding.Models.Mahdi
             _candidatesDictionary2.Add(nodeData, node);
         }
 
-        public bool ContainsDiscovery(Guid node)
-        {
-            return _discoveries.ContainsKey(node);
-        }
+        public bool ContainsDiscovery(Guid node) => _discoveries.ContainsKey(node);
 
-        public bool ContainsCandidate(Guid node)
-        {
-            return _candidatesDictionary1.ContainsKey(node);
-        }
+        public bool ContainsCandidate(Guid node) => _candidatesDictionary1.ContainsKey(node);
 
-        public Guid GetBestCandidate()
-        {
-            return _candidatesDictionary2.First().Value;
-        }
+        public Guid GetBestCandidate() => _candidatesDictionary2.First().Value;
 
-        public NodeData GetBestCandidateData()
-        {
-            return _candidatesDictionary2.First().Key;
-        }
+        public NodeData GetBestCandidateData() => _candidatesDictionary2.First().Key;
 
-        public NodeData GetDiscoveryData(Guid node)
-        {
-            return _discoveries[node];
-        }
+        public NodeData GetDiscoveryData(Guid node) => _discoveries[node];
 
-        public NodeData GetCandidateData(Guid node)
-        {
-            return _candidatesDictionary1[node];
-        }
+        public NodeData GetCandidateData(Guid node) => _candidatesDictionary1[node];
 
-        public bool HasCandidate()
-        {
-            return _candidatesDictionary1.Count > 0;
-        }
+        public bool HasCandidate() => _candidatesDictionary1.Count > 0;
 
         public void UpdateCandidate(Guid node, NodeData data)
         {
@@ -69,9 +48,6 @@ namespace BigDataPathFinding.Models.Mahdi
             _candidatesDictionary2.Add(data, node);
         }
 
-        public Dictionary<Guid, NodeData> GetDiscoveries()
-        {
-            return _discoveries;
-        }
+        public Dictionary<Guid, NodeData> GetDiscoveries() => _discoveries;
     }
 }
