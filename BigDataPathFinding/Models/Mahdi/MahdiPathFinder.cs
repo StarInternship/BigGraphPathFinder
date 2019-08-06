@@ -10,8 +10,8 @@ namespace BigDataPathFinding.Models.Mahdi
         private double _minDistance = int.MaxValue;
         private bool _shouldContinue = true;
 
-        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata,
-            sourceId, targetId, directed)
+        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
+            : base(metadata, sourceId, targetId, directed)
         {
             _searchData.AddCandidate(sourceId, new NodeData(sourceId, 0));
         }
@@ -32,7 +32,7 @@ namespace BigDataPathFinding.Models.Mahdi
                 if (Math.Abs(_minDistance - int.MaxValue) < 1)
                     _minDistance = bestCandidateData.Distance;
 
-            foreach (var adjacent in Metadata.GetOutputAdjacents(bestCandidate))
+            foreach (var adjacent in Metadata.GetOutputAdjacent(bestCandidate))
             {
                 var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
                 newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
@@ -59,7 +59,7 @@ namespace BigDataPathFinding.Models.Mahdi
 
             if (Directed)
                 return;
-            foreach (var adjacent in Metadata.GetInputAdjacents(bestCandidate))
+            foreach (var adjacent in Metadata.GetInputAdjacent(bestCandidate))
             {
                 var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
                 newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
@@ -90,9 +90,6 @@ namespace BigDataPathFinding.Models.Mahdi
             while (_shouldContinue) Go();
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet()
-        {
-            return _searchData.GetDiscoveries();
-        }
+        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.GetDiscoveries();
     }
 }

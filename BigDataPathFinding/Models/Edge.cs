@@ -15,22 +15,13 @@ namespace BigDataPathFinding.Models
         public Guid TargetId { get; }
         public double Weight { get; }
 
-        public override bool Equals(object obj)
-        {
-            return (this == obj) || 
-                   (obj is Edge edge && SourceId.Equals(edge.SourceId) && TargetId.Equals(edge.TargetId) &&
-                   Math.Abs(Weight - edge.Weight) < 0.01);
-        }
+        public override bool Equals(object obj) =>
+            (this == obj) ||
+            (obj is Edge edge && SourceId.Equals(edge.SourceId) && TargetId.Equals(edge.TargetId) &&
+             Math.Abs(Weight - edge.Weight) < 0.01);
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+        public override int GetHashCode() => ToString().GetHashCode();
 
-        public override string ToString() //TODO: Change
-        {
-            return FileGraph.FileGraph.Instance.GetNode(SourceId).Name + "," +
-                   FileGraph.FileGraph.Instance.GetNode(TargetId).Name + "," + Weight;
-        }
+        public override string ToString() => SourceId + "," + TargetId + "," + Weight;
     }
 }

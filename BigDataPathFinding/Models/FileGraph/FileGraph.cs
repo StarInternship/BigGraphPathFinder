@@ -22,15 +22,9 @@ namespace BigDataPathFinding.Models.FileGraph
 
         public static FileGraph Instance { get; private set; }
 
-        public Node GetNode(Guid id)
-        {
-            return !_nodes.ContainsKey(id) ? null : _nodes[id];
-        }
+        public Node GetNode(Guid id) => !_nodes.ContainsKey(id) ? null : _nodes[id];
 
-        public Guid GetId(string name)
-        {
-            return !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
-        }
+        public Guid GetId(string name) => !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
 
         private void ReadEdge(string edge)
         {
