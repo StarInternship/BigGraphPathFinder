@@ -12,15 +12,17 @@ namespace BigDataPathFinding
         private static void Main(string[] args)
         {
             const string testFilesPath = @"../../../TestFiles/";
-            var database = new FileGraph(testFilesPath + "BigGraph.csv");
-            var metadata = new FileMetadata(database);
+            /*var database = new FileGraph(testFilesPath + "Test1.txt");
+            var metadata = new FileMetadata(database);*/
+            var database=new ElasticDatabase("test1_node_set");
+            var metadata=new ElasticMetadata("test1_connections");
 
             while (true)
             {
                 Console.Write("source: ");
-                var sourceId = database.GetId(Console.ReadLine());
+                var sourceId = new Guid(Console.ReadLine().Trim());
                 Console.Write("target: ");
-                var targetId = database.GetId(Console.ReadLine());
+                var targetId = new Guid(Console.ReadLine().Trim());
                 Console.Write("directed(1 or 0): ");
                 var directed = Console.ReadLine() != "0";
 
