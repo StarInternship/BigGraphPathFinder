@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Nest;
 
 namespace BigDataPathFinding.Models
@@ -18,10 +15,17 @@ namespace BigDataPathFinding.Models
             _client = new ElasticClient(settings);
         }
 
-        public Node GetNode(Guid id) // I THINK IT'S NOT GOOD AT ALL.
+        public Node GetNode(Guid id)
         {
-            var searchResponse = _client.Search<Node>(s => s.Query(q => q.Match(m => m.Field(t => t.Id).Query(id.ToString()))));
-            return searchResponse.Documents.First();
+            var searchResponse = _client.Search<Node>(s => s
+                .Query(q => q
+                    .Match(m => m
+                        .Field(t => t.Id)
+                        .Query(id.ToString())
+                    )
+                )
+            );
+            return searchResponse.Total == 0 ? null : searchResponse.Documents.First();
         }
     }
 }
