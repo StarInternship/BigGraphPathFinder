@@ -32,7 +32,7 @@ namespace BigDataPathFinding.Models.Mahdi
                 if (Math.Abs(_minDistance - int.MaxValue) < 1)
                     _minDistance = bestCandidateData.Distance;
 
-            foreach (var adjacent in Metadata.GetOutputAdjacents(bestCandidate))
+            foreach (var adjacent in Metadata.GetOutputAdjacent(bestCandidate))
             {
                 var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
                 newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
@@ -59,7 +59,7 @@ namespace BigDataPathFinding.Models.Mahdi
 
             if (Directed)
                 return;
-            foreach (var adjacent in Metadata.GetInputAdjacents(bestCandidate))
+            foreach (var adjacent in Metadata.GetInputAdjacent(bestCandidate))
             {
                 var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
                 newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));

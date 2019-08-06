@@ -9,8 +9,8 @@ namespace BigDataPathFinding.Models.FileGraph
 
         public FileMetadata(FileGraph database) => _database = database;
 
-        public IEnumerable<Adjacent> GetInputAdjacents(Guid id) => ((FileNode) _database.GetNode(id)).InputAdjucents;
+        public IEnumerable<Adjacent> GetInputAdjacent(Guid id) => ((FileNode) _database.GetNode(id)).InputAdjucents;
 
-        public IEnumerable<Adjacent> GetOutputAdjacents(Guid id) => ((FileNode) _database.GetNode(id)).OutputAdjucents;
+        public IEnumerable<Adjacent> GetOutputAdjacent(Guid id) => ((FileNode) _database.GetNode(id)).OutputAdjucents;
     }
 }

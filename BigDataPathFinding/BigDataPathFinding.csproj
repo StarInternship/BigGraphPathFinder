@@ -61,6 +61,7 @@
     <Compile Include="Models\Adjacent.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Models\ElasticDatabase.cs" />
+    <Compile Include="Models\ElasticMetadata.cs" />
     <Compile Include="Models\FileGraph\FileGraph.cs" />
     <Compile Include="Models\FileGraph\FileMetadata.cs" />
     <Compile Include="Models\FileGraph\FileNode.cs" />

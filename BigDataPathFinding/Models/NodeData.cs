@@ -14,7 +14,7 @@ namespace BigDataPathFinding.Models
         public Guid Id { get; }
         public bool Explored { get; set; } = false;
         public double Distance { get; set; }
-        public HashSet<Adjacent> PreviousAdjacents { get; } = new HashSet<Adjacent>();
+        public HashSet<Adjacent> PreviousAdjacent { get; } = new HashSet<Adjacent>();
 
         public int CompareTo(NodeData other)
         {
@@ -22,14 +22,14 @@ namespace BigDataPathFinding.Models
             return Distance - other.Distance > 0 ? 1 : -1;
         }
 
-        public void ClearAdjacentsAndUpdateDistance(Adjacent adjacent, double distance)
+        public void ClearAdjacentAndUpdateDistance(Adjacent adjacent, double distance)
         {
-            PreviousAdjacents.Clear();
-            PreviousAdjacents.Add(adjacent);
+            PreviousAdjacent.Clear();
+            PreviousAdjacent.Add(adjacent);
             Distance = distance;
         }
 
-        public void AddAdjacent(Adjacent adjacent) => PreviousAdjacents.Add(adjacent);
+        public void AddAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
 
         public override bool Equals(object obj) => this == obj || (obj is NodeData nodeData && Id.Equals(nodeData.Id));
 

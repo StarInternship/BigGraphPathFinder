@@ -23,11 +23,11 @@ namespace BigDataPathFinding.Models.Hadi
                 if (node.Explored) continue;
                 node.Explored = true;
 
-                foreach (var adjacent in Metadata.GetOutputAdjacents(node.Id))
+                foreach (var adjacent in Metadata.GetOutputAdjacent(node.Id))
                     UpdateAdjacent(node, adjacent);
 
                 if (!Directed)
-                    foreach (var adjacent in Metadata.GetInputAdjacents(node.Id))
+                    foreach (var adjacent in Metadata.GetInputAdjacent(node.Id))
                         UpdateAdjacent(node, adjacent);
             }
         }
@@ -41,7 +41,7 @@ namespace BigDataPathFinding.Models.Hadi
             if (node.Distance + adjacent.Weight < outAdjacent.Distance)
             {
                 _searchData.RemoveFromQueue(outAdjacent);
-                outAdjacent.ClearAdjacentsAndUpdateDistance(
+                outAdjacent.ClearAdjacentAndUpdateDistance(
                     new Adjacent(node.Id, adjacent.Weight), node.Distance + adjacent.Weight
                 );
                 _searchData.AddToQueue(outAdjacent);

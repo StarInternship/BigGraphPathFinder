@@ -17,15 +17,16 @@ namespace BigDataPathFinding.Models
 
         public Node GetNode(Guid id)
         {
-            var searchResponse = _client.Search<Node>(s => s
+            var search = _client.Search<Node>(s => s
                 .Query(q => q
                     .Match(m => m
-                        .Field(t => t.Id)
+                        .Field(node => node.Id)
                         .Query(id.ToString())
                     )
                 )
+                .Size(1)
             );
-            return searchResponse.Total == 0 ? null : searchResponse.Documents.First();
+            return search.Total == 0 ? null : search.Documents.First();
         }
     }
 }

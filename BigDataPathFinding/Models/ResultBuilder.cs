@@ -31,15 +31,15 @@ namespace BigDataPathFinding.Models
                 if (_result.Explored(node.Id)) continue;
                 _result.Explore(node.Id);
 
-                AddAdjacents(node, currentNodes);
+                AddAdjacent(node, currentNodes);
             }
 
             return _result;
         }
 
-        private void AddAdjacents(NodeData node, HashSet<NodeData> currentNodes)
+        private void AddAdjacent(NodeData node, HashSet<NodeData> currentNodes)
         {
-            foreach (var adjacent in node.PreviousAdjacents)
+            foreach (var adjacent in node.PreviousAdjacent)
             {
                 if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
 
