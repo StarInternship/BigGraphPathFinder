@@ -32,7 +32,6 @@ namespace BigDataPathFinding.Models.Hadi
             }
         }
 
-
         private void UpdateAdjacent(NodeData node, Adjacent adjacent)
         {
             if (!PossiblePath(node, adjacent)) return;

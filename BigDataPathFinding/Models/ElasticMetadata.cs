@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Elasticsearch.Net;
 using Nest;
 
 namespace BigDataPathFinding.Models
@@ -22,7 +21,12 @@ namespace BigDataPathFinding.Models
         public IEnumerable<Adjacent> GetOutputAdjacent(Guid id)
         {
             var search = _client.Search<Edge>(s => s
-                .Fields(f => f.Field(edge => edge.TargetId).Field(node => node.Weight))
+                .StoredFields(sf => sf
+                    .Fields(
+                        f => f.TargetId,
+                        f => f.Weight
+                    )
+                )
                 .Query(q => q
                     .Match(m => m
                         .Field(t => t.SourceId)
@@ -38,7 +42,12 @@ namespace BigDataPathFinding.Models
         public IEnumerable<Adjacent> GetInputAdjacent(Guid id)
         {
             var search = _client.Search<Edge>(s => s
-                .Fields(f => f.Field(edge => edge.SourceId).Field(node => node.Weight))
+                .StoredFields(sf => sf
+                    .Fields(
+                        f => f.SourceId,
+                        f => f.Weight
+                    )
+                )
                 .Query(q => q
                     .Match(m => m
                         .Field(t => t.TargetId)
