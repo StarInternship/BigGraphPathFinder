@@ -6,10 +6,9 @@ namespace BigDataPathFinding.Models.Mahdi
 {
     internal class SearchData
     {
+        //bidirectional Dictionary
         private readonly Dictionary<Guid, NodeData> _candidatesDictionary1 = new Dictionary<Guid, NodeData>();
-
-        private readonly SortedDictionary<NodeData, Guid> _candidatesDictionary2 =
-            new SortedDictionary<NodeData, Guid>();
+        private readonly SortedDictionary<NodeData, Guid> _candidatesDictionary2 = new SortedDictionary<NodeData, Guid>();
 
         private readonly Dictionary<Guid, NodeData> _discoveries = new Dictionary<Guid, NodeData>();
 

@@ -10,8 +10,8 @@ namespace BigDataPathFinding.Models.Mahdi
         private double _minDistance = int.MaxValue;
         private bool _shouldContinue = true;
 
-        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
-            : base(metadata, sourceId, targetId, directed)
+        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) : base(metadata,
+            sourceId, targetId, directed)
         {
             _searchData.AddCandidate(sourceId, new NodeData(sourceId, 0));
         }
@@ -29,60 +29,45 @@ namespace BigDataPathFinding.Models.Mahdi
             _searchData.MoveToDiscovery(bestCandidate, bestCandidateData);
             _checkingDistance = bestCandidateData.Distance;
             if (bestCandidate == TargetId)
-                if (Math.Abs(_minDistance - int.MaxValue) < 1)
+                if (Math.Abs(_minDistance - int.MaxValue) < 0.01) //if minDistance hasn't been set! 
                     _minDistance = bestCandidateData.Distance;
 
             foreach (var adjacent in Metadata.GetOutputAdjacent(bestCandidate))
             {
-                var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
-                newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                if (_searchData.ContainsDiscovery(adjacent.Id))
-                {
-                    var currentData = _searchData.GetDiscoveryData(adjacent.Id);
-                    if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
-                        currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                    continue;
-                }
-
-                if (_searchData.ContainsCandidate(adjacent.Id))
-                {
-                    var currentData = _searchData.GetCandidateData(adjacent.Id);
-                    if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
-                        currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                    else if (currentData.Distance > newNodeData.Distance)
-                        _searchData.UpdateCandidate(adjacent.Id, newNodeData);
-                    continue;
-                }
-
-                _searchData.AddCandidate(adjacent.Id, newNodeData);
+                CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
             }
 
             if (Directed)
                 return;
             foreach (var adjacent in Metadata.GetInputAdjacent(bestCandidate))
             {
-                var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
-                newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                if (_searchData.ContainsDiscovery(adjacent.Id))
-                {
-                    var currentData = _searchData.GetDiscoveryData(adjacent.Id);
-                    if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
-                        currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                    continue;
-                }
-
-                if (_searchData.ContainsCandidate(adjacent.Id))
-                {
-                    var currentData = _searchData.GetCandidateData(adjacent.Id);
-                    if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
-                        currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
-                    else if (currentData.Distance > newNodeData.Distance)
-                        _searchData.UpdateCandidate(adjacent.Id, newNodeData);
-                    continue;
-                }
-
-                _searchData.AddCandidate(adjacent.Id, newNodeData);
+                CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
             }
+        }
+
+        private void CheckAdjacent(Adjacent adjacent, NodeData bestCandidateData, Guid bestCandidate)
+        {
+            var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
+            newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
+            if (_searchData.ContainsDiscovery(adjacent.Id))
+            {
+                var currentData = _searchData.GetDiscoveryData(adjacent.Id);
+                if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
+                    currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
+                return;
+            }
+
+            if (_searchData.ContainsCandidate(adjacent.Id))
+            {
+                var currentData = _searchData.GetCandidateData(adjacent.Id);
+                if (Math.Abs(currentData.Distance - newNodeData.Distance) < 0.01)
+                    currentData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
+                else if (currentData.Distance > newNodeData.Distance)
+                    _searchData.UpdateCandidate(adjacent.Id, newNodeData);
+                return;
+            }
+
+            _searchData.AddCandidate(adjacent.Id, newNodeData);
         }
 
         public override void FindPath()
