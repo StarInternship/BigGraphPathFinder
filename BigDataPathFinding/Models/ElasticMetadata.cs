@@ -9,7 +9,7 @@ namespace BigDataPathFinding.Models
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
         private const int Size = 10000;
-        private const string Scroll = "10s";
+        private const string Scroll = "50s";
         private readonly ElasticClient _client;
 
         public ElasticMetadata(string connectionsIndex)
@@ -21,11 +21,11 @@ namespace BigDataPathFinding.Models
         public IEnumerable<Adjacent> GetOutputAdjacent(Guid id)
         {
             var search = _client.Search<Edge>(s => s
-                .StoredFields(sf => sf
-                    .Fields(
-                        f => f.TargetId,
-                        f => f.Weight
-                    )
+                .Source(src => src
+                    .Includes(i => i.Fields(
+                            f => f.TargetId,
+                            f => f.Weight
+                        ))
                 )
                 .Query(q => q
                     .Match(m => m
@@ -42,11 +42,11 @@ namespace BigDataPathFinding.Models
         public IEnumerable<Adjacent> GetInputAdjacent(Guid id)
         {
             var search = _client.Search<Edge>(s => s
-                .StoredFields(sf => sf
-                    .Fields(
+                .Source(src => src
+                    .Includes(i => i.Fields(
                         f => f.SourceId,
                         f => f.Weight
-                    )
+                    ))
                 )
                 .Query(q => q
                     .Match(m => m
