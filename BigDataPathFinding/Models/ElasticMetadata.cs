@@ -34,7 +34,7 @@ namespace BigDataPathFinding.Models
                     )
                 )
                 .Size(Size)
-                .Scroll(Scroll)
+                //.Scroll(Scroll)
             );
             return search.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
         }
@@ -55,7 +55,7 @@ namespace BigDataPathFinding.Models
                     )
                 )
                 .Size(Size)
-                .Scroll(Scroll)
+                //.Scroll(Scroll)
             );
             return search.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
         }
