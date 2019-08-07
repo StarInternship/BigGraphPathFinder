@@ -35,6 +35,7 @@ namespace BigDataPathFinding
 
                 stopWatch.Start();
 
+                metadata.NumberOfRequests = 0;
                 PathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
@@ -45,9 +46,11 @@ namespace BigDataPathFinding
                 var actual = resultBuilder.Build(targetId).Edges;
                 Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
                 foreach (var edge in actual) Console.WriteLine(database.GetNode(edge.SourceId).Name+","+database.GetNode(edge.TargetId).Name+","+edge.Weight);
+                Console.WriteLine("count: " + metadata.NumberOfRequests);
                 Console.WriteLine("******** Hadi ********\n\n");
 
 
+                metadata.NumberOfRequests = 0;
                 pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
@@ -58,6 +61,7 @@ namespace BigDataPathFinding
                 actual = resultBuilder.Build(targetId).Edges;
                 Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
                 foreach (var edge in actual) Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
+                Console.WriteLine("count: " + metadata.NumberOfRequests);
                 Console.WriteLine("******* Mahdi *********");
 
                 stopWatch.Reset();

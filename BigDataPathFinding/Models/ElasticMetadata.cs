@@ -17,9 +17,11 @@ namespace BigDataPathFinding.Models
             var settings = new ConnectionSettings(Uri).DefaultIndex(connectionsIndex);
             _client = new ElasticClient(settings);
         }
+        public int NumberOfRequests { get; set; } = 0;
 
         public IEnumerable<Adjacent> GetOutputAdjacent(Guid id)
         {
+            NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
@@ -34,13 +36,14 @@ namespace BigDataPathFinding.Models
                     )
                 )
                 .Size(Size)
-                .Scroll(Scroll)
+                //.Scroll(Scroll)
             );
             return search.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
         }
 
         public IEnumerable<Adjacent> GetInputAdjacent(Guid id)
         {
+            NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
@@ -55,7 +58,7 @@ namespace BigDataPathFinding.Models
                     )
                 )
                 .Size(Size)
-                .Scroll(Scroll)
+                //.Scroll(Scroll)
             );
             return search.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
         }
