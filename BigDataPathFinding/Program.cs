@@ -35,7 +35,7 @@ namespace BigDataPathFinding
 
                 stopWatch.Start();
 
-                PathFinder pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
+                PathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -48,7 +48,7 @@ namespace BigDataPathFinding
                 Console.WriteLine("******** Hadi ********\n\n");
 
 
-                pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
