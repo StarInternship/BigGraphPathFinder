@@ -32,16 +32,22 @@ namespace BigDataPathFinding.Models.Mahdi
                 if (Math.Abs(_minDistance - int.MaxValue) < 0.01) //if minDistance hasn't been set! 
                     _minDistance = bestCandidateData.Distance;
 
-            foreach (var adjacent in Metadata.GetOutputAdjacent(bestCandidate))
+            foreach (var adjacentList in Metadata.GetOutputAdjacent(bestCandidate))
             {
-                CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
+                foreach (var adjacent in adjacentList)
+                {
+                    CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
+                }
             }
 
             if (Directed)
                 return;
-            foreach (var adjacent in Metadata.GetInputAdjacent(bestCandidate))
+            foreach (var adjacentList in Metadata.GetInputAdjacent(bestCandidate))
             {
-                CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
+                foreach (var adjacent in adjacentList)
+                {
+                    CheckAdjacent(adjacent, bestCandidateData, bestCandidate);
+                }
             }
         }
 

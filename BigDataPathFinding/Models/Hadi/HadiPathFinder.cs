@@ -23,12 +23,23 @@ namespace BigDataPathFinding.Models.Hadi
                 if (node.Explored) continue;
                 node.Explored = true;
 
-                foreach (var adjacent in Metadata.GetOutputAdjacent(node.Id))
-                    UpdateAdjacent(node, adjacent);
+                foreach (var adjacentList in Metadata.GetOutputAdjacent(node.Id))
+                {
+                    foreach (var adjacent in adjacentList)
+                    {
+                        UpdateAdjacent(node, adjacent);
+                    }
+
+                }
 
                 if (!Directed)
-                    foreach (var adjacent in Metadata.GetInputAdjacent(node.Id))
-                        UpdateAdjacent(node, adjacent);
+                    foreach (var adjacentList in Metadata.GetInputAdjacent(node.Id))
+                    {
+                        foreach (var adjacent in adjacentList)
+                        {
+                            UpdateAdjacent(node, adjacent);
+                        }
+                    }
             }
         }
 
