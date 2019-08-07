@@ -8,8 +8,8 @@ namespace BigDataPathFinding.Models
     public class ElasticMetadata : IMetadata
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
-        private const int Size = 10000;
-        private const string Scroll = "50s";
+        private const int Size = 10;
+        private const string Scroll = "2m";
         private readonly ElasticClient _client;
 
         public ElasticMetadata(string connectionsIndex)
