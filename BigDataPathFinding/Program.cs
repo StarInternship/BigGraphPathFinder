@@ -12,8 +12,8 @@ namespace BigDataPathFinding
         private static void Main(string[] args)
         {
             const string testFilesPath = @"../../../TestFiles/";
-            /*var database = new FileGraph(testFilesPath + "Test1.txt");
-            var metadata = new FileMetadata(database);*/
+//            var database = new FileGraph(testFilesPath + "hosein2.txt");
+//            var metadata = new FileMetadata(database);
             var database=new ElasticDatabase("hosein2_node_set");
             var metadata=new ElasticMetadata("hosein2_connections");
 
@@ -25,9 +25,9 @@ namespace BigDataPathFinding
             while (true)
             {
                 Console.Write("source: ");
-                var sourceId = new Guid(Console.ReadLine().Trim());
+                var sourceId = /*database.GetId(Console.ReadLine());//*/new Guid(Console.ReadLine().Trim());
                 Console.Write("target: ");
-                var targetId = new Guid(Console.ReadLine().Trim());
+                var targetId = /*database.GetId(Console.ReadLine());//*/new Guid(Console.ReadLine().Trim());
                 Console.Write("directed(1 or 0): ");
                 var directed = Console.ReadLine() != "0";
 
