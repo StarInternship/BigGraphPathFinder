@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nest;
 
@@ -17,16 +18,14 @@ namespace BigDataPathFinding.Models
 
         public Node GetNode(Guid id)
         {
-            var search = _client.Search<Node>(s => s
+            var search = _client.Search<Dictionary<string, object>>(s => s
                 .Query(q => q
-                    .Match(m => m
-                        .Field(node => node.Id)
-                        .Query(id.ToString())
+                    .Ids(i => i
+                        .Values(id)
                     )
                 )
-                .Size(1)
             );
-            return search.Total == 0 ? null : search.Documents.First();
+            return search.Total == 0 ? null : new Node(id, (string)search.Documents.First()["name"]);
         }
     }
 }
