@@ -6,7 +6,7 @@ namespace BigDataPathFinding.Models.Hadi
     public class HadiPathFinder : PathFinder
     {
         private SearchData _searchData;
-
+        private double _checkingDistance;
         public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
             : base(metadata, sourceId, targetId, directed)
         {
@@ -19,6 +19,13 @@ namespace BigDataPathFinding.Models.Hadi
             while (!_searchData.IsEmpty())
             {
                 var node = _searchData.PopBestCurrentNode();
+
+                _checkingDistance = node.Distance;
+
+                if (!(GetNode(TargetId) == null || _checkingDistance < GetNode(TargetId).Distance))
+                {
+                    return;
+                }
 
                 if (node.Explored) continue;
                 node.Explored = true;
