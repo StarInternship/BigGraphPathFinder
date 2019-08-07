@@ -9,7 +9,7 @@ namespace BigDataPathFinding.Models
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
         private const int Size = 10000;
-        private const string Scroll = "2m";
+        private const string Scroll = "5s";
         private readonly ElasticClient _client;
 
         public ElasticMetadata(string connectionsIndex)
@@ -48,6 +48,8 @@ namespace BigDataPathFinding.Models
                 yield return current.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
                 current = _client.Scroll<Edge>(Scroll, search.ScrollId);
             }
+
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }
 
         public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
@@ -79,6 +81,8 @@ namespace BigDataPathFinding.Models
                 yield return current.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
                 current = _client.Scroll<Edge>(Scroll, search.ScrollId);
             }
+
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }
     }
 }
