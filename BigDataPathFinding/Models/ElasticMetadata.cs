@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Nest;
 
 namespace BigDataPathFinding.Models
@@ -8,7 +7,7 @@ namespace BigDataPathFinding.Models
     public class ElasticMetadata : IMetadata
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
-        private const int Size = 10000;
+        private const int Size = 20;
         private const string Scroll = "5s";
         private readonly ElasticClient _client;
 
@@ -22,7 +21,7 @@ namespace BigDataPathFinding.Models
         public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
         {
             NumberOfRequests++;
-            var search = _client.Search<Edge>(s => s
+            var search = _client.Search<OutputAdjacent>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
                             f => f.TargetId,
@@ -38,15 +37,15 @@ namespace BigDataPathFinding.Models
                 .Size(Size)
                 .Scroll(Scroll)
             );
-            
-            yield return search.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
+            var remaining = search.Total - search.Hits.Count;
 
-            var current = _client.Scroll<Edge>(Scroll, search.ScrollId);
-            
-            while(current.Hits.Count > 0)
+            yield return search.Documents;
+
+            while (remaining > 0)
             {
-                yield return current.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
-                current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                search = _client.Scroll<OutputAdjacent>(Scroll, search.ScrollId);
+                remaining -= search.Hits.Count;
+                yield return search.Documents;
             }
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
@@ -55,7 +54,7 @@ namespace BigDataPathFinding.Models
         public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
         {
             NumberOfRequests++;
-            var search = _client.Search<Edge>(s => s
+            var search = _client.Search<InputAdjacent>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
                         f => f.SourceId,
@@ -71,15 +70,15 @@ namespace BigDataPathFinding.Models
                 .Size(Size)
                 .Scroll(Scroll)
             );
+            var remaining = search.Total - search.Hits.Count;
 
-            yield return search.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
+            yield return search.Documents;
 
-            var current = _client.Scroll<Edge>(Scroll, search.ScrollId);
-
-            while (current.Hits.Count > 0)
+            while (remaining > 0)
             {
-                yield return current.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
-                current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                search = _client.Scroll<InputAdjacent>(Scroll, search.ScrollId);
+                remaining -= search.Hits.Count;
+                yield return search.Documents;
             }
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
