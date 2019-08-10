@@ -17,7 +17,7 @@ namespace BigDataPathFinding.Models
             var settings = new ConnectionSettings(Uri).DefaultIndex(connectionsIndex);
             _client = new ElasticClient(settings);
         }
-        public int NumberOfRequests { get; set; } = 0;
+        public int NumberOfRequests { get; set; }
 
         public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
         {
