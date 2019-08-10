@@ -22,7 +22,7 @@ namespace BigDataPathFinding.Models
         public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
         {
             NumberOfRequests++;
-            var search = _client.Search<Edge>(s => s
+            var search = _client.Search<OutputAdjacent>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
                             f => f.TargetId,
@@ -39,14 +39,14 @@ namespace BigDataPathFinding.Models
                 .Scroll(Scroll)
             );
             
-            yield return search.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
+            yield return search.Documents;
 
-            var current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+            var current = _client.Scroll<OutputAdjacent>(Scroll, search.ScrollId);
             
             while(current.Hits.Count > 0)
             {
-                yield return current.Documents.Select(edge => new Adjacent(edge.TargetId, edge.Weight));
-                current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                yield return current.Documents;
+                current = _client.Scroll<OutputAdjacent>(Scroll, search.ScrollId);
             }
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
@@ -55,7 +55,7 @@ namespace BigDataPathFinding.Models
         public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
         {
             NumberOfRequests++;
-            var search = _client.Search<Edge>(s => s
+            var search = _client.Search<InputAdjacent>(s => s
                 .Source(src => src
                     .Includes(i => i.Fields(
                         f => f.SourceId,
@@ -72,14 +72,14 @@ namespace BigDataPathFinding.Models
                 .Scroll(Scroll)
             );
 
-            yield return search.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
+            yield return search.Documents;
 
-            var current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+            var current = _client.Scroll<InputAdjacent>(Scroll, search.ScrollId);
 
             while (current.Hits.Count > 0)
             {
-                yield return current.Documents.Select(edge => new Adjacent(edge.SourceId, edge.Weight));
-                current = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                yield return current.Documents;
+                current = _client.Scroll<InputAdjacent>(Scroll, search.ScrollId);
             }
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
