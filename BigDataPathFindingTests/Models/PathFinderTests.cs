@@ -3,6 +3,7 @@ using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.FileGraph;
 using BigDataPathFinding.Models.Hadi;
 using BigDataPathFinding.Models.Mahdi;
+using BigDataPathFinding.Models.ShortestWeightless;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BigDataPathFindingTests.Models
@@ -214,6 +215,32 @@ namespace BigDataPathFindingTests.Models
             {
                 new Edge(database.GetId("0"), database.GetId("2"), 1),
                 new Edge(database.GetId("2"), database.GetId("1"), 1),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 20),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+    }
+
+    [TestClass]
+    public class FindShortestPassWeightLess
+    {
+        private const string TestFilesPath = @"../../../TestFiles/";
+
+        [TestMethod]
+        public void EasyTest()
+        {
+            var database = new FileGraph(TestFilesPath + "VisitedGraph.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, true);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("1"), 10),
                 new Edge(database.GetId("1"), database.GetId("3"), 1),
                 new Edge(database.GetId("3"), database.GetId("4"), 20),
             };
