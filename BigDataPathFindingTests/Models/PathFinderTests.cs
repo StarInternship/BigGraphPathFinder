@@ -220,4 +220,13 @@ namespace BigDataPathFindingTests.Models
             Assert.IsTrue(expected.SetEquals(actual));
         }
     }
+
+    [TestClass]
+    public class FindShortestPassWeightLess
+    {
+        [TestMethod]
+        public void EasyTest()
+        {
+        }
+    }
 }
