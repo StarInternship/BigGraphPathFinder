@@ -32,12 +32,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                         {
                             var newNode = new NodeData(edge.TargetId, distance);
                             searchData.AddToNodeSet(newNode);
-                            newNode.AddAdjacent(new Adjacent(edge.SourceId, 1));
+                            newNode.AddAdjacent(new Adjacent(edge.SourceId, edge.Weight));
                             guids.Add(newNode.Id);
                         }
                         else if (searchData.GetNode(edge.TargetId).Distance == distance)
                         {
-                            searchData.GetNode(edge.TargetId).AddAdjacent(new Adjacent(edge.SourceId, 1));
+                            searchData.GetNode(edge.TargetId).AddAdjacent(new Adjacent(edge.SourceId, edge.Weight));
                         }
 
                         if (TargetId == edge.TargetId)
@@ -54,12 +54,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                             {
                                 var newNode = new NodeData(edge.SourceId, distance);
                                 searchData.AddToNodeSet(newNode);
-                                newNode.AddAdjacent(new Adjacent(edge.TargetId, 1));
+                                newNode.AddAdjacent(new Adjacent(edge.TargetId, edge.Weight));
                                 guids.Add(newNode.Id);
                             }
                             else if (searchData.GetNode(edge.SourceId).Distance == distance)
                             {
-                                searchData.GetNode(edge.SourceId).AddAdjacent(new Adjacent(edge.TargetId, 1));
+                                searchData.GetNode(edge.SourceId).AddAdjacent(new Adjacent(edge.TargetId, edge.Weight));
                             }
 
                             if (TargetId == edge.TargetId)
@@ -77,7 +77,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet()
         {
-            throw new NotImplementedException();
+            return searchData.NodeSet;
         }
     }
 }
