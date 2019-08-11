@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    public class ElasticWeightlessPathFinder : AbstractPathFinder
+    public class WeightlessPathFinder : AbstractPathFinder
     {
-        public ElasticWeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) 
+        public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed) 
             : base(metadata, sourceId, targetId, directed)
         {
         }

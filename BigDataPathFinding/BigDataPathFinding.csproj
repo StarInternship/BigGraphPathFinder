@@ -80,7 +80,7 @@
     <Compile Include="Models\Mahdi\MahdiPathFinder.cs" />
     <Compile Include="Models\ResultBuilder.cs" />
     <Compile Include="Models\ResultNode.cs" />
-    <Compile Include="Models\ShortestWeightless\ElasticWeightlessPathFinder.cs" />
+    <Compile Include="Models\ShortestWeightless\WeightlessPathFinder.cs" />
     <Compile Include="Models\ShortestWeightless\SearchData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
