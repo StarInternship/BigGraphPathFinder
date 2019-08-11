@@ -15,47 +15,48 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            int distance = 0;
-            searchData.AddToNodeSet(new NodeData(SourceId, distance));
+            int leyer = 0;
+            searchData.AddToNodeSet(new NodeData(SourceId, leyer));
             searchData.AddToCurrentNodes(SourceId);
+            bool reachedToTarget = false;
 
-            while (true)
+            while (!reachedToTarget)
             {
-                HashSet<Guid> guids = new HashSet<Guid>();
-                distance++;
-                bool reachedToTarget = false;
-                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.currentNodes))
+                HashSet<Guid> nextLeyerNodes = new HashSet<Guid>();
+                leyer++;
+
+                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
                 {
                     foreach (Edge edge in edges)
                     {
-                        reachedToTarget = VisiteEdge(distance, guids, edge.SourceId, edge.TargetId, edge.Weight);
+                        reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
                 }
+
+
                 if (!Directed)
                 {
-                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.currentNodes))
+                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentNodes))
                     {
                         foreach (Edge edge in edges)
                         {
-                            reachedToTarget = VisiteEdge(distance, guids, edge.TargetId, edge.SourceId, edge.Weight);
+                            reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
                 }
 
-                searchData.ClearCurrentNodes(guids);
-
-                if (reachedToTarget)
-                    break;
+                searchData.ClearCurrentNodes(nextLeyerNodes);
             }
         }
 
-        private bool VisiteEdge(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        private bool VisiteEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
             if (searchData.GetNode(targetId) == null)
             {
-                VisiteNewNode(distance, guids, sourceId, targetId, weight);
+                VisiteNewNode(leyer, nextLeyerNodes, sourceId, targetId, weight);
             }
-            else if (searchData.GetNode(targetId).Distance == distance)
+
+            else if (searchData.GetNode(targetId).Distance == leyer)
             {
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
             }
@@ -63,12 +64,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             return TargetId == targetId;
         }
 
-        private void VisiteNewNode(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        private void VisiteNewNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
-            var newNode = new NodeData(targetId, distance);
+            var newNode = new NodeData(targetId, leyer);
             searchData.AddToNodeSet(newNode);
             newNode.AddAdjacent(new Adjacent(sourceId, weight));
-            guids.Add(newNode.Id);
+            nextLeyerNodes.Add(newNode.Id);
         }
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet()
