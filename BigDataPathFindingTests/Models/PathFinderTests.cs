@@ -246,5 +246,25 @@ namespace BigDataPathFindingTests.Models
             };
             Assert.IsTrue(expected.SetEquals(actual));
         }
+
+        [TestMethod]
+        public void Undirected()
+        {
+            var database = new FileGraph(TestFilesPath + "undirected.csv");
+            var metadata = new FileMetadata(database);
+            var sourceId = database.GetId("0");
+            var targetId = database.GetId("4");
+            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, false);
+            pathFinder.FindPath();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var actual = resultBuilder.Build(targetId).Edges;
+            var expected = new HashSet<Edge>
+            {
+                new Edge(database.GetId("0"), database.GetId("1"), 10),
+                new Edge(database.GetId("1"), database.GetId("3"), 1),
+                new Edge(database.GetId("3"), database.GetId("4"), 20),
+            };
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
     }
 }

@@ -28,20 +28,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (Edge edge in edges)
                     {
-                        if (searchData.GetNode(edge.TargetId) == null)
-                        {
-                            var newNode = new NodeData(edge.TargetId, distance);
-                            searchData.AddToNodeSet(newNode);
-                            newNode.AddAdjacent(new Adjacent(edge.SourceId, edge.Weight));
-                            guids.Add(newNode.Id);
-                        }
-                        else if (searchData.GetNode(edge.TargetId).Distance == distance)
-                        {
-                            searchData.GetNode(edge.TargetId).AddAdjacent(new Adjacent(edge.SourceId, edge.Weight));
-                        }
-
-                        if (TargetId == edge.TargetId)
-                            reachedToTarget = true;
+                        reachedToTarget = VisiteEdge(distance, guids, edge.SourceId, edge.TargetId, edge.Weight);
                     }
                 }
                 if (!Directed)
@@ -50,20 +37,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         foreach (Edge edge in edges)
                         {
-                            if (searchData.GetNode(edge.SourceId) == null)
-                            {
-                                var newNode = new NodeData(edge.SourceId, distance);
-                                searchData.AddToNodeSet(newNode);
-                                newNode.AddAdjacent(new Adjacent(edge.TargetId, edge.Weight));
-                                guids.Add(newNode.Id);
-                            }
-                            else if (searchData.GetNode(edge.SourceId).Distance == distance)
-                            {
-                                searchData.GetNode(edge.SourceId).AddAdjacent(new Adjacent(edge.TargetId, edge.Weight));
-                            }
-
-                            if (TargetId == edge.TargetId)
-                                reachedToTarget = true;
+                            reachedToTarget = VisiteEdge(distance, guids, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
                 }
@@ -73,6 +47,28 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 if (reachedToTarget)
                     break;
             }
+        }
+
+        private bool VisiteEdge(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        {
+            if (searchData.GetNode(targetId) == null)
+            {
+                VisiteNewNode(distance, guids, sourceId, targetId, weight);
+            }
+            else if (searchData.GetNode(targetId).Distance == distance)
+            {
+                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+            }
+
+            return TargetId == targetId;
+        }
+
+        private void VisiteNewNode(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        {
+            var newNode = new NodeData(targetId, distance);
+            searchData.AddToNodeSet(newNode);
+            newNode.AddAdjacent(new Adjacent(sourceId, weight));
+            guids.Add(newNode.Id);
         }
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet()
