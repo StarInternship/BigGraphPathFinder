@@ -9,13 +9,15 @@ namespace BigDataPathFinding.Models
         protected readonly IMetadata Metadata;
         protected readonly Guid SourceId;
         protected readonly Guid TargetId;
+        protected readonly int MaxDistance;
 
-        protected AbstractPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
+        protected AbstractPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed , int maxDistance)
         {
             Metadata = metadata;
             SourceId = sourceId;
             TargetId = targetId;
             Directed = directed;
+            MaxDistance = maxDistance;
         }
 
         public abstract void FindPath();

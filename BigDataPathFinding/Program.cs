@@ -13,6 +13,7 @@ namespace BigDataPathFinding
     {
         private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
+        private const int MaxDistance = 1000;
 
         private static void Main(string[] args)
         {
@@ -72,7 +73,7 @@ namespace BigDataPathFinding
 
                 if (Source == Source.Elastic)
                     ((ElasticMetadata) metadata).NumberOfRequests = 0;
-                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
+                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -92,7 +93,7 @@ namespace BigDataPathFinding
                 stopWatch.Start();
                 if (Source == Source.Elastic)
                     ((ElasticMetadata)metadata).NumberOfRequests = 0;
-                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
@@ -111,7 +112,7 @@ namespace BigDataPathFinding
                 stopWatch.Start();
                 if (Source == Source.Elastic)
                     ((ElasticMetadata)metadata).NumberOfRequests = 0;
-                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
