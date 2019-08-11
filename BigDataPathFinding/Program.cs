@@ -5,6 +5,7 @@ using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
 using BigDataPathFinding.Models.Hadi;
 using BigDataPathFinding.Models.Mahdi;
+using BigDataPathFinding.Models.ShortestWeightless;
 
 namespace BigDataPathFinding
 {
@@ -90,7 +91,7 @@ namespace BigDataPathFinding
                 stopWatch.Reset();
                 stopWatch.Start();
                 if (Source == Source.Elastic)
-                    ((ElasticMetadata) metadata).NumberOfRequests = 0;
+                    ((ElasticMetadata)metadata).NumberOfRequests = 0;
                 pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
@@ -103,8 +104,27 @@ namespace BigDataPathFinding
                 foreach (var edge in actual)
                     Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
                 if (Source == Source.Elastic)
-                    Console.WriteLine("count: " + ((ElasticMetadata) metadata).NumberOfRequests);
+                    Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
                 Console.WriteLine("******* Mahdi *********");
+
+                stopWatch.Reset();
+                stopWatch.Start();
+                if (Source == Source.Elastic)
+                    ((ElasticMetadata)metadata).NumberOfRequests = 0;
+                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder.FindPath();
+                stopWatch.Stop();
+                Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
+                stopWatch.Reset();
+                stopWatch.Start();
+                resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+                actual = resultBuilder.Build(targetId).Edges;
+                Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
+                foreach (var edge in actual)
+                    Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
+                if (Source == Source.Elastic)
+                    Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
+                Console.WriteLine("******* Weightless *********");
 
                 stopWatch.Reset();
                 stopWatch.Start();
