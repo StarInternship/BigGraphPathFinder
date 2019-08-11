@@ -49,14 +49,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        private bool VisiteEdge(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        private bool VisiteEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
             if (searchData.GetNode(targetId) == null)
             {
-                VisiteNewNode(distance, guids, sourceId, targetId, weight);
+                VisiteNewNode(leyer, nextLeyerNodes, sourceId, targetId, weight);
             }
 
-            else if (searchData.GetNode(targetId).Distance == distance)
+            else if (searchData.GetNode(targetId).Distance == leyer)
             {
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
             }
@@ -64,12 +64,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             return TargetId == targetId;
         }
 
-        private void VisiteNewNode(int distance, HashSet<Guid> guids, Guid sourceId, Guid targetId, double weight)
+        private void VisiteNewNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
-            var newNode = new NodeData(targetId, distance);
+            var newNode = new NodeData(targetId, leyer);
             searchData.AddToNodeSet(newNode);
             newNode.AddAdjacent(new Adjacent(sourceId, weight));
-            guids.Add(newNode.Id);
+            nextLeyerNodes.Add(newNode.Id);
         }
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet()
