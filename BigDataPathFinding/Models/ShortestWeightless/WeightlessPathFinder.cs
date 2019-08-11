@@ -25,11 +25,16 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 HashSet<Guid> nextLeyerNodes = new HashSet<Guid>();
                 leyer++;
 
+
+
                 foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
                 {
                     foreach (Edge edge in edges)
                     {
-                        reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                        if (VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight))
+                        {
+                            reachedToTarget = true;
+                        }
                     }
                 }
 
@@ -40,11 +45,17 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         foreach (Edge edge in edges)
                         {
-                            reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
+                            if (VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight))
+                            {
+                                reachedToTarget = true;
+                            }
                         }
                     }
                 }
-
+                if (nextLeyerNodes.Count == 0)
+                {
+                    Console.WriteLine("hadi");
+                }
                 searchData.ClearCurrentNodes(nextLeyerNodes);
             }
         }
