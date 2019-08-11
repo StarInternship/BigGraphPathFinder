@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Nest;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.ElasticGraph
 {
     public class ElasticMetadata : IMetadata
     {
@@ -82,6 +82,16 @@ namespace BigDataPathFinding.Models
             }
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
+        }
+
+        public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IEnumerable<Edge>> GetAllAdjacent(IEnumerable<Guid> ids)
+        {
+            throw new NotImplementedException();
         }
     }
 }

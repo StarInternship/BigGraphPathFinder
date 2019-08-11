@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nest;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.ElasticGraph
 {
     public class ElasticDatabase : IDatabase
     {
