@@ -8,7 +8,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
     public class ElasticMetadata : IMetadata
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
-        private const int Size = 10000;
+        private const int Size = 1000;
         private const string Scroll = "5s";
         private readonly ElasticClient _client;
 
@@ -87,7 +87,6 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            if (!ids.Any()) yield break;
             NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
@@ -115,7 +114,6 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            if (!ids.Any()) yield break;
             NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Query(q => q

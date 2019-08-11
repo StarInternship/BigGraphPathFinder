@@ -14,14 +14,13 @@ namespace BigDataPathFinding
         private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
         private const int MaxDistance = 1000;
+        private static readonly Stopwatch stopWatch = new Stopwatch();
+        private static IDatabase database;
+        private static IMetadata metadata;
 
         private static void Main(string[] args)
         {
-            var stopWatch = new Stopwatch();
             stopWatch.Start();
-
-            IDatabase database;
-            IMetadata metadata;
 
             switch (Source)
             {
@@ -31,13 +30,13 @@ namespace BigDataPathFinding
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
-                    metadata = new FileMetadata((FileGraph) database);
+                    metadata = new FileMetadata((FileGraph)database);
                     break;
             }
 
             stopWatch.Stop();
 
-            Console.WriteLine("Get Ready After "+stopWatch.ElapsedMilliseconds+" ms.");
+            Console.WriteLine("Get Ready After " + stopWatch.ElapsedMilliseconds + " ms.");
 
             while (true)
             {
@@ -49,7 +48,7 @@ namespace BigDataPathFinding
                         sourceId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        sourceId = ((FileGraph) database).GetId(Console.ReadLine());
+                        sourceId = ((FileGraph)database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -60,7 +59,7 @@ namespace BigDataPathFinding
                         targetId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        targetId = ((FileGraph) database).GetId(Console.ReadLine());
+                        targetId = ((FileGraph)database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -68,68 +67,40 @@ namespace BigDataPathFinding
                 var directed = Console.ReadLine() != "0";
 
 
-                stopWatch.Reset();
-                stopWatch.Start();
-
-                if (Source == Source.Elastic)
-                    ((ElasticMetadata) metadata).NumberOfRequests = 0;
-                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
-                pathFinder.FindPath();
-                stopWatch.Stop();
-                Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                stopWatch.Reset();
-                stopWatch.Start();
-                var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-                var actual = resultBuilder.Build(targetId).Edges;
-                stopWatch.Stop();
-                Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                foreach (var edge in actual)
-                    Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
-                if (Source == Source.Elastic)
-                    Console.WriteLine("count: " + ((ElasticMetadata) metadata).NumberOfRequests);
+                stopWatch.Restart();
+                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                FindPath(targetId, pathFinder);
                 Console.WriteLine("******** Hadi ********\n\n");
 
-                stopWatch.Reset();
-                stopWatch.Start();
-                if (Source == Source.Elastic)
-                    ((ElasticMetadata)metadata).NumberOfRequests = 0;
-                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
-                pathFinder.FindPath();
-                stopWatch.Stop();
-                Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                stopWatch.Reset();
-                stopWatch.Start();
-                resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-                actual = resultBuilder.Build(targetId).Edges;
-                Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                foreach (var edge in actual)
-                    Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
-                if (Source == Source.Elastic)
-                    Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
-                Console.WriteLine("******* Mahdi *********");
+                stopWatch.Restart();
+                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                FindPath(targetId, pathFinder);
+                Console.WriteLine("******* Mahdi *********\n\n");
 
-                stopWatch.Reset();
-                stopWatch.Start();
-                if (Source == Source.Elastic)
-                    ((ElasticMetadata)metadata).NumberOfRequests = 0;
-                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed,MaxDistance);
-                pathFinder.FindPath();
-                stopWatch.Stop();
-                Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                stopWatch.Reset();
-                stopWatch.Start();
-                resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-                actual = resultBuilder.Build(targetId).Edges;
-                Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-                foreach (var edge in actual)
-                    Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
-                if (Source == Source.Elastic)
-                    Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
-                Console.WriteLine("******* Weightless *********");
-
-                stopWatch.Reset();
-                stopWatch.Start();
+                stopWatch.Restart();
+                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                FindPath(targetId, pathFinder);
+                Console.WriteLine("******* Weightless *********\n\n");
             }
+        }
+
+        private static void FindPath(Guid targetId, AbstractPathFinder pathFinder)
+        {
+            if (Source == Source.Elastic)
+                ((ElasticMetadata)metadata).NumberOfRequests = 0;
+            pathFinder.FindPath();
+            stopWatch.Stop();
+            Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
+            stopWatch.Reset();
+            stopWatch.Start();
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
+            var edges = resultBuilder.Build(targetId).Edges;
+            stopWatch.Stop();
+            Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
+            foreach (var edge in edges)
+                Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
+            if (Source == Source.Elastic)
+                Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
         }
     }
 
