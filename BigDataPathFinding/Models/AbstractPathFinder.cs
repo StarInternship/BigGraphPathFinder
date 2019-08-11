@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models
 {
-    public abstract class PathFinder
+    public abstract class AbstractPathFinder
     {
         protected readonly bool Directed;
         protected readonly IMetadata Metadata;
         protected readonly Guid SourceId;
         protected readonly Guid TargetId;
 
-        protected PathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
+        protected AbstractPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed)
         {
             Metadata = metadata;
             SourceId = sourceId;

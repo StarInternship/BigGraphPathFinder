@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.Hadi
 {
-    public class HadiPathFinder : PathFinder
+    public class HadiPathFinder : AbstractPathFinder
     {
         private SearchData _searchData;
         private double _checkingDistance;

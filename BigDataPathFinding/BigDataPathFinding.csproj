@@ -73,13 +73,15 @@
     <Compile Include="Models\InputAdjacent.cs" />
     <Compile Include="Models\Mahdi\SearchData.cs" />
     <Compile Include="Models\OutputAdjacent.cs" />
-    <Compile Include="Models\PathFinder.cs" />
+    <Compile Include="Models\AbstractPathFinder.cs" />
     <Compile Include="Models\ISearchData.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\NodeData.cs" />
     <Compile Include="Models\Mahdi\MahdiPathFinder.cs" />
     <Compile Include="Models\ResultBuilder.cs" />
     <Compile Include="Models\ResultNode.cs" />
+    <Compile Include="Models\ShortestWeightless\ElasticWeightlessPathFinder.cs" />
+    <Compile Include="Models\ShortestWeightless\SearchData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

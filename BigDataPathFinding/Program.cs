@@ -70,7 +70,7 @@ namespace BigDataPathFinding
 
                 if (Source == Source.Elastic)
                     ((ElasticMetadata) metadata).NumberOfRequests = 0;
-                PathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
+                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
                 pathFinder.FindPath();
                 stopWatch.Stop();
                 Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
