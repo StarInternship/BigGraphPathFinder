@@ -89,7 +89,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IEnumerable<Edge>> GetAllAdjacent(IEnumerable<Guid> ids)
+        public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
             throw new NotImplementedException();
         }

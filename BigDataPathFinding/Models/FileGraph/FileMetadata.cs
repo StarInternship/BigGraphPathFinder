@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BigDataPathFinding.Models.FileGraph
 {
@@ -22,11 +23,21 @@ namespace BigDataPathFinding.Models.FileGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            throw new NotImplementedException();
+            foreach (var id in ids)
+            {
+                yield return ((FileNode)_database.GetNode(id)).OutputAdjucents.Select(
+                    adjacent => new Edge(id, adjacent.Id, adjacent.Weight)
+                );
+            }
         }
-        public IEnumerable<IEnumerable<Edge>> GetAllAdjacent(IEnumerable<Guid> ids)
+        public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            throw new NotImplementedException();
+            foreach (var id in ids)
+            {
+                yield return ((FileNode)_database.GetNode(id)).InputAdjucents.Select(
+                    adjacent => new Edge(adjacent.Id, id, adjacent.Weight)
+                );
+            }
         }
     }
 }

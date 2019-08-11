@@ -11,6 +11,6 @@ namespace BigDataPathFinding.Models
 
         IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids);
 
-        IEnumerable<IEnumerable<Edge>> GetAllAdjacent(IEnumerable<Guid> ids);
+        IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids);
     }
 }
