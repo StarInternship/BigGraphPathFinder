@@ -87,7 +87,6 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            if (!ids.Any()) yield break;
             NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
@@ -115,7 +114,6 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            if (!ids.Any()) yield break;
             NumberOfRequests++;
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
