@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nest;
 
 namespace BigDataPathFinding.Models.ElasticGraph
@@ -86,12 +87,56 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            throw new NotImplementedException();
+            NumberOfRequests++;
+            var search = _client.Search<Edge>(s => s
+                .Query(q => q
+                   .Bool(b => new BoolQuery
+                   {
+                       Should = ids.Select(id => new QueryContainer(new MatchQuery { Field = new Field("sourceId"), Query = id.ToString() }))
+                   })
+                )
+                .Size(Size)
+                .Scroll(Scroll)
+            );
+            var remaining = search.Total - search.Hits.Count;
+
+            yield return search.Documents;
+
+            while (remaining > 0)
+            {
+                search = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                remaining -= search.Hits.Count;
+                yield return search.Documents;
+            }
+
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            throw new NotImplementedException();
+            NumberOfRequests++;
+            var search = _client.Search<Edge>(s => s
+                .Query(q => q
+                   .Bool(b => new BoolQuery
+                   {
+                       Should = ids.Select(id => new QueryContainer(new MatchQuery { Field = new Field("targetId"), Query = id.ToString() }))
+                   })
+                )
+                .Size(Size)
+                .Scroll(Scroll)
+            );
+            var remaining = search.Total - search.Hits.Count;
+
+            yield return search.Documents;
+
+            while (remaining > 0)
+            {
+                search = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                remaining -= search.Hits.Count;
+                yield return search.Documents;
+            }
+
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }
     }
 }
