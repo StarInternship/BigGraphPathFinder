@@ -52,10 +52,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                         }
                     }
                 }
-                if (nextLeyerNodes.Count == 0)
-                {
-                    Console.WriteLine("hadi");
-                }
+                
                 searchData.ClearCurrentNodes(nextLeyerNodes);
             }
         }

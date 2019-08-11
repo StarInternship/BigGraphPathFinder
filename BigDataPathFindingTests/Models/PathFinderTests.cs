@@ -230,7 +230,7 @@ namespace BigDataPathFindingTests.Models
         [TestMethod]
         public void EasyTest()
         {
-            var database = new FileGraph(TestFilesPath + "undirected.csv");
+            var database = new FileGraph(TestFilesPath + "VisitedGraph.csv");
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
