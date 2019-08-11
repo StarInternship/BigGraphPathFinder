@@ -54,6 +54,8 @@ namespace BigDataPathFinding.Models.Mahdi
         private void CheckAdjacent(Adjacent adjacent, NodeData bestCandidateData, Guid bestCandidate)
         {
             var newNodeData = new NodeData(adjacent.Id, adjacent.Weight + bestCandidateData.Distance);
+            if(newNodeData.Distance>_minDistance)
+                return;
             newNodeData.AddAdjacent(new Adjacent(bestCandidate, adjacent.Weight));
             if (_searchData.ContainsDiscovery(adjacent.Id))
             {
