@@ -8,7 +8,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
     public class ElasticMetadata : IMetadata
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
-        private const int Size = 10000;
+        private const int Size = 1000;
         private const string Scroll = "5s";
         private readonly ElasticClient _client;
 

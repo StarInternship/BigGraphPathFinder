@@ -28,9 +28,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 if (searchData.CurrentNodes.Count == 0)
                     return;
 
-                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
+                foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
                 {
-                    foreach (Edge edge in edges)
+                    foreach (var edge in edges)
                     {
                         if (VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight))
                         {
@@ -41,9 +41,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 if (!Directed)
                 {
-                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentNodes))
+                    foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentNodes))
                     {
-                        foreach (Edge edge in edges)
+                        foreach (var edge in edges)
                         {
                             if (VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight))
                             {
