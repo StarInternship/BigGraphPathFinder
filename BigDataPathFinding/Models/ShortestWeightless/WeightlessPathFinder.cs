@@ -25,6 +25,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 HashSet<Guid> nextLeyerNodes = new HashSet<Guid>();
                 leyer++;
 
+                if (searchData.CurrentNodes.Count == 0)
+                    return;
+
                 foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
                 {
                     foreach (Edge edge in edges)
