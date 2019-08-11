@@ -80,9 +80,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             nextLeyerNodes.Add(newNode.Id);
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet()
-        {
-            return searchData.NodeSet;
-        }
+        public override Dictionary<Guid, NodeData> GetResultNodeSet() => searchData.NodeSet;
     }
 }
