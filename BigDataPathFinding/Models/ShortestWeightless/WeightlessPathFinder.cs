@@ -15,37 +15,34 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            int distance = 0;
-            searchData.AddToNodeSet(new NodeData(SourceId, distance));
+            int leyer = 0;
+            searchData.AddToNodeSet(new NodeData(SourceId, leyer));
             searchData.AddToCurrentNodes(SourceId);
+            bool reachedToTarget = false;
 
-            while (true)
+            while (!reachedToTarget)
             {
-                HashSet<Guid> guids = new HashSet<Guid>();
-                distance++;
-                bool reachedToTarget = false;
-                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.currentNodes))
+                HashSet<Guid> nextLeyerNodes = new HashSet<Guid>();
+                leyer++;
+                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
                 {
                     foreach (Edge edge in edges)
                     {
-                        reachedToTarget = VisiteEdge(distance, guids, edge.SourceId, edge.TargetId, edge.Weight);
+                        reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
                 }
                 if (!Directed)
                 {
-                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.currentNodes))
+                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentNodes))
                     {
                         foreach (Edge edge in edges)
                         {
-                            reachedToTarget = VisiteEdge(distance, guids, edge.TargetId, edge.SourceId, edge.Weight);
+                            reachedToTarget = VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
                 }
 
-                searchData.ClearCurrentNodes(guids);
-
-                if (reachedToTarget)
-                    break;
+                searchData.ClearCurrentNodes(nextLeyerNodes);
             }
         }
 
@@ -55,6 +52,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 VisiteNewNode(distance, guids, sourceId, targetId, weight);
             }
+
             else if (searchData.GetNode(targetId).Distance == distance)
             {
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
