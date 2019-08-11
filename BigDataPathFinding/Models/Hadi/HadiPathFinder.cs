@@ -22,7 +22,7 @@ namespace BigDataPathFinding.Models.Hadi
 
                 _checkingDistance = node.Distance;
 
-                if (!(GetNode(TargetId) == null || _checkingDistance < GetNode(TargetId).Distance))
+                if (GetNode(TargetId) != null && _checkingDistance >= GetNode(TargetId).Distance)
                 {
                     return;
                 }
