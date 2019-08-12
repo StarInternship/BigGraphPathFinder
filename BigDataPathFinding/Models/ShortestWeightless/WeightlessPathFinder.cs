@@ -22,16 +22,26 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer));
+            searchData.AddToNodeSet(new WeightlessNodeData(SourceId, forwardLeyer, Seen.forward));
             searchData.AddToCurrentForwardNodes(SourceId);
 
-            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer));
+            searchData.AddToNodeSet(new WeightlessNodeData(TargetId, backwardLeyer, Seen.backward));
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             while (!reachedToTarget)
             {
+                if (searchData.CurrentBackwardNodes.Count == 0 && searchData.CurrentForwardNodes.Count == 0)
+                    return;
+
                 GoForward();
+
+                if (joints.Count > 0)
+                    break;
+
                 GoBackward();
+
+                if (joints.Count > 0)
+                    break;
             }
             AddPreviousAdjacentToBackwardNodes();
         }
@@ -43,23 +53,18 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void GoBackward()
         {
-            throw new NotImplementedException();
-        }
+            backwardLeyer--;
 
-        private void GoForward()
-        {
-            forwardLeyer++;
+            if (searchData.CurrentBackwardNodes.Count == 0)
+                return;
 
             var nextLeyerNodes = new HashSet<Guid>();
 
-            foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
+            foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentBackwardNodes))
             {
                 foreach (Edge edge in edges)
                 {
-                    if (VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight))
-                    {
-                        reachedToTarget = true;
-                    }
+                    VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                 }
             }
 
@@ -70,10 +75,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (Edge edge in edges)
                     {
-                        if (VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight))
-                        {
-                            reachedToTarget = true;
-                        }
+                        VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                     }
                 }
             }
@@ -81,29 +83,86 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             searchData.ClearCurrentForwardNodes(nextLeyerNodes);
         }
 
-        private bool VisiteForwardEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
+        private void GoForward()
+        {
+            forwardLeyer++;
+            if (searchData.CurrentForwardNodes.Count == 0)
+                return;
+            var nextLeyerNodes = new HashSet<Guid>();
+
+            foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentForwardNodes))
+            {
+                foreach (Edge edge in edges)
+                {
+                    VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                }
+            }
+
+
+            if (!Directed)
+            {
+                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
+                {
+                    foreach (Edge edge in edges)
+                    {
+                        VisiteBackwardEdge(forwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
+                    }
+                }
+            }
+
+            searchData.ClearCurrentBackwardNodes(nextLeyerNodes);
+        }
+
+        private void VisiteBackwardEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
+        {
+
+            if (searchData.GetNode(sourceId) == null)
+            {
+                var newNode = new WeightlessNodeData(targetId, leyer, Seen.backward);
+                searchData.AddToNodeSet(newNode);
+                nextLeyerNodes.Add(newNode.Id);
+            }
+
+            if (searchData.GetNode(targetId).Distance == leyer)
+            {
+                searchData.GetNode(targetId).AddBackwardAdjacent(new Adjacent(sourceId, weight));
+            }
+
+            if (searchData.GetNode(targetId).Seen == Seen.forward)
+            {
+                joints.Add(targetId);
+            }
+
+        }
+
+        private void VisiteForwardEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
             if (searchData.GetNode(targetId) == null)
             {
                 VisiteNewNode(leyer, nextLeyerNodes, sourceId, targetId, weight);
             }
 
-            else if (searchData.GetNode(targetId).Distance == leyer)
+            if (searchData.GetNode(targetId).Distance == leyer)
             {
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
             }
 
-            return TargetId == targetId;
+            if (searchData.GetNode(targetId).Seen == Seen.backward)
+            {
+                joints.Add(targetId);
+            }
         }
 
         private void VisiteNewNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
-            var newNode = new NodeData(targetId, leyer);
+            var newNode = new WeightlessNodeData(targetId, leyer, Seen.forward);
             searchData.AddToNodeSet(newNode);
-            newNode.AddAdjacent(new Adjacent(sourceId, weight));
             nextLeyerNodes.Add(newNode.Id);
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet() => searchData.NodeSet;
+        public override Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            return null;
+        }
     }
 }

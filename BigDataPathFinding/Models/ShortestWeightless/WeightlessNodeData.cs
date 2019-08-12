@@ -10,12 +10,19 @@ namespace BigDataPathFinding.Models.ShortestWeightless
     {
         public HashSet<Adjacent> ForwardAdjacents { get; } = new HashSet<Adjacent>();
 
-        public WeightlessNodeData(Guid id, double distance) : base(id, distance)
+        public Seen Seen { get; }
+        public WeightlessNodeData(Guid id, double distance, Seen seen) : base(id, distance)
         {
-
+            Seen = seen;
         }
 
-        public void AddForwardAdjacent(Adjacent adjacent) => ForwardAdjacents.Add(adjacent);
+        public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacents.Add(adjacent);
 
+    }
+
+    public enum Seen
+    {
+        forward,
+        backward
     }
 }
