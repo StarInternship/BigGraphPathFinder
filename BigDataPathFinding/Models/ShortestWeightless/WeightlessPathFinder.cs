@@ -48,36 +48,37 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void GoForward()
         {
+            forwardLeyer++;
+
             var nextLeyerNodes = new HashSet<Guid>();
 
-                foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentNodes))
+            foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
+            {
+                foreach (Edge edge in edges)
+                {
+                    if (VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight))
+                    {
+                        reachedToTarget = true;
+                    }
+                }
+            }
+
+
+            if (!Directed)
+            {
+                foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentForwardNodes))
                 {
                     foreach (Edge edge in edges)
                     {
-                        if (VisiteEdge(leyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight))
+                        if (VisiteForwardEdge(forwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight))
                         {
                             reachedToTarget = true;
                         }
                     }
                 }
-
-
-                if (!Directed)
-                {
-                    foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(searchData.CurrentNodes))
-                    {
-                        foreach (Edge edge in edges)
-                        {
-                            if (VisiteEdge(leyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight))
-                            {
-                                reachedToTarget = true;
-                            }
-                        }
-                    }
-                }
-                
-                searchData.ClearCurrentNodes(nextLeyerNodes);
             }
+
+            searchData.ClearCurrentForwardNodes(nextLeyerNodes);
         }
 
         private bool VisiteForwardEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)

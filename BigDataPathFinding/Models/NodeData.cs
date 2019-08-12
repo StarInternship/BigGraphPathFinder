@@ -15,7 +15,6 @@ namespace BigDataPathFinding.Models
         public bool Explored { get; set; } = false;
         public double Distance { get; set; }
         public HashSet<Adjacent> PreviousAdjacent { get; } = new HashSet<Adjacent>();
-        public HashSet<Adjacent> ForwardAdjacents { get; } = new HashSet<Adjacent>();
 
         public int CompareTo(NodeData other)
         {
@@ -31,7 +30,6 @@ namespace BigDataPathFinding.Models
         }
 
         public void AddAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
-        public void AddForwardAdjacent(Adjacent adjacent) => ForwardAdjacents.Add(adjacent);
 
         public override bool Equals(object obj) => this == obj || (obj is NodeData nodeData && Id.Equals(nodeData.Id));
 
