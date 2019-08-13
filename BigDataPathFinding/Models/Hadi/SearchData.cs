@@ -9,6 +9,9 @@ namespace BigDataPathFinding.Models.Hadi
     {
         private readonly SortedDictionary<double, HashSet<NodeData>> _queue = new SortedDictionary<double, HashSet<NodeData>>();
 
+        public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
+
+
         public SearchData(NodeData source)
         {
             AddToQueue(source);
@@ -64,5 +67,10 @@ namespace BigDataPathFinding.Models.Hadi
         public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
 
         public bool IsEmpty() => _queue.Count == 0;
+
+        public Dictionary<Guid, NodeData> GetResultNodeSet() => NodeSet;
+        public HashSet<Guid> GetJoints()=>Joints;
+
+        public int GetPathDistance() => 0;
     }
 }

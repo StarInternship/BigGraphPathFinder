@@ -7,21 +7,27 @@ namespace BigDataPathFinding.Models
     public class ResultBuilder
     {
         private readonly IDatabase _database;
-        private readonly Dictionary<Guid, NodeData> nodeSet;
+        private readonly ISearchData searchData;
         private readonly Graph _result = new Graph();
 
-        public ResultBuilder(IDatabase database, Dictionary<Guid, NodeData> nodeSet)
+        public ResultBuilder(IDatabase database, ISearchData searchData)
         {
             _database = database;
-            this.nodeSet = nodeSet;
+            this.searchData = searchData;
         }
 
-        public Graph Build(Guid targetId)
+        public Graph Build()
         {
-            if (!nodeSet.ContainsKey(targetId)) return _result;
+            if (searchData.GetJoints().Count == 0) return _result;
 
-            _result.AddNode(new ResultNode(_database.GetNode(targetId)));
-            var currentNodes = new HashSet<NodeData> {nodeSet[targetId]};
+            var currentNodes = new HashSet<NodeData>();
+
+            foreach (Guid guid in searchData.GetJoints())
+            {
+                _result.AddNode(new ResultNode(_database.GetNode(guid)));
+                currentNodes.Add(searchData.GetResultNodeSet()[guid]);
+            }
+
 
             while (currentNodes.Count > 0)
             {
@@ -44,7 +50,15 @@ namespace BigDataPathFinding.Models
                 if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
 
                 _result.AddEdge(adjacent.Id, node.Id, adjacent.Weight);
-                currentNodes.Add(nodeSet[adjacent.Id]);
+                currentNodes.Add(searchData.GetResultNodeSet()[adjacent.Id]);
+            }
+
+            foreach (var adjacent in node.ForwardAdjacents)
+            {
+                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
+
+                _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
+                currentNodes.Add(searchData.GetResultNodeSet()[adjacent.Id]);
             }
         }
     }

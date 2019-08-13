@@ -1,19 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models
 {
     public interface ISearchData
     {
-        NodeData PopBestCurrentNode();
-
-        void AddToQueue(NodeData node);
-
-        void RemoveFromQueue(NodeData node);
-
-        void AddToNodeSet(NodeData node);
-
-        NodeData GetNode(Guid id);
-
-        bool IsEmpty();
+        Dictionary<Guid, NodeData> GetResultNodeSet();
+        HashSet<Guid> GetJoints();
+        int GetPathDistance();
     }
 }

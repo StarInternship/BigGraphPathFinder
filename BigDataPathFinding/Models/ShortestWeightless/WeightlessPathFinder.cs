@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
     public class WeightlessPathFinder : AbstractPathFinder
@@ -10,15 +9,15 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private bool reachedToTarget = false;
 
         private int forwardLeyer = 0;
-        private int backwardLeyer = 2000;
-
-        private HashSet<Guid> joints = new HashSet<Guid>();
+        private int backwardLeyer = 0;
 
         private readonly SearchData searchData = new SearchData();
 
         public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance)
         {
+            searchData.MaxForwardDistance = maxDistance / 2;
+            searchData.MaxBackwardDistance = (maxDistance + 1) / 2;
         }
 
         public override void FindPath()
@@ -36,44 +35,19 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 GoForward();
 
-                if (joints.Count > 0)
+                if (reachedToTarget)
                     break;
 
                 GoBackward();
 
-                if (joints.Count > 0)
-                    break;
-            }
-            AddPreviousAdjacentToBackwardNodes();
-        }
-
-        private void AddPreviousAdjacentToBackwardNodes()
-        {
-            forwardLeyer++;
-            var gap = 2000 - forwardLeyer;
-
-            while (joints.Count > 0)
-            {
-                var node = searchData.GetNode(joints.First());
-                joints.Remove(node.Id);
-
-                if (node.Explored)
-                    continue;
-                node.Explored = true;
-
-                foreach (Adjacent adjacent in node.ForwardAdjacents)
-                {
-                    searchData.GetNode(adjacent.Id).AddAdjacent(new Adjacent(node.Id, adjacent.Weight));
-                    joints.Add(adjacent.Id);
-                }
             }
         }
 
         private void GoBackward()
         {
-            backwardLeyer--;
+            backwardLeyer++;
 
-            if (searchData.CurrentBackwardNodes.Count == 0)
+            if (searchData.CurrentBackwardNodes.Count == 0 || backwardLeyer > searchData.MaxBackwardDistance)
                 return;
 
             var nextLeyerNodes = new HashSet<Guid>();
@@ -98,14 +72,15 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
             }
 
-            searchData.ClearCurrentBackwardNodes(nextLeyerNodes);
+            searchData.UpdateCurrentBackwardNodes(nextLeyerNodes);
         }
 
         private void GoForward()
         {
             forwardLeyer++;
-            if (searchData.CurrentForwardNodes.Count == 0)
+            if (searchData.CurrentForwardNodes.Count == 0 || forwardLeyer > searchData.MaxForwardDistance)
                 return;
+
             var nextLeyerNodes = new HashSet<Guid>();
 
             foreach (IEnumerable<Edge> edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
@@ -128,7 +103,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
             }
 
-            searchData.ClearCurrentForwardNodes(nextLeyerNodes);
+            searchData.UpdateCurrentForwardNodes(nextLeyerNodes);
         }
 
         private void VisiteBackwardEdge(int leyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
@@ -148,9 +123,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             if (searchData.GetNode(sourceId).Seen == Seen.forward)
             {
-                joints.Add(sourceId);
+                searchData.Joints.Add(sourceId);
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(sourceId, weight));
-
+                reachedToTarget = true;
             }
 
         }
@@ -169,9 +144,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             if (searchData.GetNode(targetId).Seen == Seen.backward)
             {
-                joints.Add(targetId);
+                searchData.Joints.Add(targetId);
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
-
+                reachedToTarget = true;
             }
         }
 
@@ -183,5 +158,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         }
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet() => searchData.NodeSet;
+
+        public override ISearchData GetSearchData() => searchData;
     }
 }

@@ -91,8 +91,8 @@ namespace BigDataPathFinding
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             stopWatch.Reset();
             stopWatch.Start();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var edges = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var edges = resultBuilder.Build().Edges;
             stopWatch.Stop();
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             foreach (var edge in edges)
