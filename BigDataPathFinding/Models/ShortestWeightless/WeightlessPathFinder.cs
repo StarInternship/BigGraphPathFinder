@@ -41,6 +41,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 GoBackward();
 
             }
+
+            searchData.PathDistance = forwardLeyer + backwardLeyer;
         }
 
         private void GoBackward()
@@ -48,7 +50,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             backwardLeyer++;
 
             if (searchData.CurrentBackwardNodes.Count == 0 || backwardLeyer > searchData.MaxBackwardDistance)
+            {
+                searchData.ClearCurrentBackwardNodes();
                 return;
+            }
 
             var nextLeyerNodes = new HashSet<Guid>();
 
@@ -79,7 +84,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         {
             forwardLeyer++;
             if (searchData.CurrentForwardNodes.Count == 0 || forwardLeyer > searchData.MaxForwardDistance)
+            {
+                searchData.ClearCurrentForwardNodes();
                 return;
+            }
 
             var nextLeyerNodes = new HashSet<Guid>();
 
