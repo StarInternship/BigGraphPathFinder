@@ -15,13 +15,13 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public ElasticMetadata(string connectionsIndex)
         {
-#if DEBUG
-            var settings = new ConnectionSettings(Uri).DefaultIndex(connectionsIndex).DisableDirectStreaming();
-#else
             var settings = new ConnectionSettings(Uri).DefaultIndex(connectionsIndex);
+#if DEBUG
+            settings.DisableDirectStreaming()
 #endif
             _client = new ElasticClient(settings);
         }
+
         public int NumberOfRequests { get; set; }
 
         public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
@@ -94,7 +94,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            Console.WriteLine("source count: " + ids.Count());
+            Console.WriteLine("forward source count: " + ids.Count());
             NumberOfRequests++;
             sw.Restart();
             var search = _client.Search<Edge>(s => s
@@ -129,7 +129,9 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
+            Console.WriteLine("forward source count: " + ids.Count());
             NumberOfRequests++;
+            sw.Restart();
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
                     .Bool(b => b
@@ -144,14 +146,19 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
             var remaining = search.Total - search.Hits.Count;
 
+            Console.WriteLine("result count: " + search.Total);
+            Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
             yield return search.Documents;
 
             while (remaining > 0)
             {
+                sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId);
                 remaining -= search.Hits.Count;
+                Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
                 yield return search.Documents;
             }
+            Console.WriteLine();
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }

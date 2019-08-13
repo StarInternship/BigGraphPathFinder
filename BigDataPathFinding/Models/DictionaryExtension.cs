@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BigDataPathFinding.Models
 {
@@ -11,9 +8,9 @@ namespace BigDataPathFinding.Models
         public static string MakeString(this Dictionary<string, object> source)
         {
             StringBuilder result = new StringBuilder("{");
-            foreach (var key in source.Keys)
+            foreach (var value in source.Values)
             {
-                result.Append("[" + key + "]: " + source[key] + ", ");
+                result.Append("[" + value + "] ");
             }
             result.Append("}");
             return result.ToString();
