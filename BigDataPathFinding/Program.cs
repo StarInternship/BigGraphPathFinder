@@ -23,8 +23,8 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("permutation8_node_set");
-                    metadata = new ElasticMetadata("permutation8_connections");
+                    database = new ElasticDatabase("permutation9_node_set");
+                    metadata = new ElasticMetadata("permutation9_connections");
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
@@ -77,12 +77,12 @@ namespace BigDataPathFinding
 
                 stopWatch.Restart();
                 var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
-                FindPath(targetId, pathFinder);
+                FindPath(pathFinder);
                 Console.WriteLine("******* Weightless *********\n\n");
             }
         }
 
-        private static void FindPath(Guid targetId, AbstractPathFinder pathFinder)
+        private static void FindPath(AbstractPathFinder pathFinder)
         {
             if (Source == Source.Elastic)
                 ((ElasticMetadata)metadata).NumberOfRequests = 0;
@@ -95,10 +95,12 @@ namespace BigDataPathFinding
             var edges = resultBuilder.Build().Edges;
             stopWatch.Stop();
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-            foreach (var edge in edges)
-                Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
+            Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
             if (Source == Source.Elastic)
-                Console.WriteLine("count: " + ((ElasticMetadata)metadata).NumberOfRequests);
+                Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
+            Console.WriteLine("number of edges: " + edges.Count);
+            //foreach (var edge in edges)
+            //    Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
         }
     }
 

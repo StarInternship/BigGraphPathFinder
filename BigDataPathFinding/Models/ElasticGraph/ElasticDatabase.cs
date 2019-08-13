@@ -25,7 +25,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
                     )
                 )
             );
-            return search.Total == 0 ? null : new Node(id, (string)search.Documents.First()["name"]);
+            return search.Total == 0 ? null : new Node(id, search.Documents.First());
         }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models
 {
     public class Node
     {
-        public Node(Guid id, string name)
+        public Node(Guid id, Dictionary<string, object> data)
         {
             Id = id;
-            Name = name;
+            Data = data;
         }
 
         public Guid Id { get; }
-        public string Name { get; }
+        public Dictionary<string, object> Data { get; }
 
         public override bool Equals(object obj) => this == obj || (obj is Node node && node.Id.Equals(Id));
 

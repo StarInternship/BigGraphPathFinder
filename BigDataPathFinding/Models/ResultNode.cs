@@ -2,7 +2,7 @@
 {
     public class ResultNode : Node
     {
-        public ResultNode(Node node) : base(node.Id, node.Name)
+        public ResultNode(Node node) : base(node.Id, node.Data)
         {
         }
 
