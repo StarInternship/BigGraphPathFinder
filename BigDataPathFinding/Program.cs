@@ -3,8 +3,6 @@ using System.Diagnostics;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
-using BigDataPathFinding.Models.Hadi;
-using BigDataPathFinding.Models.Mahdi;
 using BigDataPathFinding.Models.ShortestWeightless;
 
 namespace BigDataPathFinding
@@ -25,8 +23,8 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("hosein2_node_set");
-                    metadata = new ElasticMetadata("hosein2_connections");
+                    database = new ElasticDatabase("permutation8_node_set");
+                    metadata = new ElasticMetadata("permutation8_connections");
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
@@ -67,18 +65,18 @@ namespace BigDataPathFinding
                 var directed = Console.ReadLine() != "0";
 
 
-                stopWatch.Restart();
-                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
-                FindPath(targetId, pathFinder);
-                Console.WriteLine("******** Hadi ********\n\n");
+                //stopWatch.Restart();
+                //AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                //FindPath(targetId, pathFinder);
+                //Console.WriteLine("******** Hadi ********\n\n");
+
+                //stopWatch.Restart();
+                //pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                //FindPath(targetId, pathFinder);
+                //Console.WriteLine("******* Mahdi *********\n\n");
 
                 stopWatch.Restart();
-                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
-                FindPath(targetId, pathFinder);
-                Console.WriteLine("******* Mahdi *********\n\n");
-
-                stopWatch.Restart();
-                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
+                var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
                 FindPath(targetId, pathFinder);
                 Console.WriteLine("******* Weightless *********\n\n");
             }
