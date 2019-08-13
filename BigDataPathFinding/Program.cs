@@ -29,13 +29,13 @@ namespace BigDataPathFinding
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
-                    metadata = new FileMetadata((FileGraph) database);
+                    metadata = new FileMetadata((FileGraph)database);
                     break;
             }
 
             stopWatch.Stop();
 
-            Console.WriteLine("Get Ready After "+stopWatch.ElapsedMilliseconds+" ms.");
+            Console.WriteLine("Get Ready After " + stopWatch.ElapsedMilliseconds + " ms.");
 
             while (true)
             {
