@@ -84,7 +84,6 @@ namespace BigDataPathFinding.Models.Hadi
 
         private NodeData GetNode(Guid node) => _searchData.GetNode(node);
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.NodeSet;
 
         public override ISearchData GetSearchData() => _searchData;
     }

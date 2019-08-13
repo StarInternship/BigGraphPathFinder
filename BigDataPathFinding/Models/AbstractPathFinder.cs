@@ -22,7 +22,6 @@ namespace BigDataPathFinding.Models
 
         public abstract void FindPath();
 
-        public abstract Dictionary<Guid, NodeData> GetResultNodeSet();
         public abstract ISearchData GetSearchData();
     }
 }

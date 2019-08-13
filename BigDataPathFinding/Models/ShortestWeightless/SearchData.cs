@@ -8,7 +8,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     class SearchData : ISearchData
     {
-        public Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
+        private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();
         public HashSet<Guid> CurrentForwardNodes { get; private set; } = new HashSet<Guid>();
         public int PathDistance { get; set; }
@@ -16,6 +16,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public int MaxForwardDistance { get; set; }
         public int MaxBackwardDistance { get; set; }
+
         public void AddToNodeSet(WeightlessNodeData node) => NodeSet[node.Id] = node;
 
         public WeightlessNodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : (WeightlessNodeData)NodeSet[id];

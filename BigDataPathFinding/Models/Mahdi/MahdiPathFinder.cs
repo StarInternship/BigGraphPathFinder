@@ -86,7 +86,6 @@ namespace BigDataPathFinding.Models.Mahdi
                 _searchData.GetJoints().Add(TargetId);
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.GetNodeSet();
 
         public override ISearchData GetSearchData() => _searchData;
     }
