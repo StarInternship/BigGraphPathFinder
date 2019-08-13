@@ -5,7 +5,7 @@ namespace BigDataPathFinding.Models.FileGraph
 {
     public class FileNode : Node
     {
-        public FileNode(Guid id, string name) : base(id, name)
+        public FileNode(Guid id, string name) : base(id, new Dictionary<string, object> {["name"] = name })
         {
         }
 

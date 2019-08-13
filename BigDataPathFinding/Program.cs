@@ -100,7 +100,7 @@ namespace BigDataPathFinding
                 Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
             Console.WriteLine("number of edges: " + edges.Count);
             //foreach (var edge in edges)
-            //    Console.WriteLine(database.GetNode(edge.SourceId).Name + "," + database.GetNode(edge.TargetId).Name + "," + edge.Weight);
+            //    Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
         }
     }
 

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Adjacent.cs" />
+    <Compile Include="Models\DictionaryExtension.cs" />
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Models\ElasticGraph\ElasticDatabase.cs" />
     <Compile Include="Models\ElasticGraph\ElasticMetadata.cs" />
