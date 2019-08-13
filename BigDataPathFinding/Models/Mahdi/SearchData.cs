@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace BigDataPathFinding.Models.Mahdi
 {
-    internal class SearchData
+    internal class SearchData : ISearchData
     {
         //bidirectional Dictionary
         private readonly Dictionary<Guid, NodeData> _candidatesDictionary1 = new Dictionary<Guid, NodeData>();
         private readonly SortedDictionary<NodeData, Guid> _candidatesDictionary2 = new SortedDictionary<NodeData, Guid>();
 
         private readonly Dictionary<Guid, NodeData> _discoveries = new Dictionary<Guid, NodeData>();
+
+
+        public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
 
         public void MoveToDiscovery(Guid node, NodeData data)
         {
@@ -47,6 +50,12 @@ namespace BigDataPathFinding.Models.Mahdi
             _candidatesDictionary2.Add(data, node);
         }
 
-        public Dictionary<Guid, NodeData> GetDiscoveries() => _discoveries;
+        public Dictionary<Guid, NodeData> GetNodeSet() => _discoveries;
+
+        public Dictionary<Guid, NodeData> GetResultNodeSet() => _discoveries;
+
+        public HashSet<Guid> GetJoints() => Joints;
+
+        public int GetPathDistance() => 0;
     }
 }

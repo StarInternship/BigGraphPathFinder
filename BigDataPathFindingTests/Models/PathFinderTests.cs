@@ -22,8 +22,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 1),
@@ -43,8 +43,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("648"), 20),
@@ -65,8 +65,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("2"), 1),
@@ -88,8 +88,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("F");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             Assert.IsTrue(actual.Count == 6);
         }
 
@@ -102,8 +102,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("2"), 1),
@@ -129,8 +129,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true , 10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 1),
@@ -150,8 +150,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("2"), 1),
@@ -173,8 +173,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("648"), 20),
@@ -195,8 +195,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("F");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             Assert.IsTrue(actual.Count == 6);
         }
 
@@ -209,8 +209,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("2"), 1),
@@ -236,8 +236,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 10),
@@ -256,8 +256,8 @@ namespace BigDataPathFindingTests.Models
             var targetId = database.GetId("4");
             var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
-            var actual = resultBuilder.Build(targetId).Edges;
+            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            var actual = resultBuilder.Build().Edges;
             var expected = new HashSet<Edge>
             {
                 new Edge(database.GetId("0"), database.GetId("1"), 10),

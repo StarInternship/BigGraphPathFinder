@@ -8,7 +8,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     class WeightlessNodeData : NodeData
     {
-        public HashSet<Adjacent> ForwardAdjacents { get; } = new HashSet<Adjacent>();
 
         public Seen Seen { get; }
         public WeightlessNodeData(Guid id, double distance, Seen seen) : base(id, distance) => Seen = seen;

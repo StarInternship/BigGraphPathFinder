@@ -81,8 +81,13 @@ namespace BigDataPathFinding.Models.Mahdi
         public override void FindPath()
         {
             while (_shouldContinue) Go();
+
+            if (_searchData.GetDiscoveryData(TargetId) != null)
+                _searchData.GetJoints().Add(TargetId);
         }
 
-        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.GetDiscoveries();
+        public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.GetNodeSet();
+
+        public override ISearchData GetSearchData() => _searchData;
     }
 }

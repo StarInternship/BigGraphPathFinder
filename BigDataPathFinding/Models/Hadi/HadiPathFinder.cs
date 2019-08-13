@@ -24,7 +24,7 @@ namespace BigDataPathFinding.Models.Hadi
 
                 if (GetNode(TargetId) != null && _checkingDistance >= GetNode(TargetId).Distance)
                 {
-                    return;
+                    break;
                 }
 
                 if (node.Explored) continue;
@@ -48,6 +48,9 @@ namespace BigDataPathFinding.Models.Hadi
                         }
                     }
             }
+
+            if (_searchData.GetNode(TargetId) != null)
+                _searchData.GetJoints().Add(TargetId);
         }
 
         private void UpdateAdjacent(NodeData node, Adjacent adjacent)
@@ -82,5 +85,7 @@ namespace BigDataPathFinding.Models.Hadi
         private NodeData GetNode(Guid node) => _searchData.GetNode(node);
 
         public override Dictionary<Guid, NodeData> GetResultNodeSet() => _searchData.NodeSet;
+
+        public override ISearchData GetSearchData() => _searchData;
     }
 }
