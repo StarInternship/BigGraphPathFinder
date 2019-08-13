@@ -7,21 +7,21 @@ namespace BigDataPathFinding.Models
     public class ResultBuilder
     {
         private readonly IDatabase _database;
-        private readonly Dictionary<Guid, NodeData> _nodeSet;
+        private readonly Dictionary<Guid, NodeData> nodeSet;
         private readonly Graph _result = new Graph();
 
         public ResultBuilder(IDatabase database, Dictionary<Guid, NodeData> nodeSet)
         {
             _database = database;
-            _nodeSet = nodeSet;
+            this.nodeSet = nodeSet;
         }
 
         public Graph Build(Guid targetId)
         {
-            if (!_nodeSet.ContainsKey(targetId)) return _result;
+            if (!nodeSet.ContainsKey(targetId)) return _result;
 
             _result.AddNode(new ResultNode(_database.GetNode(targetId)));
-            var currentNodes = new HashSet<NodeData> {_nodeSet[targetId]};
+            var currentNodes = new HashSet<NodeData> {nodeSet[targetId]};
 
             while (currentNodes.Count > 0)
             {
@@ -44,7 +44,7 @@ namespace BigDataPathFinding.Models
                 if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
 
                 _result.AddEdge(adjacent.Id, node.Id, adjacent.Weight);
-                currentNodes.Add(_nodeSet[adjacent.Id]);
+                currentNodes.Add(nodeSet[adjacent.Id]);
             }
         }
     }

@@ -13,6 +13,7 @@ namespace BigDataPathFinding
     {
         private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
+        private const int MaxDistance = 1000;
         private static readonly Stopwatch stopWatch = new Stopwatch();
         private static IDatabase database;
         private static IMetadata metadata;
@@ -67,17 +68,17 @@ namespace BigDataPathFinding
 
 
                 stopWatch.Restart();
-                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed);
+                AbstractPathFinder pathFinder = new HadiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
                 FindPath(targetId, pathFinder);
                 Console.WriteLine("******** Hadi ********\n\n");
 
                 stopWatch.Restart();
-                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
                 FindPath(targetId, pathFinder);
                 Console.WriteLine("******* Mahdi *********\n\n");
 
                 stopWatch.Restart();
-                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed);
+                pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, MaxDistance);
                 FindPath(targetId, pathFinder);
                 Console.WriteLine("******* Weightless *********\n\n");
             }

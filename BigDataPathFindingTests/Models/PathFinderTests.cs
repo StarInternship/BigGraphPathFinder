@@ -20,7 +20,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -41,7 +41,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -63,7 +63,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, false);
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -86,7 +86,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("A");
             var targetId = database.GetId("F");
-            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -100,7 +100,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new MahdiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -127,7 +127,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true , 10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -148,7 +148,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, false);
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -171,7 +171,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -193,7 +193,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("A");
             var targetId = database.GetId("F");
-            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -207,7 +207,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new HadiPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -234,7 +234,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, true);
+            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, true,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
@@ -254,7 +254,7 @@ namespace BigDataPathFindingTests.Models
             var metadata = new FileMetadata(database);
             var sourceId = database.GetId("0");
             var targetId = database.GetId("4");
-            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, false);
+            var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, false,10);
             pathFinder.FindPath();
             var resultBuilder = new ResultBuilder(database, pathFinder.GetResultNodeSet());
             var actual = resultBuilder.Build(targetId).Edges;
