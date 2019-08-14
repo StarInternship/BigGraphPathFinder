@@ -11,7 +11,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();
         public HashSet<Guid> CurrentForwardNodes { get; private set; } = new HashSet<Guid>();
-        public int PathDistance { get; set; }
+        public int PathDistance { get; set; } = 0;
         public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
 
         public int MaxForwardDistance { get; set; }

@@ -7,8 +7,46 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     public class WeightlessPathFinder : AbstractPathFinder
     {
+        private bool reachToTarget = false;
 
-        private bool reachedToTarget = false;
+        private bool ReachedToTarget
+        {
+            get
+            {
+                lock (tagetLock)
+                {
+                    return reachToTarget;
+                }
+            }
+            set
+            {
+                lock (tagetLock)
+                {
+                    reachToTarget = value;
+                }
+            }
+        }
+
+        private int PathDistance
+        {
+            get
+            {
+                lock (distanceLock)
+                {
+                    return searchData.PathDistance;
+                }
+            }
+            set
+            {
+                lock (distanceLock)
+                {
+                    searchData.PathDistance = value;
+                }
+            }
+        }
+
+        private readonly Object tagetLock = new Object();
+        private readonly Object distanceLock = new Object();
 
         private int forwardLeyer = 0;
         private int backwardLeyer = 0;
@@ -16,11 +54,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private readonly SearchData searchData = new SearchData();
 
 
+
         public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance)
         {
-            searchData.MaxForwardDistance = maxDistance ;
-            searchData.MaxBackwardDistance = (maxDistance + 1) / 2;
+            searchData.MaxForwardDistance = (maxDistance + 1) / 2;
+            searchData.MaxBackwardDistance = (maxDistance) / 2;
         }
 
         public override void FindPath()
@@ -32,12 +71,13 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             var forwardTask = new Task(ExpandForward);
-//var backwardTask = new Task(ExpandBackward);
+            var backwardTask = new Task(ExpandBackward);
+
             forwardTask.Start();
-            //backwardTask.Start();
+            backwardTask.Start();
 
             forwardTask.Wait();
-          //  backwardTask.Wait();
+            backwardTask.Wait();
 
             searchData.PathDistance = forwardLeyer + backwardLeyer;
         }
@@ -47,7 +87,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void ExpandBackward()
         {
-            while (!reachedToTarget)
+            while (!ReachedToTarget)
             {
 
                 backwardLeyer++;
@@ -68,6 +108,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
 
 
+
+
                 if (!Directed)
                 {
                     foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentBackwardNodes))
@@ -86,7 +128,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void ExpandForward()
         {
-            while (!reachedToTarget)
+            while (!ReachedToTarget)
             {
                 forwardLeyer++;
 
@@ -130,22 +172,22 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     VisitBackwardNode(backwardLeyer, nextLeyerNodes, sourceId);
                 }
-            }
 
 
-            if (searchData.GetNode(sourceId).Distance == backwardLeyer)
-            {
-                searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
-            }
+
+                if (searchData.GetNode(sourceId).Distance == backwardLeyer && searchData.GetNode(targetId).Seen == Seen.backward)
+                {
+                    searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
+                }
 
 
-            lock (searchData)
-            {
-                if (searchData.GetNode(sourceId).Seen == Seen.forward)
+
+                if (searchData.GetNode(sourceId).Seen == Seen.forward && (PathDistance >= forwardLeyer + backwardLeyer || PathDistance == 0))
                 {
                     searchData.Joints.Add(sourceId);
                     searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(sourceId, weight));
-                    reachedToTarget = true;
+                    ReachedToTarget = true;
+                    PathDistance = forwardLeyer + backwardLeyer;
                 }
             }
 
@@ -167,21 +209,21 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     VisiteForwardNode(forwardLeyer, nextLeyerNodes, targetId);
                 }
 
-            }
 
-            if (searchData.GetNode(targetId).Distance == forwardLeyer)
-            {
-                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
-            }
-            lock (searchData)
-            {
-                if (searchData.GetNode(targetId).Seen == Seen.backward)
+                if (searchData.GetNode(targetId).Distance == forwardLeyer && searchData.GetNode(targetId).Seen == Seen.forward)
+                {
+                    searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+                }
+
+                if (searchData.GetNode(targetId).Seen == Seen.backward && (PathDistance >= forwardLeyer + backwardLeyer || PathDistance == 0))
                 {
                     searchData.Joints.Add(targetId);
                     searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
-                    reachedToTarget = true;
+                    ReachedToTarget = true;
+                    PathDistance = forwardLeyer + backwardLeyer;
                 }
             }
+
         }
 
         private void VisiteForwardNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid targetId)
