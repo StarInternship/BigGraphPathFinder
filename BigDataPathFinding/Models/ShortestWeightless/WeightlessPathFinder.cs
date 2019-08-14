@@ -19,7 +19,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance)
         {
-            searchData.MaxForwardDistance = maxDistance / 2;
+            searchData.MaxForwardDistance = maxDistance ;
             searchData.MaxBackwardDistance = (maxDistance + 1) / 2;
         }
 
@@ -32,12 +32,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             var forwardTask = new Task(ExpandForward);
-            var backwardTask = new Task(ExpandBackward);
+//var backwardTask = new Task(ExpandBackward);
             forwardTask.Start();
-            backwardTask.Start();
+            //backwardTask.Start();
 
             forwardTask.Wait();
-            backwardTask.Wait();
+          //  backwardTask.Wait();
 
             searchData.PathDistance = forwardLeyer + backwardLeyer;
         }
