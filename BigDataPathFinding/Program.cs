@@ -27,7 +27,7 @@ namespace BigDataPathFinding
                     metadata = new ElasticMetadata("hosein2_connections");
                     break;
                 case Source.File:
-                    database = new FileGraph(TestFilesPath + "hosein2.txt");
+                    database = new FileGraph(TestFilesPath + "VisitedGraph.csv");
                     metadata = new FileMetadata((FileGraph)database);
                     break;
             }
@@ -99,8 +99,8 @@ namespace BigDataPathFinding
             if (Source == Source.Elastic)
                 Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
             Console.WriteLine("number of edges: " + edges.Count);
-            //foreach (var edge in edges)
-            //    Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+            foreach (var edge in edges)
+                Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
         }
     }
 
