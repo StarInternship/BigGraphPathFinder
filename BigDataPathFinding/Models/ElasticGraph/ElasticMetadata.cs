@@ -94,7 +94,9 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
+#if DEBUG
             Console.WriteLine("source count: " + ids.Count());
+#endif
             NumberOfRequests++;
             sw.Restart();
             var search = _client.Search<Edge>(s => s
@@ -109,9 +111,11 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 .Scroll(Scroll)
             );
             var remaining = search.Total - search.Hits.Count;
+#if DEBUG
 
             Console.WriteLine("result count: " + search.Total);
             Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
             yield return search.Documents;
 
             while (remaining > 0)
@@ -119,11 +123,14 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId);
                 remaining -= search.Hits.Count;
+#if DEBUG
                 Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
                 yield return search.Documents;
             }
+#if DEBUG
             Console.WriteLine();
-
+#endif
             _client.ClearScroll(c => c.ScrollId(search.ScrollId));
         }
 
