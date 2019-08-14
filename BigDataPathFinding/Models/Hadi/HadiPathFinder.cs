@@ -50,7 +50,7 @@ namespace BigDataPathFinding.Models.Hadi
             }
 
             if (_searchData.GetNode(TargetId) != null)
-                _searchData.GetJoints().Add(TargetId);
+                _searchData.AddJoint(TargetId);
         }
 
         private void UpdateAdjacent(NodeData node, Adjacent adjacent)

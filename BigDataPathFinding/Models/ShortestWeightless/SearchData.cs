@@ -13,7 +13,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public HashSet<Guid> CurrentForwardNodes { get; private set; } = new HashSet<Guid>();
         public int PathDistance { get; set; }
         public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
-
         public int MaxForwardDistance { get; set; }
         public int MaxBackwardDistance { get; set; }
 
@@ -24,19 +23,21 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public void AddToCurrentForwardNodes(Guid id) => CurrentForwardNodes.Add(id);
 
         public void UpdateCurrentForwardNodes(HashSet<Guid> edges) => CurrentForwardNodes = edges;
-        public void ClearCurrentForwardNodes() => CurrentForwardNodes = new HashSet<Guid>();
-        public void ClearCurrentBackwardNodes() => CurrentBackwardNodes = new HashSet<Guid>();
 
+        public void ClearCurrentForwardNodes() => CurrentForwardNodes = new HashSet<Guid>();
+
+        public void ClearCurrentBackwardNodes() => CurrentBackwardNodes = new HashSet<Guid>();
 
         public void AddToCurrentBackwardNodes(Guid id) => CurrentBackwardNodes.Add(id);
 
         public void UpdateCurrentBackwardNodes(HashSet<Guid> edges) => CurrentBackwardNodes = edges;
-
 
         public Dictionary<Guid, NodeData> GetResultNodeSet() => NodeSet;
 
         public HashSet<Guid> GetJoints() => Joints;
 
         public int GetPathDistance() => PathDistance;
+
+        public void AddJoint(Guid id) => Joints.Add(id);
     }
 }

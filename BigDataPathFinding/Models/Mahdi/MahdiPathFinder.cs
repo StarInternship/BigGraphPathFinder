@@ -83,7 +83,7 @@ namespace BigDataPathFinding.Models.Mahdi
             while (_shouldContinue) Go();
 
             if (_searchData.GetDiscoveryData(TargetId) != null)
-                _searchData.GetJoints().Add(TargetId);
+                _searchData.AddJoint(TargetId);
         }
 
 
