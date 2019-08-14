@@ -22,8 +22,8 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("permutation10_node_set");
-                    metadata = new ElasticMetadata("permutation10_connections");
+                    database = new ElasticDatabase("hosein2_node_set");
+                    metadata = new ElasticMetadata("hosein2_connections");
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
