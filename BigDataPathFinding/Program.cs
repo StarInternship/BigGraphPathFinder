@@ -89,6 +89,9 @@ namespace BigDataPathFinding
             if (Source == Source.Elastic)
                 Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
             Console.WriteLine("number of edges: " + edges.Count);
+
+            if (edges.Count > 100) return;
+
             foreach (var edge in edges)
                 Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
         }
