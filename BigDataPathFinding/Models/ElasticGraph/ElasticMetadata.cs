@@ -13,6 +13,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
         private const int Size = 10000;
         private const string Scroll = "5s";
         private readonly ElasticClient _client;
+        private readonly Stopwatch Sw = new Stopwatch();
 
         public ElasticMetadata(string connectionsIndex)
         {
@@ -91,13 +92,12 @@ namespace BigDataPathFinding.Models.ElasticGraph
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
-        private Stopwatch sw = new Stopwatch();
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
-            Console.WriteLine("forward source count: " + ids.Count());
+            Console.WriteLine("output source count: " + ids.Count());
             NumberOfRequests++;
-            sw.Restart();
+            Sw.Restart();
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
                     .Bool(b => b
@@ -112,15 +112,15 @@ namespace BigDataPathFinding.Models.ElasticGraph
             var remaining = search.Total - search.Hits.Count;
 
             Console.WriteLine("result count: " + search.Total);
-            Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
+            Console.WriteLine("search time: " + Sw.ElapsedMilliseconds + " ms.");
             yield return search.Documents;
 
             while (remaining > 0)
             {
-                sw.Restart();
+                Sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
-                Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
+                Console.WriteLine("scroll time: " + Sw.ElapsedMilliseconds + " ms.");
                 yield return search.Documents;
             }
             Console.WriteLine();
@@ -130,9 +130,9 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            Console.WriteLine("backward source count: " + ids.Count());
+            Console.WriteLine("input source count: " + ids.Count());
             NumberOfRequests++;
-            sw.Restart();
+            Sw.Restart();
             var search = _client.Search<Edge>(s => s
                 .Query(q => q
                     .Bool(b => b
@@ -148,15 +148,15 @@ namespace BigDataPathFinding.Models.ElasticGraph
             var remaining = search.Total - search.Hits.Count;
 
             Console.WriteLine("result count: " + search.Total);
-            Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
+            Console.WriteLine("search time: " + Sw.ElapsedMilliseconds + " ms.");
             yield return search.Documents;
 
             while (remaining > 0)
             {
-                sw.Restart();
+                Sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
-                Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
+                Console.WriteLine("scroll time: " + Sw.ElapsedMilliseconds + " ms.");
                 yield return search.Documents;
             }
             Console.WriteLine();
