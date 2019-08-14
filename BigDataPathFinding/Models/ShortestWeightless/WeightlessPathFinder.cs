@@ -179,17 +179,16 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
 
 
-            lock (searchData)
-            {
-                if (searchData.GetNode(sourceId).Seen == Seen.forward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
-                {
-                    searchData.Joints.Add(sourceId);
-                    searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
-                    ReachedToTarget = true;
-                    PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
-                }
 
+            if (searchData.GetNode(sourceId).Seen == Seen.forward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
+            {
+                searchData.Joints.Add(sourceId);
+                searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
+                ReachedToTarget = true;
+                PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
             }
+
+
         }
 
         private void VisitBackwardNode(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId)
@@ -212,16 +211,15 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
             }
-            lock (searchData)
+
+            if (searchData.GetNode(targetId).Seen == Seen.backward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
-                if (searchData.GetNode(targetId).Seen == Seen.backward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
-                {
-                    searchData.Joints.Add(targetId);
-                    searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
-                    ReachedToTarget = true;
-                    PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
-                }
+                searchData.Joints.Add(targetId);
+                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+                ReachedToTarget = true;
+                PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
             }
+
 
         }
 
