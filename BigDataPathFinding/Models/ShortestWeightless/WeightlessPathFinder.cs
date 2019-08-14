@@ -41,7 +41,15 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 ExpandBackward();
 
             }
+            CalculatePathDistance();
+        }
 
+        private void CalculatePathDistance()
+        {
+            if (backwardLeyer > searchData.MaxBackwardDistance)
+                backwardLeyer = searchData.MaxBackwardDistance;
+            if (forwardLeyer > searchData.MaxForwardDistance)
+                forwardLeyer = searchData.MaxForwardDistance;
             searchData.PathDistance = forwardLeyer + backwardLeyer;
         }
 
