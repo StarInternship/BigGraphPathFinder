@@ -16,8 +16,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance)
         {
-            searchData.MaxForwardDistance = maxDistance / 2;
-            searchData.MaxBackwardDistance = (maxDistance + 1) / 2;
+            searchData.MaxForwardDistance = (maxDistance + 1) / 2;
+            searchData.MaxBackwardDistance = (maxDistance) / 2;
         }
 
         public override void FindPath()
@@ -95,7 +95,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 foreach (var edge in edges)
                 {
-                    VisiteForwardEdge( nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                    VisiteForwardEdge(nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                 }
             }
 
@@ -106,7 +106,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (Edge edge in edges)
                     {
-                        VisiteForwardEdge( nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
+                        VisiteForwardEdge(nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             nextLeyerNodes.Add(sourceId);
         }
 
-        private void VisiteForwardEdge( HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
+        private void VisiteForwardEdge(HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
         {
             if (searchData.GetNode(targetId) == null)
             {

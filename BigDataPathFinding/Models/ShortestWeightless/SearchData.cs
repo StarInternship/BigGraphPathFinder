@@ -25,7 +25,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public void UpdateCurrentForwardNodes(HashSet<Guid> edges) => CurrentForwardNodes = edges;
         public void ClearCurrentForwardNodes() => CurrentForwardNodes = new HashSet<Guid>();
-        public void ClearCurrentBackwardNodes() => CurrentForwardNodes = new HashSet<Guid>();
+        public void ClearCurrentBackwardNodes() => CurrentBackwardNodes = new HashSet<Guid>();
 
 
         public void AddToCurrentBackwardNodes(Guid id) => CurrentBackwardNodes.Add(id);

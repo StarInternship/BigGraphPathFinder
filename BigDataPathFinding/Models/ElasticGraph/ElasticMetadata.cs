@@ -17,7 +17,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
         {
             var settings = new ConnectionSettings(Uri).DefaultIndex(connectionsIndex);
 #if DEBUG
-            settings.DisableDirectStreaming()
+            settings.DisableDirectStreaming();
 #endif
             _client = new ElasticClient(settings);
         }
@@ -129,7 +129,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
-            Console.WriteLine("forward source count: " + ids.Count());
+            Console.WriteLine("backward source count: " + ids.Count());
             NumberOfRequests++;
             sw.Restart();
             var search = _client.Search<Edge>(s => s
