@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BigDataPathFinding.Models.Elastic;
 using Nest;
 
 namespace BigDataPathFinding.Models.ElasticGraph
@@ -24,7 +25,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
                         .Values(id)
                     )
                 )
-            );
+            ).Validate();
             return search.Total == 0 ? null : new Node(id, search.Documents.First());
         }
     }

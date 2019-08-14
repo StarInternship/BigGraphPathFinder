@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using BigDataPathFinding.Models.Elastic;
 using Nest;
 
 namespace BigDataPathFinding.Models.ElasticGraph
@@ -42,19 +43,19 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 )
                 .Size(Size)
                 .Scroll(Scroll)
-            );
+            ).Validate();
             var remaining = search.Total - search.Hits.Count;
 
             yield return search.Documents;
 
             while (remaining > 0)
             {
-                search = _client.Scroll<OutputAdjacent>(Scroll, search.ScrollId);
+                search = _client.Scroll<OutputAdjacent>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
                 yield return search.Documents;
             }
 
-            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
         public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
@@ -75,19 +76,19 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 )
                 .Size(Size)
                 .Scroll(Scroll)
-            );
+            ).Validate();
             var remaining = search.Total - search.Hits.Count;
 
             yield return search.Documents;
 
             while (remaining > 0)
             {
-                search = _client.Scroll<InputAdjacent>(Scroll, search.ScrollId);
+                search = _client.Scroll<InputAdjacent>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
                 yield return search.Documents;
             }
 
-            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
         private Stopwatch sw = new Stopwatch();
@@ -107,7 +108,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 )
                 .Size(Size)
                 .Scroll(Scroll)
-            );
+            ).Validate();
             var remaining = search.Total - search.Hits.Count;
 
             Console.WriteLine("result count: " + search.Total);
@@ -117,14 +118,14 @@ namespace BigDataPathFinding.Models.ElasticGraph
             while (remaining > 0)
             {
                 sw.Restart();
-                search = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
                 Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
                 yield return search.Documents;
             }
             Console.WriteLine();
 
-            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
@@ -142,7 +143,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 )
                 .Size(Size)
                 .Scroll(Scroll)
-            );
+            ).Validate();
 
             var remaining = search.Total - search.Hits.Count;
 
@@ -153,14 +154,14 @@ namespace BigDataPathFinding.Models.ElasticGraph
             while (remaining > 0)
             {
                 sw.Restart();
-                search = _client.Scroll<Edge>(Scroll, search.ScrollId);
+                search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
                 Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
                 yield return search.Documents;
             }
             Console.WriteLine();
 
-            _client.ClearScroll(c => c.ScrollId(search.ScrollId));
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
     }
 }

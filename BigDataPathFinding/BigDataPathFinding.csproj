@@ -63,6 +63,8 @@
     <Compile Include="Models\Edge.cs" />
     <Compile Include="Models\ElasticGraph\ElasticDatabase.cs" />
     <Compile Include="Models\ElasticGraph\ElasticMetadata.cs" />
+    <Compile Include="Models\Elastic\ElasticResponseValidator.cs" />
+    <Compile Include="Models\Elastic\ResponseException.cs" />
     <Compile Include="Models\FileGraph\FileGraph.cs" />
     <Compile Include="Models\FileGraph\FileMetadata.cs" />
     <Compile Include="Models\FileGraph\FileNode.cs" />
