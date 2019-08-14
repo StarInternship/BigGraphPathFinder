@@ -15,17 +15,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private readonly SearchData searchData = new SearchData();
 
-        public bool ReachedToTarget
-        {
-            get
-            {
-                lock (searchData)
-                {
-                    return reachedToTarget;
-                }
-            }
-        }
-
 
         public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance)
@@ -58,83 +47,79 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void ExpandBackward()
         {
-            while (!ReachedToTarget)
+            while (!reachedToTarget)
             {
-                lock (searchData)
+
+                backwardLeyer++;
+
+                if (searchData.CurrentBackwardNodes.Count == 0 || backwardLeyer > searchData.MaxBackwardDistance)
                 {
-                    backwardLeyer++;
+                    break;
+                }
 
-                    if (searchData.CurrentBackwardNodes.Count == 0 || backwardLeyer > searchData.MaxBackwardDistance)
+                var nextLeyerNodes = new HashSet<Guid>();
+
+                foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentBackwardNodes))
+                {
+                    foreach (var edge in edges)
                     {
-                        break;
+                        VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
+                }
 
-                    var nextLeyerNodes = new HashSet<Guid>();
 
-                    foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentBackwardNodes))
+                if (!Directed)
+                {
+                    foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentBackwardNodes))
                     {
                         foreach (var edge in edges)
                         {
-                            VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                            VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
-
-
-                    if (!Directed)
-                    {
-                        foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentBackwardNodes))
-                        {
-                            foreach (var edge in edges)
-                            {
-                                VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
-                            }
-                        }
-                    }
-
-                    searchData.UpdateCurrentBackwardNodes(nextLeyerNodes);
                 }
+
+                searchData.UpdateCurrentBackwardNodes(nextLeyerNodes);
             }
+
         }
 
         private void ExpandForward()
         {
-            while (!ReachedToTarget)
+            while (!reachedToTarget)
             {
-                lock (searchData)
+                forwardLeyer++;
+
+                if (searchData.CurrentForwardNodes.Count == 0 || forwardLeyer > searchData.MaxForwardDistance)
                 {
+                    return;
+                }
 
-                    forwardLeyer++;
+                var nextLeyerNodes = new HashSet<Guid>();
 
-                    if (searchData.CurrentForwardNodes.Count == 0 || forwardLeyer > searchData.MaxForwardDistance)
+                foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
+                {
+                    foreach (var edge in edges)
                     {
-                        return;
+                        VisiteForwardEdge(nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
+                }
 
-                    var nextLeyerNodes = new HashSet<Guid>();
 
-                    foreach (var edges in Metadata.GetOutputAdjacent(searchData.CurrentForwardNodes))
+                if (!Directed)
+                {
+                    foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentForwardNodes))
                     {
                         foreach (var edge in edges)
                         {
-                            VisiteForwardEdge(nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                            VisiteForwardEdge(nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
-
-
-                    if (!Directed)
-                    {
-                        foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentForwardNodes))
-                        {
-                            foreach (var edge in edges)
-                            {
-                                VisiteForwardEdge(nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
-                            }
-                        }
-                    }
-
-                    searchData.UpdateCurrentForwardNodes(nextLeyerNodes);
                 }
+
+                searchData.UpdateCurrentForwardNodes(nextLeyerNodes);
             }
+
         }
 
         private void VisiteBackwardEdge(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId, Guid targetId, double weight)
@@ -145,13 +130,17 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     VisitBackwardNode(backwardLeyer, nextLeyerNodes, sourceId);
                 }
+            }
 
 
-                if (searchData.GetNode(sourceId).Distance == backwardLeyer)
-                {
-                    searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
-                }
+            if (searchData.GetNode(sourceId).Distance == backwardLeyer)
+            {
+                searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
+            }
 
+
+            lock (searchData)
+            {
                 if (searchData.GetNode(sourceId).Seen == Seen.forward)
                 {
                     searchData.Joints.Add(sourceId);
@@ -159,6 +148,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     reachedToTarget = true;
                 }
             }
+
 
         }
 
@@ -177,12 +167,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     VisiteForwardNode(forwardLeyer, nextLeyerNodes, targetId);
                 }
 
+            }
 
-                if (searchData.GetNode(targetId).Distance == forwardLeyer)
-                {
-                    searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
-                }
-
+            if (searchData.GetNode(targetId).Distance == forwardLeyer)
+            {
+                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+            }
+            lock (searchData)
+            {
                 if (searchData.GetNode(targetId).Seen == Seen.backward)
                 {
                     searchData.Joints.Add(targetId);
