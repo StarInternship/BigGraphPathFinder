@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using BigDataPathFinding.Models;
@@ -23,8 +24,8 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("permutation9_node_set");
-                    metadata = new ElasticMetadata("permutation9_connections");
+                    database = new ElasticDatabase("permutation10_node_set");
+                    metadata = new ElasticMetadata("permutation10_connections");
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
@@ -70,10 +71,10 @@ namespace BigDataPathFinding
                 long sumOfSquares = 0;
                 int pathDistance = 0;
                 int edgesCount = 0;
-                for (int i = 0; i < 50; i++)
+                const double searchCount = 10;
+                for (int i = 0; i < searchCount; i++)
                 {
-                    if ((i + 1) % 5 == 0)
-                        Console.Write(".");
+                    Console.Write(".");
                     stopWatch.Restart();
                     var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, maxDistance);
                     (long t, int c, int d) = FindPath(pathFinder);
@@ -82,15 +83,14 @@ namespace BigDataPathFinding
                     totalTime += t;
                     sumOfSquares += t * t;
 
-
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 }
-                var average = totalTime / 50.0;
+                var average = totalTime / searchCount;
+                Console.WriteLine();
                 Console.WriteLine("edges count : " + edgesCount);
                 Console.WriteLine("path distance : " + pathDistance);
-                Console.WriteLine("\n******* Weightless *********");
                 Console.WriteLine("Average time: " + average + " ms.");
-                Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / 50.0) - average * average)));
+                Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / searchCount) - average * average)));
                 Console.WriteLine();
             }
         }
