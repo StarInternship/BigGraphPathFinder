@@ -46,10 +46,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void CalculatePathDistance()
         {
-            if (backwardLeyer > searchData.MaxBackwardDistance)
-                backwardLeyer = searchData.MaxBackwardDistance;
-            if (forwardLeyer > searchData.MaxForwardDistance)
-                forwardLeyer = searchData.MaxForwardDistance;
+            backwardLeyer = Math.Min(backwardLeyer, searchData.MaxBackwardDistance);
+            forwardLeyer = Math.Min(forwardLeyer, searchData.MaxForwardDistance);
             searchData.PathDistance = forwardLeyer + backwardLeyer;
         }
 
@@ -164,7 +162,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             if (searchData.GetNode(targetId).Seen == Seen.backward)
             {
-                searchData.Joints.Add(targetId);
+                searchData.AddJoint(targetId);
                 searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
                 reachedToTarget = true;
             }

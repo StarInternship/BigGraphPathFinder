@@ -69,8 +69,11 @@ namespace BigDataPathFinding.Models.Hadi
         public bool IsEmpty() => _queue.Count == 0;
 
         public Dictionary<Guid, NodeData> GetResultNodeSet() => NodeSet;
+
         public HashSet<Guid> GetJoints()=>Joints;
 
         public int GetPathDistance() => 0;
+
+        public void AddJoint(Guid id) => Joints.Add(id);
     }
 }

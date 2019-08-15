@@ -81,6 +81,7 @@ namespace BigDataPathFinding
         {
             if (Source == Source.Elastic)
                 ((ElasticMetadata)metadata).NumberOfRequests = 0;
+
             pathFinder.FindPath();
             stopWatch.Stop();
             long time = stopWatch.ElapsedMilliseconds;
@@ -95,6 +96,7 @@ namespace BigDataPathFinding
 #if DEBUG
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
+
             if (Source == Source.Elastic)
                 Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
             Console.WriteLine("number of edges: " + edges.Count);

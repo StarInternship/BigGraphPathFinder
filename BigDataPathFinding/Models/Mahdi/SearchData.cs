@@ -57,5 +57,7 @@ namespace BigDataPathFinding.Models.Mahdi
         public HashSet<Guid> GetJoints() => Joints;
 
         public int GetPathDistance() => 0;
+
+        public void AddJoint(Guid id) => Joints.Add(id);
     }
 }
