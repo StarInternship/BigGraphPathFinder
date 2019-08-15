@@ -95,7 +95,9 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
         {
+#if DEBUG
             Console.WriteLine("output source count: " + ids.Count());
+#endif
             NumberOfRequests++;
             Sw.Restart();
             var search = _client.Search<Edge>(s => s
@@ -110,9 +112,10 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 .Scroll(Scroll)
             ).Validate();
             var remaining = search.Total - search.Hits.Count;
-
+#if DEBUG
             Console.WriteLine("result count: " + search.Total);
-            Console.WriteLine("search time: " + Sw.ElapsedMilliseconds + " ms.");
+            Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
             yield return search.Documents;
 
             while (remaining > 0)
@@ -120,17 +123,23 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 Sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
-                Console.WriteLine("scroll time: " + Sw.ElapsedMilliseconds + " ms.");
+#if DEBUG
+                Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
                 yield return search.Documents;
             }
+#if DEBUG
             Console.WriteLine();
+#endif
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
         public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
         {
+#if DEBUG
             Console.WriteLine("input source count: " + ids.Count());
+#endif
             NumberOfRequests++;
             Sw.Restart();
             var search = _client.Search<Edge>(s => s
@@ -146,9 +155,10 @@ namespace BigDataPathFinding.Models.ElasticGraph
             ).Validate();
 
             var remaining = search.Total - search.Hits.Count;
-
+#if DEBUG
             Console.WriteLine("result count: " + search.Total);
-            Console.WriteLine("search time: " + Sw.ElapsedMilliseconds + " ms.");
+            Console.WriteLine("search time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
             yield return search.Documents;
 
             while (remaining > 0)
@@ -156,10 +166,14 @@ namespace BigDataPathFinding.Models.ElasticGraph
                 Sw.Restart();
                 search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
                 remaining -= search.Hits.Count;
-                Console.WriteLine("scroll time: " + Sw.ElapsedMilliseconds + " ms.");
+#if DEBUG
+                Console.WriteLine("scroll time: " + sw.ElapsedMilliseconds + " ms.");
+#endif
                 yield return search.Documents;
             }
+#if DEBUG
             Console.WriteLine();
+#endif
 
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
