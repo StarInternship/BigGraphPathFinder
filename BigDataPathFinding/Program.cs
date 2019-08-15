@@ -16,7 +16,7 @@ namespace BigDataPathFinding
         private static IDatabase database;
         private static IMetadata metadata;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             stopWatch.Start();
 
