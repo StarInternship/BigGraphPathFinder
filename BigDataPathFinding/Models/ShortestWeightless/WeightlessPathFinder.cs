@@ -13,8 +13,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private readonly SearchData searchData = new SearchData();
 
-        public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
-            : base(metadata, sourceId, targetId, directed, maxDistance)
+        public WeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance, int minDistance)
+            : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
         {
             searchData.MaxForwardDistance = (maxDistance + 1) / 2;
             searchData.MaxBackwardDistance = (maxDistance) / 2;

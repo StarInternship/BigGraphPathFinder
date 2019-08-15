@@ -10,8 +10,8 @@ namespace BigDataPathFinding.Models.Mahdi
         private double _minDistance = int.MaxValue;
         private bool _shouldContinue = true;
 
-        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance) : base(metadata,
-            sourceId, targetId, directed, maxDistance)
+        public MahdiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance, int minDistnace) : base(metadata,
+            sourceId, targetId, directed, maxDistance, minDistnace)
         {
             _searchData.AddCandidate(sourceId, new NodeData(sourceId, 0));
         }

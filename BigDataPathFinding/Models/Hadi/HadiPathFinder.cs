@@ -7,8 +7,8 @@ namespace BigDataPathFinding.Models.Hadi
     {
         private SearchData _searchData;
         private double _checkingDistance;
-        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance)
-            : base(metadata, sourceId, targetId, directed, maxDistance)
+        public HadiPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance, int minDistnace)
+            : base(metadata, sourceId, targetId, directed, maxDistance, minDistnace)
         {
         }
 
