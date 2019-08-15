@@ -23,8 +23,8 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("permutation10_node_set");
-                    metadata = new ElasticMetadata("permutation10_connections");
+                    database = new ElasticDatabase("permutation9_node_set");
+                    metadata = new ElasticMetadata("permutation9_connections");
                     break;
                 case Source.File:
                     database = new FileGraph(TestFilesPath + "hosein2.txt");
@@ -68,27 +68,34 @@ namespace BigDataPathFinding
 
                 long totalTime = 0;
                 long sumOfSquares = 0;
+                int pathDistance = 0;
+                int edgesCount = 0;
                 for (int i = 0; i < 50; i++)
                 {
                     if ((i + 1) % 5 == 0)
                         Console.Write(".");
                     stopWatch.Restart();
                     var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, maxDistance);
-                    long t = FindPath(pathFinder);
+                    (long t, int c, int d) = FindPath(pathFinder);
+                    pathDistance = d;
+                    edgesCount = c;
                     totalTime += t;
                     sumOfSquares += t * t;
 
-                   
+
                     Thread.Sleep(1000);
                 }
                 var average = totalTime / 50.0;
+                Console.WriteLine("edges count : " + edgesCount);
+                Console.WriteLine("path distance : " + pathDistance);
                 Console.WriteLine("\n******* Weightless *********");
                 Console.WriteLine("Average time: " + average + " ms.");
                 Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / 50.0) - average * average)));
+                Console.WriteLine();
             }
         }
 
-        private static long FindPath(AbstractPathFinder pathFinder)
+        private static (long, int, int) FindPath(AbstractPathFinder pathFinder)
         {
             if (Source == Source.Elastic)
                 ((ElasticMetadata)metadata).NumberOfRequests = 0;
@@ -114,7 +121,7 @@ namespace BigDataPathFinding
             foreach (var edge in edges)
                 Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
 #endif
-            return time;
+            return (time, edges.Count, pathFinder.GetSearchData().GetPathDistance());
         }
     }
 
