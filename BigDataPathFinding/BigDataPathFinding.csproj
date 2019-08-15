@@ -86,6 +86,7 @@
     <Compile Include="Models\ShortestWeightless\WeightlessNodeData.cs" />
     <Compile Include="Models\ShortestWeightless\WeightlessPathFinder.cs" />
     <Compile Include="Models\ShortestWeightless\SearchData.cs" />
+    <Compile Include="Models\ShortestWeightless\WeightlessPathFinderMultiThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
