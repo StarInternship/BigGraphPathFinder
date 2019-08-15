@@ -138,7 +138,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             if (searchData.GetNode(sourceId).Seen == Seen.forward)
             {
                 searchData.Joints.Add(sourceId);
-                searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(sourceId, weight));
+                searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
                 reachedToTarget = true;
             }
 
