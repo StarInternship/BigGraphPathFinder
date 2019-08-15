@@ -45,8 +45,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        private readonly Object tagetLock = new Object();
-        private readonly Object distanceLock = new Object();
+        private readonly object tagetLock = new object();
+        private readonly object distanceLock = new object();
 
         private int forwardLeyer = 0;
         private int backwardLeyer = 0;
