@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
@@ -66,14 +67,17 @@ namespace BigDataPathFinding
                 var maxDistance = int.Parse(Console.ReadLine());
 
                 long Time = 0;
-                for (int i = 0; i < 200; i++)
+                for (int i = 0; i < 50; i++)
                 {
+                    if ((i + 1) % 5 == 0)
+                        Console.Write(".");
                     stopWatch.Restart();
                     var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, maxDistance);
                     Time += FindPath(pathFinder);
+                    Thread.Sleep(1000);
                 }
-                Console.WriteLine("******* Weightless *********\n\n");
-                Console.WriteLine(Time / 200);
+                Console.WriteLine("\n******* Weightless *********");
+                Console.WriteLine(Time / 50);
             }
         }
 
