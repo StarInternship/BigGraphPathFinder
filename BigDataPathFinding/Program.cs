@@ -88,7 +88,7 @@ namespace BigDataPathFinding
                 var average = totalTime / 50.0;
                 Console.WriteLine("edges count : " + edgesCount);
                 Console.WriteLine("path distance : " + pathDistance);
-                Console.WriteLine("\n******* Weightless *********");
+                Console.WriteLine("******* Weightless *********");
                 Console.WriteLine("Average time: " + average + " ms.");
                 Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / 50.0) - average * average)));
                 Console.WriteLine();
