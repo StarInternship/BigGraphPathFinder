@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
@@ -13,14 +12,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         {
             get
             {
-                lock (tagetLock)
+                lock (targetLock)
                 {
                     return reachToTarget;
                 }
             }
             set
             {
-                lock (tagetLock)
+                lock (targetLock)
                 {
                     reachToTarget = value;
                 }
@@ -45,15 +44,13 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        private readonly object tagetLock = new object();
+        private readonly object targetLock = new object();
         private readonly object distanceLock = new object();
 
         private int forwardLeyer = 0;
         private int backwardLeyer = 0;
 
         private readonly SearchData searchData = new SearchData();
-
-
 
         public WeightlessPathFinderMultiThread(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance, int minDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
@@ -80,9 +77,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             backwardTask.Wait();
         }
 
-
-
-
         private void ExpandBackward()
         {
             while (!ReachedToTarget)
@@ -104,9 +98,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                         VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
                 }
-
-
-
 
                 if (!Directed)
                 {
@@ -145,7 +136,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     }
                 }
 
-
                 if (!Directed)
                 {
                     foreach (var edges in Metadata.GetInputAdjacent(searchData.CurrentForwardNodes))
@@ -172,13 +162,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
             }
 
-
             if (searchData.GetNode(sourceId).Distance == backwardLeyer && searchData.GetNode(targetId).Seen == Seen.backward)
             {
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
             }
-
-
 
             if (searchData.GetNode(sourceId).Seen == Seen.forward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
@@ -187,8 +174,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 ReachedToTarget = true;
                 PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
             }
-
-
         }
 
         private void VisitBackwardNode(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId)
@@ -219,8 +204,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 ReachedToTarget = true;
                 PathDistance = (int)searchData.GetNode(sourceId).Distance + (int)searchData.GetNode(targetId).Distance + 1;
             }
-
-
         }
 
         private void VisiteForwardNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid targetId)
@@ -228,7 +211,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             searchData.AddToNodeSet(new WeightlessNodeData(targetId, leyer, Seen.forward));
             nextLeyerNodes.Add(targetId);
         }
-
 
         public override ISearchData GetSearchData() => searchData;
     }
