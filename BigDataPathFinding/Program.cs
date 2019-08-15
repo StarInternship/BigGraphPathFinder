@@ -66,18 +66,25 @@ namespace BigDataPathFinding
                 Console.Write("max distance: ");
                 var maxDistance = int.Parse(Console.ReadLine());
 
-                long Time = 0;
+                long totalTime = 0;
+                long sumOfSquares = 0;
                 for (int i = 0; i < 50; i++)
                 {
                     if ((i + 1) % 5 == 0)
                         Console.Write(".");
                     stopWatch.Restart();
                     var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed, maxDistance);
-                    Time += FindPath(pathFinder);
+                    long t = FindPath(pathFinder);
+                    totalTime += t;
+                    sumOfSquares += t * t;
+
+                   
                     Thread.Sleep(1000);
                 }
+                var average = totalTime / 50.0;
                 Console.WriteLine("\n******* Weightless *********");
-                Console.WriteLine(Time / 50);
+                Console.WriteLine("Average time: " + average + " ms.");
+                Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / 50.0) - average * average)));
             }
         }
 
