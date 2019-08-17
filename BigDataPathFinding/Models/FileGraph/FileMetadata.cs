@@ -12,12 +12,12 @@ namespace BigDataPathFinding.Models.FileGraph
         public FileMetadata(FileGraph database) => _database = database;
 
 
-        public IEnumerable<IEnumerable<Adjacent>> GetInputEdges(Guid id)
+        public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
         {
             yield return ((FileNodeInfo)_database.GetNode(id)).InputAdjacent;
         }
 
-        public IEnumerable<IEnumerable<Adjacent>> GetOutputEdges(Guid id)
+        public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
         {
             yield return ((FileNodeInfo)_database.GetNode(id)).OutputAdjacent;
         }

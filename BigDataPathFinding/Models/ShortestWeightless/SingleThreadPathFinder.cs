@@ -57,7 +57,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             var newLayer = new HashSet<Guid>();
 
             var listOfEdges = Directed
-                ? Metadata.GetInputEdges(_searchData.CurrentForwardNodes)
+                ? Metadata.GetInputAdjacent(_searchData.CurrentForwardNodes)
                 : Metadata.GetAllEdges(_searchData.CurrentForwardNodes);
 
             foreach (var edges in listOfEdges)
@@ -84,7 +84,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             var newLayer = new HashSet<Guid>();
 
             var listOfEdges = Directed
-                ? Metadata.GetOutputEdges(_searchData.CurrentForwardNodes)
+                ? Metadata.GetOutputAdjacent(_searchData.CurrentForwardNodes)
                 : Metadata.GetAllEdges(_searchData.CurrentForwardNodes);
 
             foreach (var edges in listOfEdges)

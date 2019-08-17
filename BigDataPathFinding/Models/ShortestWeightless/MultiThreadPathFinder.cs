@@ -91,7 +91,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 _backwardLayer++;
                 var nextLayerNodes = new HashSet<Guid>();
 
-                foreach (var edges in Metadata.GetInputEdges(_searchData.CurrentBackwardNodes))
+                foreach (var edges in Metadata.GetInputAdjacent(_searchData.CurrentBackwardNodes))
                 {
                     foreach (var edge in edges)
                     {
@@ -101,7 +101,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 if (!Directed)
                 {
-                    foreach (var edges in Metadata.GetOutputEdges(_searchData.CurrentBackwardNodes)
+                    foreach (var edges in Metadata.GetOutputAdjacent(_searchData.CurrentBackwardNodes)
                     )
                     {
                         foreach (var edge in edges)
@@ -129,7 +129,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 var nextLayerNodes = new HashSet<Guid>();
 
-                foreach (var edges in Metadata.GetOutputEdges(_searchData.CurrentForwardNodes))
+                foreach (var edges in Metadata.GetOutputAdjacent(_searchData.CurrentForwardNodes))
                 {
                     foreach (var edge in edges)
                     {
@@ -139,7 +139,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 if (!Directed)
                 {
-                    foreach (var edges in Metadata.GetInputEdges(_searchData.CurrentForwardNodes))
+                    foreach (var edges in Metadata.GetInputAdjacent(_searchData.CurrentForwardNodes))
                     {
                         foreach (var edge in edges)
                         {
