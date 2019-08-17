@@ -48,8 +48,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private readonly object targetLock = new object();
         private readonly object distanceLock = new object();
 
-        private int forwardLeyer = 0;
-        private int backwardLeyer = 0;
+        private int _forwardLayer = 0;
+        private int _backwardLayer = 0;
 
         private readonly ShortestWeightlessSearchData _shortestWeightlessSearchData = new ShortestWeightlessSearchData();
 
@@ -62,10 +62,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            _shortestWeightlessSearchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.Forward));
+            _shortestWeightlessSearchData.AddToNodeSet(new NodeData(SourceId, _forwardLayer, Seen.Forward));
             _shortestWeightlessSearchData.AddToCurrentForwardNodes(SourceId);
 
-            _shortestWeightlessSearchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.Backward));
+            _shortestWeightlessSearchData.AddToNodeSet(new NodeData(TargetId, _backwardLayer, Seen.Backward));
             _shortestWeightlessSearchData.AddToCurrentBackwardNodes(TargetId);
 
             var forwardTask = new Task(ExpandForward);
@@ -83,9 +83,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             while (!ReachedToTarget)
             {
 
-                backwardLeyer++;
+                _backwardLayer++;
 
-                if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 || backwardLeyer > _shortestWeightlessSearchData.MaxBackwardDistance)
+                if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 || _backwardLayer > _shortestWeightlessSearchData.MaxBackwardDistance)
                 {
                     break;
                 }
@@ -96,7 +96,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (var edge in edges)
                     {
-                        VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                        VisiteBackwardEdge(_backwardLayer, nextLeyerNodes, edge.SourceId, edge.TargetId, edge.Weight);
                     }
                 }
 
@@ -106,7 +106,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         foreach (var edge in edges)
                         {
-                            VisiteBackwardEdge(backwardLeyer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
+                            VisiteBackwardEdge(_backwardLayer, nextLeyerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                         }
                     }
                 }
@@ -120,9 +120,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         {
             while (!ReachedToTarget)
             {
-                forwardLeyer++;
+                _forwardLayer++;
 
-                if (_shortestWeightlessSearchData.CurrentForwardNodes.Count == 0 || forwardLeyer > _shortestWeightlessSearchData.MaxForwardDistance)
+                if (_shortestWeightlessSearchData.CurrentForwardNodes.Count == 0 || _forwardLayer > _shortestWeightlessSearchData.MaxForwardDistance)
                 {
                     return;
                 }
@@ -189,11 +189,11 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 if (_shortestWeightlessSearchData.GetNode(targetId) == null)
                 {
-                    VisiteForwardNode(forwardLeyer, nextLeyerNodes, targetId);
+                    VisiteForwardNode(_forwardLayer, nextLeyerNodes, targetId);
                 }
             }
 
-            if (_shortestWeightlessSearchData.GetNode(targetId).Distance == forwardLeyer && _shortestWeightlessSearchData.GetNode(targetId).Seen == Seen.Forward)
+            if (_shortestWeightlessSearchData.GetNode(targetId).Distance == _forwardLayer && _shortestWeightlessSearchData.GetNode(targetId).Seen == Seen.Forward)
             {
                 _shortestWeightlessSearchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
             }
