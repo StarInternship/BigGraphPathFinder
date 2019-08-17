@@ -13,9 +13,9 @@ namespace BigDataPathFinding.Models
 
         public Guid Id { get; }
         public bool Explored { get; set; } = false;
-        public double Distance { get; set; }
+        public double Distance { get; private set; }
         public HashSet<Adjacent> PreviousAdjacent { get; } = new HashSet<Adjacent>();
-        public HashSet<Adjacent> ForwardAdjacents { get; } = new HashSet<Adjacent>();
+        public HashSet<Adjacent> ForwardAdjacent { get; } = new HashSet<Adjacent>();
 
         public int CompareTo(NodeData other)
         {

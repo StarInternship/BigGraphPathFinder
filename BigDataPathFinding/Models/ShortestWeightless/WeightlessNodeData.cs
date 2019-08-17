@@ -12,7 +12,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public Seen Seen { get; }
         public WeightlessNodeData(Guid id, double distance, Seen seen) : base(id, distance) => Seen = seen;
 
-        public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacents.Add(adjacent);
+        public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacent.Add(adjacent);
 
     }
 

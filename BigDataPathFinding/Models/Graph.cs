@@ -17,8 +17,12 @@ namespace BigDataPathFinding.Models
 
         public void AddNode(ResultNode node) => Nodes[node.Id] = node;
 
-        public void AddEdge(ResultNode source, ResultNode target, double weight) =>
+        private void AddEdge(ResultNode source, ResultNode target, double weight)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (target == null) throw new ArgumentNullException(nameof(target));
             Edges.Add(new Edge(source.Id, target.Id, weight));
+        }
 
         public bool Explored(Guid id) => ContainsNode(id) && Nodes[id].Explored;
 
