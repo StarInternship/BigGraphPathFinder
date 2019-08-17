@@ -58,8 +58,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             int maxDistance, int minDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
         {
-            _shortestWeightlessSearchData.MaxForwardDistance = (maxDistance + 1) / 2;
-            _shortestWeightlessSearchData.MaxBackwardDistance = (maxDistance) / 2;
         }
 
         public override void FindPath()
@@ -84,14 +82,13 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         {
             while (!ReachedToTarget)
             {
-                _backwardLayer++;
-
                 if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 ||
-                    _backwardLayer > _shortestWeightlessSearchData.MaxBackwardDistance)
+                    _backwardLayer + _forwardLayer > MaxDistance)
                 {
                     break;
                 }
 
+                _backwardLayer++;
                 var nextLayerNodes = new HashSet<Guid>();
 
                 foreach (var edges in Metadata.GetInputAdjacent(_shortestWeightlessSearchData.CurrentBackwardNodes))
@@ -126,7 +123,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 _forwardLayer++;
 
                 if (_shortestWeightlessSearchData.CurrentForwardNodes.Count == 0 ||
-                    _forwardLayer > _shortestWeightlessSearchData.MaxForwardDistance)
+                    _forwardLayer + _backwardLayer > MaxDistance)
                 {
                     return;
                 }
