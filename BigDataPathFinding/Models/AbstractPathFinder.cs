@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models
 {
@@ -9,8 +10,8 @@ namespace BigDataPathFinding.Models
         protected readonly IMetadata Metadata;
         protected readonly Guid SourceId;
         protected readonly Guid TargetId;
-        private readonly int MaxDistance;
-        private readonly int MinDistance;
+        internal readonly int MaxDistance;
+        internal readonly int MinDistance;
 
         protected AbstractPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed , int maxDistance , int minDistance)
         {

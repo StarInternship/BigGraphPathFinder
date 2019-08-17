@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    internal class SearchData : ISearchData
+    internal class ShortestWeightlessSearchData : ISearchData
     {
         private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, Models.NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();

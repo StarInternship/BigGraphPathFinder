@@ -69,18 +69,18 @@
     <Compile Include="Models\FileGraph\FileMetadata.cs" />
     <Compile Include="Models\FileGraph\FileNodeInfo.cs" />
     <Compile Include="Models\Graph.cs" />
-    <Compile Include="Models\IDatabase.cs" />
-    <Compile Include="Models\IMetadata.cs" />
+    <Compile Include="Models\Interfaces\IDatabase.cs" />
+    <Compile Include="Models\Interfaces\IMetadata.cs" />
     <Compile Include="Models\InputAdjacent.cs" />
     <Compile Include="Models\OutputAdjacent.cs" />
     <Compile Include="Models\AbstractPathFinder.cs" />
-    <Compile Include="Models\ISearchData.cs" />
+    <Compile Include="Models\Interfaces\ISearchData.cs" />
     <Compile Include="Models\NodeInfo.cs" />
     <Compile Include="Models\NodeData.cs" />
     <Compile Include="Models\ResultBuilder.cs" />
-    <Compile Include="Models\ShortestsWeightlessPathFinder.cs" />
-    <Compile Include="Models\SearchData.cs" />
-    <Compile Include="Models\ShortestsWeightlessPathFinderMultiThread.cs" />
+    <Compile Include="Models\ShortestWeightless\ShortestWeightlessPathFinder.cs" />
+    <Compile Include="Models\ShortestWeightless\ShortestWeightlessSearchData.cs" />
+    <Compile Include="Models\ShortestWeightless\ShortestWeightlessPathFinderMultiThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

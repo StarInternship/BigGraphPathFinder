@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.Interfaces
 {
     public interface IDatabase
     {

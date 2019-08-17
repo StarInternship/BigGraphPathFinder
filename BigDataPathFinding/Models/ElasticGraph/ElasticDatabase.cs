@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BigDataPathFinding.Models.Elastic;
+using BigDataPathFinding.Models.Interfaces;
 using Nest;
 
 namespace BigDataPathFinding.Models.ElasticGraph

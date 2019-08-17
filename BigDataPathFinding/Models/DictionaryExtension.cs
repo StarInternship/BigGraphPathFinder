@@ -7,7 +7,7 @@ namespace BigDataPathFinding.Models
     {
         public static string MakeString(this Dictionary<string, object> source)
         {
-            StringBuilder result = new StringBuilder("{");
+            var result = new StringBuilder("{");
             foreach (var value in source.Values)
             {
                 result.Append("[" + value + "] ");

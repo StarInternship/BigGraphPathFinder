@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.Interfaces
 {
     public interface IMetadata
     {

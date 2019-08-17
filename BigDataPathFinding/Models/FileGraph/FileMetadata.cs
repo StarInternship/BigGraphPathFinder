@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.FileGraph
 {

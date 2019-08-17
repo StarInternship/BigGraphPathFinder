@@ -4,6 +4,8 @@ using System.Threading;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
+using BigDataPathFinding.Models.Interfaces;
+using BigDataPathFinding.Models.ShortestWeightless;
 
 namespace BigDataPathFinding
 {
@@ -74,7 +76,7 @@ namespace BigDataPathFinding
                 {
                     Console.Write(".");
                     StopWatch.Restart();
-                    var pathFinder = new WeightlessPathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
+                    var pathFinder = new ShortestWeightlessPathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
                     (long t, int c, int d) = FindPath(pathFinder);
                     pathDistance = d;
                     edgesCount = c;
