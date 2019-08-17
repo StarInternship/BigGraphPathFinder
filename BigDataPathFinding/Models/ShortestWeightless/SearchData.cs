@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    internal class SearchData : ISearchData
+    public class SearchData : ISearchData
     {
-        private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, Models.NodeData>();
+        private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();
         public HashSet<Guid> CurrentForwardNodes { get; private set; } = new HashSet<Guid>();
         public int PathDistance { get; set; }
         public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
 
-        public void AddToNodeSet(NodeData node) => NodeSet[node.Id] = node;
+        public void AddToNodeSet(NodeData node) => NodeSet.Add(node.Id, node);
 
         public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
 

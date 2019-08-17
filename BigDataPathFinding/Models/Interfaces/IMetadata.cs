@@ -5,12 +5,16 @@ namespace BigDataPathFinding.Models.Interfaces
 {
     public interface IMetadata
     {
-        IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id);
+        IEnumerable<IEnumerable<Adjacent>> GetOutputEdges(Guid id);
 
-        IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id);
+        IEnumerable<IEnumerable<Adjacent>> GetInputEdges(Guid id);
 
-        IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids);
+        IEnumerable<IEnumerable<Adjacent>> GetAllAdjacent(Guid id);
 
-        IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids);
+        IEnumerable<IEnumerable<Edge>> GetOutputEdges(IEnumerable<Guid> ids);
+
+        IEnumerable<IEnumerable<Edge>> GetInputEdges(IEnumerable<Guid> ids);
+
+        IEnumerable<IEnumerable<Edge>> GetAllEdges(IEnumerable<Guid> ids);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BigDataPathFinding.Models.FileGraph
 {
@@ -15,5 +16,7 @@ namespace BigDataPathFinding.Models.FileGraph
         public void AddInput(Guid inputId, double weight) => InputAdjacent.Add(new Adjacent(inputId, weight));
 
         public void AddOutput(Guid outputId, double weight) => OutputAdjacent.Add(new Adjacent(outputId, weight));
+
+        public IEnumerable<Adjacent> GetAllAdjacent() => InputAdjacent.Union(OutputAdjacent);
     }
 }

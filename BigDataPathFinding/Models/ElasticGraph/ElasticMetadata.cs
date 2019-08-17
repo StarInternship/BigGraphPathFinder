@@ -27,7 +27,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
 
         public int NumberOfRequests { get; set; }
 
-        public IEnumerable<IEnumerable<Adjacent>> GetOutputAdjacent(Guid id)
+        public IEnumerable<IEnumerable<Adjacent>> GetOutputEdges(Guid id)
         {
             NumberOfRequests++;
             var search = _client.Search<OutputAdjacent>(s => s
@@ -60,7 +60,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
-        public IEnumerable<IEnumerable<Adjacent>> GetInputAdjacent(Guid id)
+        public IEnumerable<IEnumerable<Adjacent>> GetInputEdges(Guid id)
         {
             NumberOfRequests++;
             var search = _client.Search<InputAdjacent>(s => s
@@ -94,7 +94,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
         }
 
 
-        public IEnumerable<IEnumerable<Edge>> GetOutputAdjacent(IEnumerable<Guid> ids)
+        public IEnumerable<IEnumerable<Edge>> GetOutputEdges(IEnumerable<Guid> ids)
         {
 #if DEBUG
             Console.WriteLine("output source count: " + ids.Count());
@@ -136,7 +136,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
-        public IEnumerable<IEnumerable<Edge>> GetInputAdjacent(IEnumerable<Guid> ids)
+        public IEnumerable<IEnumerable<Edge>> GetInputEdges(IEnumerable<Guid> ids)
         {
 #if DEBUG
             Console.WriteLine("input source count: " + ids.Count());
