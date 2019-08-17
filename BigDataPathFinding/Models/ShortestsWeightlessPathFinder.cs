@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BigDataPathFinding.Models.ShortestWeightless
+namespace BigDataPathFinding.Models
 {
     public class WeightlessPathFinder : AbstractPathFinder
     {

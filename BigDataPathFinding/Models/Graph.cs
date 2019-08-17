@@ -7,7 +7,6 @@ namespace BigDataPathFinding.Models
     {
         private Dictionary<Guid, NodeInfo> Nodes { get; } = new Dictionary<Guid, NodeInfo>();
         public HashSet<Edge> Edges { get; } = new HashSet<Edge>();
-
         private readonly HashSet<Guid> _exploredNodes=new HashSet<Guid>();
 
         public void AddEdge(Guid source, Guid target, double weight) =>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BigDataPathFinding.Models.ShortestWeightless
+namespace BigDataPathFinding.Models
 {
     public class WeightlessPathFinderMultiThread : AbstractPathFinder
     {

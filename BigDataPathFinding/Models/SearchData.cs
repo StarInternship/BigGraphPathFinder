@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BigDataPathFinding.Models.ShortestWeightless
+namespace BigDataPathFinding.Models
 {
-    class SearchData : ISearchData
+    internal class SearchData : ISearchData
     {
-        private Dictionary<Guid, Models.NodeData> NodeSet { get; } = new Dictionary<Guid, Models.NodeData>();
+        private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, Models.NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();
         public HashSet<Guid> CurrentForwardNodes { get; private set; } = new HashSet<Guid>();
         public int PathDistance { get; set; }

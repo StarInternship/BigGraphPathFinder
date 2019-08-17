@@ -4,7 +4,6 @@ using System.Threading;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
-using BigDataPathFinding.Models.ShortestWeightless;
 
 namespace BigDataPathFinding
 {
@@ -12,29 +11,29 @@ namespace BigDataPathFinding
     {
         private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
-        private static readonly Stopwatch stopWatch = new Stopwatch();
-        private static IDatabase database;
-        private static IMetadata metadata;
+        private static readonly Stopwatch StopWatch = new Stopwatch();
+        private static IDatabase _database;
+        private static IMetadata _metadata;
 
         private static void Main()
         {
-            stopWatch.Start();
+            StopWatch.Start();
 
             switch (Source)
             {
                 case Source.Elastic:
-                    database = new ElasticDatabase("permutation10_node_set");
-                    metadata = new ElasticMetadata("permutation10_connections");
+                    _database = new ElasticDatabase("permutation10_node_set");
+                    _metadata = new ElasticMetadata("permutation10_connections");
                     break;
                 case Source.File:
-                    database = new FileGraph(TestFilesPath + "hosein2.txt");
-                    metadata = new FileMetadata((FileGraph)database);
+                    _database = new FileGraph(TestFilesPath + "hosein2.txt");
+                    _metadata = new FileMetadata((FileGraph)_database);
                     break;
             }
 
-            stopWatch.Stop();
+            StopWatch.Stop();
 
-            Console.WriteLine("Get Ready After " + stopWatch.ElapsedMilliseconds + " ms.");
+            Console.WriteLine("Get Ready After " + StopWatch.ElapsedMilliseconds + " ms.");
 
             while (true)
             {
@@ -46,7 +45,7 @@ namespace BigDataPathFinding
                         sourceId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        sourceId = ((FileGraph)database).GetId(Console.ReadLine());
+                        sourceId = ((FileGraph)_database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -57,7 +56,7 @@ namespace BigDataPathFinding
                         targetId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        targetId = ((FileGraph)database).GetId(Console.ReadLine());
+                        targetId = ((FileGraph)_database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -74,8 +73,8 @@ namespace BigDataPathFinding
                 for (int i = 0; i < searchCount; i++)
                 {
                     Console.Write(".");
-                    stopWatch.Restart();
-                    var pathFinder = new WeightlessPathFinder(metadata, sourceId, targetId, directed,maxDistance, 0);
+                    StopWatch.Restart();
+                    var pathFinder = new WeightlessPathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
                     (long t, int c, int d) = FindPath(pathFinder);
                     pathDistance = d;
                     edgesCount = c;
@@ -97,19 +96,19 @@ namespace BigDataPathFinding
         private static (long, int, int) FindPath(AbstractPathFinder pathFinder)
         {
             if (Source == Source.Elastic)
-                ((ElasticMetadata)metadata).NumberOfRequests = 0;
+                ((ElasticMetadata)_metadata).NumberOfRequests = 0;
 
             pathFinder.FindPath();
-            stopWatch.Stop();
-            long time = stopWatch.ElapsedMilliseconds;
+            StopWatch.Stop();
+            long time = StopWatch.ElapsedMilliseconds;
 #if DEBUG
             Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
 #endif
-            stopWatch.Reset();
-            stopWatch.Start();
-            var resultBuilder = new ResultBuilder(database, pathFinder.GetSearchData());
+            StopWatch.Reset();
+            StopWatch.Start();
+            var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
             var edges = resultBuilder.Build().Edges;
-            stopWatch.Stop();
+            StopWatch.Stop();
 #if DEBUG
             Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
             Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());

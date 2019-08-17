@@ -5,6 +5,11 @@ namespace BigDataPathFinding.Models
 {
     public class NodeInfo
     {
+
+        public NodeInfo(NodeInfo node): this(node.Id, node.Data)
+        {
+        }
+
         public NodeInfo(Guid id, Dictionary<string, object> data)
         {
             Id = id;

@@ -24,7 +24,7 @@ namespace BigDataPathFinding.Models
 
             foreach (var guid in _searchData.GetJoints())
             {
-                _result.AddNode(new ResultNode(_database.GetNode(guid)));
+                _result.AddNode(new NodeInfo(_database.GetNode(guid)));
                 currentNodes.Add(_searchData.GetResultNodeSet()[guid]);
             }
 
@@ -47,7 +47,7 @@ namespace BigDataPathFinding.Models
         {
             foreach (var adjacent in node.PreviousAdjacent)
             {
-                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
+                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new NodeInfo(_database.GetNode(adjacent.Id)));
 
                 _result.AddEdge(adjacent.Id, node.Id, adjacent.Weight);
                 currentNodes.Add(_searchData.GetResultNodeSet()[adjacent.Id]);
@@ -55,7 +55,7 @@ namespace BigDataPathFinding.Models
 
             foreach (var adjacent in node.ForwardAdjacent)
             {
-                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new ResultNode(_database.GetNode(adjacent.Id)));
+                if (!_result.ContainsNode(adjacent.Id)) _result.AddNode(new NodeInfo(_database.GetNode(adjacent.Id)));
 
                 _result.AddEdge(node.Id, adjacent.Id, adjacent.Weight);
                 currentNodes.Add(_searchData.GetResultNodeSet()[adjacent.Id]);

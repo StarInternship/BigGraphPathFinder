@@ -25,13 +25,6 @@ namespace BigDataPathFinding.Models
             return Distance - other.Distance > 0 ? 1 : -1;
         }
 
-        public void ClearAdjacentAndUpdateDistance(Adjacent adjacent, double distance)
-        {
-            PreviousAdjacent.Clear();
-            PreviousAdjacent.Add(adjacent);
-            Distance = distance;
-        }
-
         public void AddForwardAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
 
         public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacent.Add(adjacent);
