@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    internal class ShortestWeightlessSearchData : ISearchData
+    internal class SearchData : ISearchData
     {
         private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, Models.NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();

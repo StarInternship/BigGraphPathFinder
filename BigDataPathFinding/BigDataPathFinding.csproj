@@ -78,9 +78,9 @@
     <Compile Include="Models\NodeInfo.cs" />
     <Compile Include="Models\NodeData.cs" />
     <Compile Include="Models\ResultBuilder.cs" />
-    <Compile Include="Models\ShortestWeightless\ShortestWeightlessPathFinder.cs" />
-    <Compile Include="Models\ShortestWeightless\ShortestWeightlessSearchData.cs" />
-    <Compile Include="Models\ShortestWeightless\ShortestWeightlessPathFinderMultiThread.cs" />
+    <Compile Include="Models\ShortestWeightless\PathFinder.cs" />
+    <Compile Include="Models\ShortestWeightless\SearchData.cs" />
+    <Compile Include="Models\ShortestWeightless\PathFinderMultiThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

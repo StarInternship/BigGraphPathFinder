@@ -76,7 +76,7 @@ namespace BigDataPathFinding
                 {
                     Console.Write(".");
                     StopWatch.Restart();
-                    var pathFinder = new ShortestWeightlessPathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
+                    var pathFinder = new PathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
                     (long t, int c, int d) = FindPath(pathFinder);
                     pathDistance = d;
                     edgesCount = c;
