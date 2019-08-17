@@ -43,7 +43,7 @@ namespace BigDataPathFinding.Models
             return _result;
         }
 
-        private void AddAdjacent(NodeData node, HashSet<NodeData> currentNodes)
+        private void AddAdjacent(NodeData node, ISet<NodeData> currentNodes)
         {
             foreach (var adjacent in node.PreviousAdjacent)
             {

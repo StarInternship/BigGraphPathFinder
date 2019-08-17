@@ -22,10 +22,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            searchData.AddToNodeSet(new WeightlessNodeData(SourceId, forwardLeyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.forward));
             searchData.AddToCurrentForwardNodes(SourceId);
 
-            searchData.AddToNodeSet(new WeightlessNodeData(TargetId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.backward));
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             while (!reachedToTarget)
@@ -144,7 +144,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisitBackwardNode(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId)
         {
-            searchData.AddToNodeSet(new WeightlessNodeData(sourceId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(sourceId, backwardLeyer, Seen.backward));
             nextLeyerNodes.Add(sourceId);
         }
 
@@ -157,20 +157,20 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             if (searchData.GetNode(targetId).Distance == forwardLeyer)
             {
-                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+                searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
             }
 
             if (searchData.GetNode(targetId).Seen == Seen.backward)
             {
                 searchData.AddJoint(targetId);
-                searchData.GetNode(targetId).AddAdjacent(new Adjacent(sourceId, weight));
+                searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
                 reachedToTarget = true;
             }
         }
 
         private void VisiteNewNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid targetId)
         {
-            searchData.AddToNodeSet(new WeightlessNodeData(targetId, leyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(targetId, leyer, Seen.forward));
             nextLeyerNodes.Add(targetId);
         }
 

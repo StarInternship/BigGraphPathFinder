@@ -5,10 +5,13 @@ namespace BigDataPathFinding.Models
 {
     public class NodeData : IComparable<NodeData>
     {
-        public NodeData(Guid id, double distance)
+        public Seen Seen { get; }
+
+        public NodeData(Guid id, double distance, Seen seen)
         {
             Id = id;
             Distance = distance;
+            Seen = seen;
         }
 
         public Guid Id { get; }
@@ -30,10 +33,18 @@ namespace BigDataPathFinding.Models
             Distance = distance;
         }
 
-        public void AddAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
+        public void AddForwardAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
+
+        public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacent.Add(adjacent);
 
         public override bool Equals(object obj) => this == obj || (obj is NodeData nodeData && Id.Equals(nodeData.Id));
 
         public override int GetHashCode() => Id.GetHashCode();
+    }
+
+    public enum Seen
+    {
+        forward,
+        backward
     }
 }

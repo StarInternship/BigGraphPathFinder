@@ -9,11 +9,11 @@ namespace BigDataPathFinding.Models.FileGraph
         {
         }
 
-        public List<Adjacent> OutputAdjucents { get; } = new List<Adjacent>();
-        public List<Adjacent> InputAdjucents { get; } = new List<Adjacent>();
+        public List<Adjacent> OutputAdjacent { get; } = new List<Adjacent>();
+        public List<Adjacent> InputAdjacent { get; } = new List<Adjacent>();
 
-        public void AddInput(Guid inputId, double weight) => InputAdjucents.Add(new Adjacent(inputId, weight));
+        public void AddInput(Guid inputId, double weight) => InputAdjacent.Add(new Adjacent(inputId, weight));
 
-        public void AddOutput(Guid outputId, double weight) => OutputAdjucents.Add(new Adjacent(outputId, weight));
+        public void AddOutput(Guid outputId, double weight) => OutputAdjacent.Add(new Adjacent(outputId, weight));
     }
 }

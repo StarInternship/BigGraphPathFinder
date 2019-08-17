@@ -5,7 +5,7 @@ namespace BigDataPathFinding.Models
 {
     public class Graph
     {
-        public Dictionary<Guid, ResultNode> Nodes { get; } = new Dictionary<Guid, ResultNode>();
+        private Dictionary<Guid, ResultNode> Nodes { get; } = new Dictionary<Guid, ResultNode>();
         public HashSet<Edge> Edges { get; } = new HashSet<Edge>();
 
         public void AddEdge(Guid source, Guid target, double weight) =>
@@ -29,5 +29,10 @@ namespace BigDataPathFinding.Models
         public void Explore(Guid id) => GetNode(id).Explored = true;
 
         public override bool Equals(object obj) => this == obj || obj is Graph graph && Edges.SetEquals(graph.Edges);
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
