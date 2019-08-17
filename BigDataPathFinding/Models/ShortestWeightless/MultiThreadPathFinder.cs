@@ -5,7 +5,7 @@ using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    public class PathFinderMultiThread : AbstractPathFinder
+    public class MultiThreadPathFinder : AbstractPathFinder
     {
         private bool _reachToTarget = false;
 
@@ -54,7 +54,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private readonly SearchData
             _searchData = new SearchData();
 
-        public PathFinderMultiThread(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
+        public MultiThreadPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
             int maxDistance, int minDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
         {
