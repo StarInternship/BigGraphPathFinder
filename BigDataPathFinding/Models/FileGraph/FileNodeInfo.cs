@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models.FileGraph
 {
-    public class FileNode : Node
+    public class FileNodeInfo : NodeInfo
     {
-        public FileNode(Guid id, string name) : base(id, new Dictionary<string, object> {["name"] = name })
+        public FileNodeInfo(Guid id, string name) : base(id, new Dictionary<string, object> {["name"] = name })
         {
         }
 

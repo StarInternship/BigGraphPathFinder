@@ -15,7 +15,6 @@ namespace BigDataPathFinding.Models
         }
 
         public Guid Id { get; }
-        public bool Explored { get; set; } = false;
         public double Distance { get; private set; }
         public HashSet<Adjacent> PreviousAdjacent { get; } = new HashSet<Adjacent>();
         public HashSet<Adjacent> ForwardAdjacent { get; } = new HashSet<Adjacent>();
@@ -44,7 +43,7 @@ namespace BigDataPathFinding.Models
 
     public enum Seen
     {
-        forward,
-        backward
+        Forward,
+        Backward
     }
 }

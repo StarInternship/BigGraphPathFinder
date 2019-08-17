@@ -9,7 +9,7 @@ namespace BigDataPathFinding.Models.FileGraph
     {
         private static readonly Regex Regex = new Regex(@"^(.+),(.+),(\d+.?\d*)$");
         private readonly Dictionary<string, Guid> _ids = new Dictionary<string, Guid>();
-        private readonly Dictionary<Guid, FileNode> _nodes = new Dictionary<Guid, FileNode>();
+        private readonly Dictionary<Guid, FileNodeInfo> _nodes = new Dictionary<Guid, FileNodeInfo>();
 
         public FileGraph(string path)
         {
@@ -22,7 +22,7 @@ namespace BigDataPathFinding.Models.FileGraph
 
         public static FileGraph Instance { get; private set; }
 
-        public Node GetNode(Guid id) => !_nodes.ContainsKey(id) ? null : _nodes[id];
+        public NodeInfo GetNode(Guid id) => !_nodes.ContainsKey(id) ? null : _nodes[id];
 
         public Guid GetId(string name) => !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
 
@@ -49,7 +49,7 @@ namespace BigDataPathFinding.Models.FileGraph
         private void AddNode(string name)
         {
             var id = Guid.NewGuid();
-            var node = new FileNode(id, name);
+            var node = new FileNodeInfo(id, name);
             _ids[name] = id;
             _nodes[id] = node;
         }

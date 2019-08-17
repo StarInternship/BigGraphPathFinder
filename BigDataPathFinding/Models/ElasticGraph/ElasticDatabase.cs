@@ -17,7 +17,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
             _client = new ElasticClient(settings);
         }
 
-        public Node GetNode(Guid id)
+        public NodeInfo GetNode(Guid id)
         {
             var search = _client.Search<Dictionary<string, object>>(s => s
                 .Query(q => q
@@ -26,7 +26,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
                     )
                 )
             ).Validate();
-            return search.Total == 0 ? null : new Node(id, search.Documents.First());
+            return search.Total == 0 ? null : new NodeInfo(id, search.Documents.First());
         }
     }
 }

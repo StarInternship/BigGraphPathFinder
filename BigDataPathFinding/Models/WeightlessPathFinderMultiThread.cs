@@ -61,10 +61,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.Forward));
             searchData.AddToCurrentForwardNodes(SourceId);
 
-            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.Backward));
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             var forwardTask = new Task(ExpandForward);
@@ -162,12 +162,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
             }
 
-            if (searchData.GetNode(sourceId).Distance == backwardLeyer && searchData.GetNode(targetId).Seen == Seen.backward)
+            if (searchData.GetNode(sourceId).Distance == backwardLeyer && searchData.GetNode(targetId).Seen == Seen.Backward)
             {
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
             }
 
-            if (searchData.GetNode(sourceId).Seen == Seen.forward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
+            if (searchData.GetNode(sourceId).Seen == Seen.Forward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
                 searchData.Joints.Add(sourceId);
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
@@ -178,7 +178,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisitBackwardNode(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId)
         {
-            searchData.AddToNodeSet(new NodeData(sourceId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(sourceId, backwardLeyer, Seen.Backward));
             nextLeyerNodes.Add(sourceId);
         }
 
@@ -192,12 +192,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 }
             }
 
-            if (searchData.GetNode(targetId).Distance == forwardLeyer && searchData.GetNode(targetId).Seen == Seen.forward)
+            if (searchData.GetNode(targetId).Distance == forwardLeyer && searchData.GetNode(targetId).Seen == Seen.Forward)
             {
                 searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
             }
 
-            if (searchData.GetNode(targetId).Seen == Seen.backward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
+            if (searchData.GetNode(targetId).Seen == Seen.Backward && (PathDistance == searchData.GetNode(sourceId).Distance + searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
                 searchData.Joints.Add(targetId);
                 searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
@@ -208,7 +208,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisiteForwardNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid targetId)
         {
-            searchData.AddToNodeSet(new NodeData(targetId, leyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(targetId, leyer, Seen.Forward));
             nextLeyerNodes.Add(targetId);
         }
 

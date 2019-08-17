@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BigDataPathFinding.Models
 {
-    public class Node
+    public class NodeInfo
     {
-        public Node(Guid id, Dictionary<string, object> data)
+        public NodeInfo(Guid id, Dictionary<string, object> data)
         {
             Id = id;
             Data = data;
@@ -14,7 +14,7 @@ namespace BigDataPathFinding.Models
         public Guid Id { get; }
         public Dictionary<string, object> Data { get; }
 
-        public override bool Equals(object obj) => this == obj || (obj is Node node && node.Id.Equals(Id));
+        public override bool Equals(object obj) => this == obj || (obj is NodeInfo node && node.Id.Equals(Id));
 
         public override int GetHashCode() => Id.GetHashCode();
     }

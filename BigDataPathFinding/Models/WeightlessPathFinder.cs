@@ -22,10 +22,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(SourceId, forwardLeyer, Seen.Forward));
             searchData.AddToCurrentForwardNodes(SourceId);
 
-            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(TargetId, backwardLeyer, Seen.Backward));
             searchData.AddToCurrentBackwardNodes(TargetId);
 
             while (!reachedToTarget)
@@ -133,7 +133,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
             }
 
-            if (searchData.GetNode(sourceId).Seen == Seen.forward)
+            if (searchData.GetNode(sourceId).Seen == Seen.Forward)
             {
                 searchData.Joints.Add(sourceId);
                 searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
@@ -144,7 +144,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisitBackwardNode(int backwardLeyer, HashSet<Guid> nextLeyerNodes, Guid sourceId)
         {
-            searchData.AddToNodeSet(new NodeData(sourceId, backwardLeyer, Seen.backward));
+            searchData.AddToNodeSet(new NodeData(sourceId, backwardLeyer, Seen.Backward));
             nextLeyerNodes.Add(sourceId);
         }
 
@@ -160,7 +160,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
             }
 
-            if (searchData.GetNode(targetId).Seen == Seen.backward)
+            if (searchData.GetNode(targetId).Seen == Seen.Backward)
             {
                 searchData.AddJoint(targetId);
                 searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
@@ -170,7 +170,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisiteNewNode(int leyer, HashSet<Guid> nextLeyerNodes, Guid targetId)
         {
-            searchData.AddToNodeSet(new NodeData(targetId, leyer, Seen.forward));
+            searchData.AddToNodeSet(new NodeData(targetId, leyer, Seen.Forward));
             nextLeyerNodes.Add(targetId);
         }
 
