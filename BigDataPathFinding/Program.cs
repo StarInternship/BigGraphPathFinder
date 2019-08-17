@@ -29,7 +29,7 @@ namespace BigDataPathFinding
                     break;
                 case Source.File:
                     _database = new FileGraph(TestFilesPath + "hosein2.txt");
-                    _metadata = new FileMetadata((FileGraph)_database);
+                    _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }
 
@@ -47,7 +47,7 @@ namespace BigDataPathFinding
                         sourceId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        sourceId = ((FileGraph)_database).GetId(Console.ReadLine());
+                        sourceId = ((FileGraph) _database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -58,7 +58,7 @@ namespace BigDataPathFinding
                         targetId = new Guid(Console.ReadLine()?.Trim() ?? throw new InvalidOperationException());
                         break;
                     case Source.File:
-                        targetId = ((FileGraph)_database).GetId(Console.ReadLine());
+                        targetId = ((FileGraph) _database).GetId(Console.ReadLine());
                         break;
                 }
 
@@ -76,7 +76,8 @@ namespace BigDataPathFinding
                 {
                     Console.Write(".");
                     StopWatch.Restart();
-                    var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed,maxDistance, 0);
+                    var pathFinder =
+                        new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
                     (long t, int c, int d) = FindPath(pathFinder);
                     pathDistance = d;
                     edgesCount = c;
@@ -85,12 +86,14 @@ namespace BigDataPathFinding
 
                     Thread.Sleep(5000);
                 }
+
                 var average = totalTime / searchCount;
                 Console.WriteLine();
                 Console.WriteLine("edges count : " + edgesCount);
                 Console.WriteLine("path distance : " + pathDistance);
                 Console.WriteLine("Average time: " + average + " ms.");
-                Console.WriteLine("Standard deviation of time: " + Math.Sqrt(((sumOfSquares / searchCount) - average * average)));
+                Console.WriteLine("Standard deviation of time: " +
+                                  Math.Sqrt(((sumOfSquares / searchCount) - average * average)));
                 Console.WriteLine();
             }
         }
@@ -98,7 +101,7 @@ namespace BigDataPathFinding
         private static (long, int, int) FindPath(AbstractPathFinder pathFinder)
         {
             if (Source == Source.Elastic)
-                ((ElasticMetadata)_metadata).NumberOfRequests = 0;
+                ((ElasticMetadata) _metadata).NumberOfRequests = 0;
 
             pathFinder.FindPath();
             StopWatch.Stop();

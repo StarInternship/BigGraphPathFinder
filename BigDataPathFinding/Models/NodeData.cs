@@ -25,9 +25,9 @@ namespace BigDataPathFinding.Models
             return Distance - other.Distance > 0 ? 1 : -1;
         }
 
-        public void AddForwardAdjacent(Adjacent adjacent) => PreviousAdjacent.Add(adjacent);
+        public void AddBackwardAdjacent(Edge edge) => PreviousAdjacent.Add(new Adjacent(edge.SourceId, edge.Weight));
 
-        public void AddBackwardAdjacent(Adjacent adjacent) => ForwardAdjacent.Add(adjacent);
+        public void AddForwardAdjacent(Edge edge) => ForwardAdjacent.Add(new Adjacent(edge.TargetId, edge.Weight));
 
         public override bool Equals(object obj) => this == obj || (obj is NodeData nodeData && Id.Equals(nodeData.Id));
 

@@ -153,8 +153,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes, Guid sourceId, Guid targetId,
-            double weight)
+        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes,Edge edge)
         {
             lock (_searchData)
             {
@@ -167,7 +166,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             if (_searchData.GetNode(sourceId).Distance == backwardLayer &&
                 _searchData.GetNode(targetId).Seen == Seen.Backward)
             {
-                _searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
+                _searchData.GetNode(sourceId).AddForwardAdjacent(edge);
             }
 
             if (_searchData.GetNode(sourceId).Seen == Seen.Forward &&
@@ -175,7 +174,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                  _searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
                 _searchData.Joints.Add(sourceId);
-                _searchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
+                _searchData.GetNode(sourceId).AddForwardAdjacent(edge);
                 ReachedToTarget = true;
                 PathDistance = (int) _searchData.GetNode(sourceId).Distance +
                                (int) _searchData.GetNode(targetId).Distance + 1;
@@ -189,7 +188,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             nextLayerNodes.Add(sourceId);
         }
 
-        private void VisitForwardEdge(HashSet<Guid> nextLayerNodes, Guid sourceId, Guid targetId, double weight)
+        private void VisitForwardEdge(HashSet<Guid> nextLayerNodes,Edge edge)
         {
             lock (_searchData)
             {
@@ -202,7 +201,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             if (_searchData.GetNode(targetId).Distance == _forwardLayer &&
                 _searchData.GetNode(targetId).Seen == Seen.Forward)
             {
-                _searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
+                _searchData.GetNode(targetId).AddBackwardAdjacent(edge);
             }
 
             if (_searchData.GetNode(targetId).Seen == Seen.Backward &&
@@ -210,7 +209,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                  _searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
             {
                 _searchData.Joints.Add(targetId);
-                _searchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
+                _searchData.GetNode(targetId).AddBackwardAdjacent(edge);
                 ReachedToTarget = true;
                 PathDistance = (int) _searchData.GetNode(sourceId).Distance +
                                (int) _searchData.GetNode(targetId).Distance + 1;
