@@ -95,7 +95,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (var edge in edges)
                     {
-                        VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                        VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge);
                     }
                 }
 
@@ -106,8 +106,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         foreach (var edge in edges)
                         {
-                            VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge.TargetId, edge.SourceId,
-                                edge.Weight);
+                            VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge);
                         }
                     }
                 }
@@ -134,7 +133,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (var edge in edges)
                     {
-                        VisitForwardEdge(nextLayerNodes, edge.SourceId, edge.TargetId, edge.Weight);
+                        VisitForwardEdge(nextLayerNodes, edge);
                     }
                 }
 
@@ -144,7 +143,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         foreach (var edge in edges)
                         {
-                            VisitForwardEdge(nextLayerNodes, edge.TargetId, edge.SourceId, edge.Weight);
+                            VisitForwardEdge(nextLayerNodes, edge);
                         }
                     }
                 }
@@ -153,31 +152,31 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes,Edge edge)
+        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes, Edge edge)
         {
             lock (_searchData)
             {
-                if (_searchData.GetNode(sourceId) == null)
+                if (_searchData.GetNode(edge.SourceId) == null)
                 {
-                    VisitBackwardNode(backwardLayer, nextLayerNodes, sourceId);
+                    VisitBackwardNode(backwardLayer, nextLayerNodes, edge.SourceId);
                 }
             }
 
-            if (_searchData.GetNode(sourceId).Distance == backwardLayer &&
-                _searchData.GetNode(targetId).Seen == Seen.Backward)
+            if (_searchData.GetNode(edge.SourceId).Distance == backwardLayer &&
+                _searchData.GetNode(edge.TargetId).Seen == Seen.Backward)
             {
-                _searchData.GetNode(sourceId).AddForwardAdjacent(edge);
+                _searchData.GetNode(edge.SourceId).AddForwardAdjacent(edge);
             }
 
-            if (_searchData.GetNode(sourceId).Seen == Seen.Forward &&
-                (PathDistance == _searchData.GetNode(sourceId).Distance +
-                 _searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
+            if (_searchData.GetNode(edge.SourceId).Seen == Seen.Forward &&
+                (PathDistance == _searchData.GetNode(edge.SourceId).Distance +
+                 _searchData.GetNode(edge.TargetId).Distance + 1 || PathDistance == 0))
             {
-                _searchData.Joints.Add(sourceId);
-                _searchData.GetNode(sourceId).AddForwardAdjacent(edge);
+                _searchData.Joints.Add(edge.SourceId);
+                _searchData.GetNode(edge.SourceId).AddForwardAdjacent(edge);
                 ReachedToTarget = true;
-                PathDistance = (int) _searchData.GetNode(sourceId).Distance +
-                               (int) _searchData.GetNode(targetId).Distance + 1;
+                PathDistance = (int) _searchData.GetNode(edge.SourceId).Distance +
+                               (int) _searchData.GetNode(edge.TargetId).Distance + 1;
             }
         }
 
@@ -188,31 +187,31 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             nextLayerNodes.Add(sourceId);
         }
 
-        private void VisitForwardEdge(HashSet<Guid> nextLayerNodes,Edge edge)
+        private void VisitForwardEdge(HashSet<Guid> nextLayerNodes, Edge edge)
         {
             lock (_searchData)
             {
-                if (_searchData.GetNode(targetId) == null)
+                if (_searchData.GetNode(edge.TargetId) == null)
                 {
-                    VisitForwardNode(_forwardLayer, nextLayerNodes, targetId);
+                    VisitForwardNode(_forwardLayer, nextLayerNodes, edge.TargetId);
                 }
             }
 
-            if (_searchData.GetNode(targetId).Distance == _forwardLayer &&
-                _searchData.GetNode(targetId).Seen == Seen.Forward)
+            if (_searchData.GetNode(edge.TargetId).Distance == _forwardLayer &&
+                _searchData.GetNode(edge.TargetId).Seen == Seen.Forward)
             {
-                _searchData.GetNode(targetId).AddBackwardAdjacent(edge);
+                _searchData.GetNode(edge.TargetId).AddBackwardAdjacent(edge);
             }
 
-            if (_searchData.GetNode(targetId).Seen == Seen.Backward &&
-                (PathDistance == _searchData.GetNode(sourceId).Distance +
-                 _searchData.GetNode(targetId).Distance + 1 || PathDistance == 0))
+            if (_searchData.GetNode(edge.TargetId).Seen == Seen.Backward &&
+                (PathDistance == _searchData.GetNode(edge.SourceId).Distance +
+                 _searchData.GetNode(edge.TargetId).Distance + 1 || PathDistance == 0))
             {
-                _searchData.Joints.Add(targetId);
-                _searchData.GetNode(targetId).AddBackwardAdjacent(edge);
+                _searchData.Joints.Add(edge.TargetId);
+                _searchData.GetNode(edge.TargetId).AddBackwardAdjacent(edge);
                 ReachedToTarget = true;
-                PathDistance = (int) _searchData.GetNode(sourceId).Distance +
-                               (int) _searchData.GetNode(targetId).Distance + 1;
+                PathDistance = (int) _searchData.GetNode(edge.SourceId).Distance +
+                               (int) _searchData.GetNode(edge.TargetId).Distance + 1;
             }
         }
 
