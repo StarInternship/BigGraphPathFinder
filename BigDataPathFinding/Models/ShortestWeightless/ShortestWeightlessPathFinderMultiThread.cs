@@ -7,7 +7,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     public class ShortestWeightlessPathFinderMultiThread : AbstractPathFinder
     {
-        private bool reachToTarget = false;
+        private bool _reachToTarget = false;
 
         private bool ReachedToTarget
         {
@@ -15,14 +15,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 lock (targetLock)
                 {
-                    return reachToTarget;
+                    return _reachToTarget;
                 }
             }
             set
             {
                 lock (targetLock)
                 {
-                    reachToTarget = value;
+                    _reachToTarget = value;
                 }
             }
         }

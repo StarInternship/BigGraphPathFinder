@@ -15,7 +15,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public void AddToNodeSet(NodeData node) => NodeSet[node.Id] = node;
 
-        public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : (NodeData)NodeSet[id];
+        public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
 
         public void AddToCurrentForwardNodes(Guid id) => CurrentForwardNodes.Add(id);
 
@@ -29,7 +29,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public void UpdateCurrentBackwardNodes(HashSet<Guid> edges) => CurrentBackwardNodes = edges;
 
-        public Dictionary<Guid, Models.NodeData> GetResultNodeSet() => NodeSet;
+        public Dictionary<Guid, NodeData> GetResultNodeSet() => NodeSet;
 
         public HashSet<Guid> GetJoints() => Joints;
 
