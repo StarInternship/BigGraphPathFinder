@@ -6,15 +6,16 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     public class ShortestWeightlessPathFinder : AbstractPathFinder
     {
-
         private bool _reachedToTarget = false;
 
         private int _forwardLayer = 0;
         private int _backwardLayer = 0;
 
-        private readonly ShortestWeightlessSearchData _shortestWeightlessSearchData = new ShortestWeightlessSearchData();
+        private readonly ShortestWeightlessSearchData
+            _shortestWeightlessSearchData = new ShortestWeightlessSearchData();
 
-        public ShortestWeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance, int minDistance)
+        public ShortestWeightlessPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
+            int maxDistance, int minDistance)
             : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
         {
             _shortestWeightlessSearchData.MaxForwardDistance = (maxDistance + 1) / 2;
@@ -31,7 +32,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             while (!_reachedToTarget)
             {
-                if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 && _shortestWeightlessSearchData.CurrentForwardNodes.Count == 0)
+                if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 &&
+                    _shortestWeightlessSearchData.CurrentForwardNodes.Count == 0)
                     return;
 
                 ExpandForward();
@@ -40,8 +42,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     break;
 
                 ExpandBackward();
-
             }
+
             CalculatePathDistance();
         }
 
@@ -56,7 +58,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         {
             _backwardLayer++;
 
-            if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 || _backwardLayer > _shortestWeightlessSearchData.MaxBackwardDistance)
+            if (_shortestWeightlessSearchData.CurrentBackwardNodes.Count == 0 ||
+                _backwardLayer > _shortestWeightlessSearchData.MaxBackwardDistance)
             {
                 _shortestWeightlessSearchData.ClearCurrentBackwardNodes();
                 return;
@@ -90,7 +93,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         private void ExpandForward()
         {
             _forwardLayer++;
-            if (_shortestWeightlessSearchData.CurrentForwardNodes.Count == 0 || _forwardLayer > _shortestWeightlessSearchData.MaxForwardDistance)
+            if (_shortestWeightlessSearchData.CurrentForwardNodes.Count == 0 ||
+                _forwardLayer > _shortestWeightlessSearchData.MaxForwardDistance)
             {
                 _shortestWeightlessSearchData.ClearCurrentForwardNodes();
                 return;
@@ -109,9 +113,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
             if (!Directed)
             {
-                foreach (IEnumerable<Edge> edges in Metadata.GetInputAdjacent(_shortestWeightlessSearchData.CurrentForwardNodes))
+                foreach (var edges in Metadata.GetInputAdjacent(_shortestWeightlessSearchData.CurrentForwardNodes))
                 {
-                    foreach (Edge edge in edges)
+                    foreach (var edge in edges)
                     {
                         VisitForwardEdge(layerNodes, edge.TargetId, edge.SourceId, edge.Weight);
                     }
@@ -121,7 +125,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             _shortestWeightlessSearchData.UpdateCurrentForwardNodes(layerNodes);
         }
 
-        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes, Guid sourceId, Guid targetId, double weight)
+        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes, Guid sourceId, Guid targetId,
+            double weight)
         {
             if (nextLayerNodes == null) throw new ArgumentNullException(nameof(nextLayerNodes));
 
@@ -130,7 +135,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 VisitBackwardNode(backwardLayer, nextLayerNodes, sourceId);
             }
 
-            if (_shortestWeightlessSearchData.GetNode(sourceId).Distance == backwardLayer)
+            if (Math.Abs(_shortestWeightlessSearchData.GetNode(sourceId).Distance - backwardLayer) < 0.01)
             {
                 _shortestWeightlessSearchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
             }
@@ -141,7 +146,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 _shortestWeightlessSearchData.GetNode(sourceId).AddBackwardAdjacent(new Adjacent(targetId, weight));
                 _reachedToTarget = true;
             }
-
         }
 
         private void VisitBackwardNode(int backwardLayer, ISet<Guid> nextLayerNodes, Guid sourceId)
@@ -157,7 +161,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 VisitNewNode(_forwardLayer, nextLayerNodes, targetId);
             }
 
-            if (_shortestWeightlessSearchData.GetNode(targetId).Distance == _forwardLayer)
+            if (Math.Abs(_shortestWeightlessSearchData.GetNode(targetId).Distance - _forwardLayer) < 0.01)
             {
                 _shortestWeightlessSearchData.GetNode(targetId).AddForwardAdjacent(new Adjacent(sourceId, weight));
             }
