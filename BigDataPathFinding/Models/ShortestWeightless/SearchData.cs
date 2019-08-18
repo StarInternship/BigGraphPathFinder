@@ -12,28 +12,64 @@ namespace BigDataPathFinding.Models.ShortestWeightless
         public int PathDistance { get; set; }
         public HashSet<Guid> Joints { get; } = new HashSet<Guid>();
 
-        public void AddToNodeSet(NodeData node) => NodeSet.Add(node.Id, node);
+        public Dictionary<Guid, NodeData> GetResultNodeSet()
+        {
+            return NodeSet;
+        }
 
-        public NodeData GetNode(Guid id) => !NodeSet.ContainsKey(id) ? null : NodeSet[id];
+        public HashSet<Guid> GetJoints()
+        {
+            return Joints;
+        }
 
-        public void AddToCurrentForwardNodes(Guid id) => CurrentForwardNodes.Add(id);
+        public double GetPathDistance()
+        {
+            return PathDistance;
+        }
 
-        public void UpdateCurrentForwardNodes(HashSet<Guid> edges) => CurrentForwardNodes = edges;
+        public void AddJoint(Guid id)
+        {
+            Joints.Add(id);
+        }
 
-        public void ClearCurrentForwardNodes() => CurrentForwardNodes = new HashSet<Guid>();
+        public void AddToNodeSet(NodeData node)
+        {
+            NodeSet.Add(node.Id, node);
+        }
 
-        public void ClearCurrentBackwardNodes() => CurrentBackwardNodes = new HashSet<Guid>();
+        public NodeData GetNode(Guid id)
+        {
+            return !NodeSet.ContainsKey(id) ? null : NodeSet[id];
+        }
 
-        public void AddToCurrentBackwardNodes(Guid id) => CurrentBackwardNodes.Add(id);
+        public void AddToCurrentForwardNodes(Guid id)
+        {
+            CurrentForwardNodes.Add(id);
+        }
 
-        public void UpdateCurrentBackwardNodes(HashSet<Guid> edges) => CurrentBackwardNodes = edges;
+        public void UpdateCurrentForwardNodes(HashSet<Guid> edges)
+        {
+            CurrentForwardNodes = edges;
+        }
 
-        public Dictionary<Guid, NodeData> GetResultNodeSet() => NodeSet;
+        public void ClearCurrentForwardNodes()
+        {
+            CurrentForwardNodes = new HashSet<Guid>();
+        }
 
-        public HashSet<Guid> GetJoints() => Joints;
+        public void ClearCurrentBackwardNodes()
+        {
+            CurrentBackwardNodes = new HashSet<Guid>();
+        }
 
-        public double GetPathDistance() => PathDistance;
+        public void AddToCurrentBackwardNodes(Guid id)
+        {
+            CurrentBackwardNodes.Add(id);
+        }
 
-        public void AddJoint(Guid id) => Joints.Add(id);
+        public void UpdateCurrentBackwardNodes(HashSet<Guid> edges)
+        {
+            CurrentBackwardNodes = edges;
+        }
     }
 }

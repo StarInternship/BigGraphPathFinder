@@ -9,7 +9,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
 {
     public class ElasticDatabase : IDatabase
     {
-        private static readonly Uri Uri = new Uri($"http://localhost:9200");
+        private static readonly Uri Uri = new Uri("http://localhost:9200");
         private readonly ElasticClient _client;
 
         public ElasticDatabase(string nodeSetIndex)

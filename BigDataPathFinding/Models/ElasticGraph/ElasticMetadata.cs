@@ -10,9 +10,9 @@ namespace BigDataPathFinding.Models.ElasticGraph
 {
     public class ElasticMetadata : IMetadata
     {
-        private static readonly Uri Uri = new Uri($"http://localhost:9200");
         private const int Size = 10000;
         private const string Scroll = "500s";
+        private static readonly Uri Uri = new Uri("http://localhost:9200");
         private readonly ElasticClient _client;
         private readonly Stopwatch _sw = new Stopwatch();
 

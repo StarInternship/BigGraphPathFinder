@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BigDataPathFinding.Models;
-using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
 using BigDataPathFinding.Models.Interfaces;
 using BigDataPathFinding.Models.ShortestWeightless;
@@ -21,15 +20,14 @@ namespace BigDataPathFindingTests
         {
             _database = new FileGraph(TestFilesPath + "NewTest1.txt");
             _metadata = new FileMetadata((FileGraph) _database);
-            Guid sourceId, targetId;
 
-            sourceId = ((FileGraph) _database).GetId("A");
+            var sourceId = ((FileGraph) _database).GetId("A");
 
 
-            targetId = ((FileGraph) _database).GetId("H");
+            var targetId = ((FileGraph) _database).GetId("H");
 
-            var directed = false;
-            var maxDistance = 3;
+            const bool directed = false;
+            const int maxDistance = 3;
 
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
@@ -40,11 +38,14 @@ namespace BigDataPathFindingTests
             var edges = resultBuilder.Build().Edges;
 
             Assert.IsTrue(Math.Abs(pathFinder.GetSearchData().GetPathDistance() - 2) < 0.01);
-            Assert.IsTrue(edges.Count==4);
-            var results=new HashSet<string>();
+            Assert.IsTrue(edges.Count == 4);
+            var results = new HashSet<string>();
             foreach (var edge in edges)
-                results.Add(_database.GetNode(edge.SourceId).Data.MakeString() + "," + 
+            {
+                results.Add(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
                             _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+            }
+
             Assert.IsTrue(results.Contains("{[A] },{[D] },2"));
             Assert.IsTrue(results.Contains("{[D] },{[H] },1"));
             Assert.IsTrue(results.Contains("{[A] },{[I] },5"));
@@ -54,15 +55,13 @@ namespace BigDataPathFindingTests
         [TestMethod]
         public void InDirectedTest1()
         {
-            Guid sourceId, targetId;
-
-            sourceId = ((FileGraph)_database).GetId("A");
+            var sourceId = ((FileGraph) _database).GetId("A");
 
 
-            targetId = ((FileGraph)_database).GetId("H");
+            var targetId = ((FileGraph) _database).GetId("H");
 
-            var directed = true;
-            var maxDistance = 6;
+            const bool directed = true;
+            const int maxDistance = 6;
 
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
@@ -76,8 +75,11 @@ namespace BigDataPathFindingTests
             Assert.IsTrue(edges.Count == 5);
             var results = new HashSet<string>();
             foreach (var edge in edges)
+            {
                 results.Add(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
                             _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+            }
+
             Assert.IsTrue(results.Contains("{[C] },{[E] },1"));
             Assert.IsTrue(results.Contains("{[E] },{[D] },1"));
             Assert.IsTrue(results.Contains("{[B] },{[C] },1"));
@@ -88,15 +90,13 @@ namespace BigDataPathFindingTests
         [TestMethod]
         public void InDirectedTest2()
         {
-            Guid sourceId, targetId;
-
-            sourceId = ((FileGraph)_database).GetId("A");
+            var sourceId = ((FileGraph) _database).GetId("A");
 
 
-            targetId = ((FileGraph)_database).GetId("H");
+            var targetId = ((FileGraph) _database).GetId("H");
 
-            var directed = true;
-            var maxDistance = 4;
+            const bool directed = true;
+            const int maxDistance = 4;
 
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);

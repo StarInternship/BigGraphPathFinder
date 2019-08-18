@@ -7,7 +7,22 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 {
     public class MultiThreadPathFinder : AbstractPathFinder
     {
-        private bool _reachToTarget = false;
+        private readonly object _distanceLock = new object();
+
+        private readonly SearchData
+            _searchData = new SearchData();
+
+        private readonly object _targetLock = new object();
+        private int _backwardLayer;
+
+        private int _forwardLayer;
+        private bool _reachToTarget;
+
+        public MultiThreadPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
+            int maxDistance, int minDistance)
+            : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
+        {
+        }
 
         private bool ReachedToTarget
         {
@@ -43,21 +58,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     _searchData.PathDistance = value;
                 }
             }
-        }
-
-        private readonly object _targetLock = new object();
-        private readonly object _distanceLock = new object();
-
-        private int _forwardLayer = 0;
-        private int _backwardLayer = 0;
-
-        private readonly SearchData
-            _searchData = new SearchData();
-
-        public MultiThreadPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
-            int maxDistance, int minDistance)
-            : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
-        {
         }
 
         public override void FindPath()
@@ -182,7 +182,11 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisitBackwardNode(int backwardLayer, HashSet<Guid> nextLayerNodes, Guid sourceId)
         {
-            if (nextLayerNodes == null) throw new ArgumentNullException(nameof(nextLayerNodes));
+            if (nextLayerNodes == null)
+            {
+                throw new ArgumentNullException(nameof(nextLayerNodes));
+            }
+
             _searchData.AddToNodeSet(new NodeData(sourceId, backwardLayer, Seen.Backward));
             nextLayerNodes.Add(sourceId);
         }
@@ -217,11 +221,18 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void VisitForwardNode(int layer, HashSet<Guid> nextLayerNodes, Guid targetId)
         {
-            if (nextLayerNodes == null) throw new ArgumentNullException(nameof(nextLayerNodes));
+            if (nextLayerNodes == null)
+            {
+                throw new ArgumentNullException(nameof(nextLayerNodes));
+            }
+
             _searchData.AddToNodeSet(new NodeData(targetId, layer, Seen.Forward));
             nextLayerNodes.Add(targetId);
         }
 
-        public override ISearchData GetSearchData() => _searchData;
+        public override ISearchData GetSearchData()
+        {
+            return _searchData;
+        }
     }
 }

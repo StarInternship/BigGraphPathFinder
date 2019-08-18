@@ -10,12 +10,13 @@ namespace BigDataPathFinding.Models.Elastic
             {
                 throw new ResponseException(response);
             }
+
             return response;
         }
 
         public static Edge Reversed(this Edge edge)
         {
-            return new Edge(edge.TargetId,edge.SourceId,edge.Weight);
+            return new Edge(edge.TargetId, edge.SourceId, edge.Weight);
         }
     }
 }

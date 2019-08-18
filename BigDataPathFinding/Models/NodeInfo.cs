@@ -5,8 +5,7 @@ namespace BigDataPathFinding.Models
 {
     public class NodeInfo
     {
-
-        public NodeInfo(NodeInfo node): this(node.Id, node.Data)
+        public NodeInfo(NodeInfo node) : this(node.Id, node.Data)
         {
         }
 
@@ -19,8 +18,14 @@ namespace BigDataPathFinding.Models
         public Guid Id { get; }
         public Dictionary<string, object> Data { get; }
 
-        public override bool Equals(object obj) => this == obj || (obj is NodeInfo node && node.Id.Equals(Id));
+        public override bool Equals(object obj)
+        {
+            return this == obj || obj is NodeInfo node && node.Id.Equals(Id);
+        }
 
-        public override int GetHashCode() => Id.GetHashCode();
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

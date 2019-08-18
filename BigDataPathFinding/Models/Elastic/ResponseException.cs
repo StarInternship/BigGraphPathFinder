@@ -1,5 +1,5 @@
-﻿using Nest;
-using System;
+﻿using System;
+using Nest;
 
 namespace BigDataPathFinding.Models.Elastic
 {

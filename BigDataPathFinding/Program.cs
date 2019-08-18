@@ -69,9 +69,12 @@ namespace BigDataPathFinding
                 StopWatch.Reset();
                 StopWatch.Start();
 
-                AbstractPathFinder pathFinder=new SingleThreadPathFinder(_metadata,sourceId,targetId,directed,maxDistance,0);
+                AbstractPathFinder pathFinder =
+                    new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
                 if (Source == Source.Elastic)
-                    ((ElasticMetadata)_metadata).NumberOfRequests = 0;
+                {
+                    ((ElasticMetadata) _metadata).NumberOfRequests = 0;
+                }
 
                 pathFinder.FindPath();
 
@@ -89,10 +92,16 @@ namespace BigDataPathFinding
                 Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
 
                 if (Source == Source.Elastic)
-                    Console.WriteLine("number of requests: " + ((ElasticMetadata)_metadata).NumberOfRequests);
+                {
+                    Console.WriteLine("number of requests: " + ((ElasticMetadata) _metadata).NumberOfRequests);
+                }
+
                 Console.WriteLine("number of edges: " + edges.Count);
                 foreach (var edge in edges)
-                    Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," + _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+                {
+                    Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
+                                      _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+                }
 
                 Console.WriteLine();
             }

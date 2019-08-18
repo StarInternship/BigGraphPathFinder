@@ -12,6 +12,7 @@ namespace BigDataPathFinding.Models
             {
                 result.Append("[" + value + "] ");
             }
+
             result.Append("}");
             return result.ToString();
         }

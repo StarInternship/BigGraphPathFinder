@@ -14,18 +14,31 @@ namespace BigDataPathFinding.Models.FileGraph
 
         public FileGraph(string path)
         {
-            if (!File.Exists(path)) return;
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
             Instance = this;
             var edges = File.ReadAllLines(path);
 
-            foreach (var edge in edges) ReadEdge(edge);
+            foreach (var edge in edges)
+            {
+                ReadEdge(edge);
+            }
         }
 
         public static FileGraph Instance { get; private set; }
 
-        public NodeInfo GetNode(Guid id) => !_nodes.ContainsKey(id) ? null : _nodes[id];
+        public NodeInfo GetNode(Guid id)
+        {
+            return !_nodes.ContainsKey(id) ? null : _nodes[id];
+        }
 
-        public Guid GetId(string name) => !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
+        public Guid GetId(string name)
+        {
+            return !_ids.ContainsKey(name) ? Guid.Empty : _ids[name];
+        }
 
         private void ReadEdge(string edge)
         {
@@ -40,8 +53,15 @@ namespace BigDataPathFinding.Models.FileGraph
 
         private void AddEdge(string sourceName, string targetName, double weight)
         {
-            if (!_ids.ContainsKey(sourceName)) AddNode(sourceName);
-            if (!_ids.ContainsKey(targetName)) AddNode(targetName);
+            if (!_ids.ContainsKey(sourceName))
+            {
+                AddNode(sourceName);
+            }
+
+            if (!_ids.ContainsKey(targetName))
+            {
+                AddNode(targetName);
+            }
 
             _nodes[_ids[sourceName]].AddOutput(_ids[targetName], weight);
             _nodes[_ids[targetName]].AddInput(_ids[sourceName], weight);
