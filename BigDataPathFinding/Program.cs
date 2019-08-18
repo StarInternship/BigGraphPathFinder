@@ -27,7 +27,7 @@ namespace BigDataPathFinding
                     _metadata = new ElasticMetadata("newtest1_connections");
                     break;
                 case Source.File:
-                    _database = new FileGraph(TestFilesPath + "NewTest1.txt");
+                    _database = new FileGraph(TestFilesPath + "NewTest1.test");
                     _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }

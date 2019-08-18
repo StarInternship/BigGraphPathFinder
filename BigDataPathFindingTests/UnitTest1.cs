@@ -18,7 +18,7 @@ namespace BigDataPathFindingTests
         [TestMethod]
         public void DirectedTest1()
         {
-            _database = new FileGraph(TestFilesPath + "NewTest1.txt");
+            _database = new FileGraph(TestFilesPath + "NewTest1.test");
             _metadata = new FileMetadata((FileGraph) _database);
 
             var sourceId = ((FileGraph) _database).GetId("A");
