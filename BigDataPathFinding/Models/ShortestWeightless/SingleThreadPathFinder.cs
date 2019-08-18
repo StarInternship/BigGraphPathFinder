@@ -167,6 +167,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             _searchData.Joints.Add(edge.SourceId);
             node.AddForwardAdjacent(edge);
             _reachedToTarget = true;
+            MaxDistance= _forwardDepth + _backwardDepth;
         }
 
         private void VisitForwardEdge(ISet<Guid> nextLayerNodes, Edge edge)
@@ -192,6 +193,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             _searchData.AddJoint(edge.TargetId);
             node.AddBackwardAdjacent(edge);
             _reachedToTarget = true;
+            MaxDistance = _forwardDepth + _backwardDepth;
         }
 
         public override ISearchData GetSearchData()

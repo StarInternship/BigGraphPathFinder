@@ -6,9 +6,9 @@ namespace BigDataPathFinding.Models
     public abstract class AbstractPathFinder
     {
         protected readonly bool Directed;
-        internal readonly int MaxDistance;
+        internal int MaxDistance;
         protected readonly IMetadata Metadata;
-        internal readonly int MinDistance;
+        internal int MinDistance;
         protected readonly Guid SourceId;
         protected readonly Guid TargetId;
 

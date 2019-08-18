@@ -10,7 +10,7 @@ namespace BigDataPathFinding
 {
     internal static class Program
     {
-        private const Source Source = BigDataPathFinding.Source.File;
+        private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
         private static readonly Stopwatch StopWatch = new Stopwatch();
         private static IDatabase _database;
@@ -23,11 +23,11 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    _database = new ElasticDatabase("newtest1_node_set");
-                    _metadata = new ElasticMetadata("newtest1_connections");
+                    _database = new ElasticDatabase("hard1_node_set");
+                    _metadata = new ElasticMetadata("hard1_connections");
                     break;
                 case Source.File:
-                    _database = new FileGraph(TestFilesPath + "NewTest1.test");
+                    _database = new FileGraph(TestFilesPath + "Hard1.txt");
                     _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }
@@ -97,11 +97,11 @@ namespace BigDataPathFinding
                 }
 
                 Console.WriteLine("number of edges: " + edges.Count);
-                foreach (var edge in edges)
+                /*foreach (var edge in edges)
                 {
                     Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
                                       _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
-                }
+                }*/
 
                 Console.WriteLine();
             }
