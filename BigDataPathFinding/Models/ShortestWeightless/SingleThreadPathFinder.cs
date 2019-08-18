@@ -9,7 +9,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
     {
         private readonly SearchData _searchData = new SearchData();
         private int _backwardDepth;
-
         private int _forwardDepth;
         private bool _reachedToTarget;
 
@@ -58,7 +57,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
 
             _backwardDepth++;
-            var newLayer = new HashSet<Guid>();
+            var nextLayerNodes = new HashSet<Guid>();
 
             var listOfEdges = Directed
                 ? Metadata.GetInputEdges(_searchData.CurrentBackwardNodes)
@@ -70,7 +69,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (var edge in edges)
                     {
-                        VisitBackwardEdge(newLayer, edge);
+                        VisitBackwardEdge(nextLayerNodes, edge);
                     }
                 }
             }
@@ -82,18 +81,18 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         if (_searchData.CurrentBackwardNodes.Contains(edge.TargetId))
                         {
-                            VisitBackwardEdge(newLayer, edge);
+                            VisitBackwardEdge(nextLayerNodes, edge);
                         }
 
                         if (_searchData.CurrentBackwardNodes.Contains(edge.SourceId))
                         {
-                            VisitBackwardEdge(newLayer, edge.Reversed());
+                            VisitBackwardEdge(nextLayerNodes, edge.Reversed());
                         }
                     }
                 }
             }
 
-            _searchData.UpdateCurrentBackwardNodes(newLayer);
+            _searchData.UpdateCurrentBackwardNodes(nextLayerNodes);
         }
 
         private void ExpandForward()
@@ -106,7 +105,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
 
             _forwardDepth++;
-            var newLayer = new HashSet<Guid>();
+            var nextLayerNodes = new HashSet<Guid>();
 
             var listOfEdges = Directed
                 ? Metadata.GetOutputEdges(_searchData.CurrentForwardNodes)
@@ -118,7 +117,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                 {
                     foreach (var edge in edges)
                     {
-                        VisitForwardEdge(newLayer, edge);
+                        VisitForwardEdge(nextLayerNodes, edge);
                     }
                 }
             }
@@ -130,18 +129,18 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                     {
                         if (_searchData.CurrentForwardNodes.Contains(edge.TargetId))
                         {
-                            VisitForwardEdge(newLayer, edge.Reversed());
+                            VisitForwardEdge(nextLayerNodes, edge.Reversed());
                         }
 
                         if (_searchData.CurrentForwardNodes.Contains(edge.SourceId))
                         {
-                            VisitForwardEdge(newLayer, edge);
+                            VisitForwardEdge(nextLayerNodes, edge);
                         }
                     }
                 }
             }
 
-            _searchData.UpdateCurrentForwardNodes(newLayer);
+            _searchData.UpdateCurrentForwardNodes(nextLayerNodes);
         }
 
         private void VisitBackwardEdge(ISet<Guid> nextLayerNodes, Edge edge)
@@ -167,7 +166,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             _searchData.Joints.Add(edge.SourceId);
             node.AddForwardAdjacent(edge);
             _reachedToTarget = true;
-            MaxDistance= _forwardDepth + _backwardDepth;
+            MaxDistance = _forwardDepth + _backwardDepth;
         }
 
         private void VisitForwardEdge(ISet<Guid> nextLayerNodes, Edge edge)

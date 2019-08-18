@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BigDataPathFinding.Models.Elastic;
 using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
@@ -8,15 +9,12 @@ namespace BigDataPathFinding.Models.ShortestWeightless
     public class MultiThreadPathFinder : AbstractPathFinder
     {
         private readonly object _distanceLock = new object();
-
-        private readonly SearchData
-            _searchData = new SearchData();
-
         private readonly object _targetLock = new object();
-        private int _backwardLayer;
 
-        private int _forwardLayer;
-        private bool _reachToTarget;
+        private readonly SearchData _searchData = new SearchData();
+        private int _backwardDepth;
+        private int _forwardDepth;
+        private bool _reachedToTarget;
 
         public MultiThreadPathFinder(IMetadata metadata, Guid sourceId, Guid targetId, bool directed,
             int maxDistance, int minDistance)
@@ -30,14 +28,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             {
                 lock (_targetLock)
                 {
-                    return _reachToTarget;
+                    return _reachedToTarget;
                 }
             }
             set
             {
                 lock (_targetLock)
                 {
-                    _reachToTarget = value;
+                    _reachedToTarget = value;
                 }
             }
         }
@@ -62,10 +60,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public override void FindPath()
         {
-            _searchData.AddToNodeSet(new NodeData(SourceId, _forwardLayer, Seen.Forward));
+            _searchData.AddToNodeSet(new NodeData(SourceId, _forwardDepth, Seen.Forward));
             _searchData.AddToCurrentForwardNodes(SourceId);
 
-            _searchData.AddToNodeSet(new NodeData(TargetId, _backwardLayer, Seen.Backward));
+            _searchData.AddToNodeSet(new NodeData(TargetId, _backwardDepth, Seen.Backward));
             _searchData.AddToCurrentBackwardNodes(TargetId);
 
             var forwardTask = new Task(ExpandForward);
@@ -74,72 +72,68 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             forwardTask.Start();
             backwardTask.Start();
 
-            forwardTask.Wait();
-            backwardTask.Wait();
+            Task.WaitAll(forwardTask, backwardTask);
         }
 
         private void ExpandBackward()
         {
-            while (!ReachedToTarget)
+            while (!ReachedToTarget && _searchData.CurrentBackwardNodes.Count > 0 && _backwardDepth + _forwardDepth < MaxDistance)
             {
-                if (_searchData.CurrentBackwardNodes.Count == 0 ||
-                    _backwardLayer + _forwardLayer > MaxDistance)
-                {
-                    break;
-                }
-
-                _backwardLayer++;
+                _backwardDepth++;
                 var nextLayerNodes = new HashSet<Guid>();
 
-                foreach (var edges in Metadata.GetInputEdges(_searchData.CurrentBackwardNodes))
-                {
-                    foreach (var edge in edges)
-                    {
-                        VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge);
-                    }
-                }
+                var listOfEdges = Directed
+                    ? Metadata.GetInputEdges(_searchData.CurrentBackwardNodes)
+                    : Metadata.GetAllEdges(_searchData.CurrentBackwardNodes);
 
-                if (!Directed)
+                if (Directed)
                 {
-                    foreach (var edges in Metadata.GetOutputEdges(_searchData.CurrentBackwardNodes)
-                    )
+                    foreach (var edges in listOfEdges)
                     {
                         foreach (var edge in edges)
                         {
-                            VisitBackwardEdge(_backwardLayer, nextLayerNodes, edge);
+                            VisitBackwardEdge(nextLayerNodes, edge);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var edges in listOfEdges)
+                    {
+                        foreach (var edge in edges)
+                        {
+                            if (_searchData.CurrentBackwardNodes.Contains(edge.TargetId))
+                            {
+                                VisitBackwardEdge(nextLayerNodes, edge);
+                            }
+
+                            if (_searchData.CurrentBackwardNodes.Contains(edge.SourceId))
+                            {
+                                VisitBackwardEdge(nextLayerNodes, edge.Reversed());
+                            }
                         }
                     }
                 }
 
                 _searchData.UpdateCurrentBackwardNodes(nextLayerNodes);
             }
+            _searchData.ClearCurrentBackwardNodes();
         }
 
         private void ExpandForward()
         {
-            while (!ReachedToTarget)
+            while (!ReachedToTarget && _searchData.CurrentForwardNodes.Count > 0 && _backwardDepth + _forwardDepth < MaxDistance)
             {
-                _forwardLayer++;
-
-                if (_searchData.CurrentForwardNodes.Count == 0 ||
-                    _forwardLayer + _backwardLayer > MaxDistance)
-                {
-                    return;
-                }
-
+                _forwardDepth++;
                 var nextLayerNodes = new HashSet<Guid>();
 
-                foreach (var edges in Metadata.GetOutputEdges(_searchData.CurrentForwardNodes))
-                {
-                    foreach (var edge in edges)
-                    {
-                        VisitForwardEdge(nextLayerNodes, edge);
-                    }
-                }
+                var listOfEdges = Directed
+                    ? Metadata.GetOutputEdges(_searchData.CurrentBackwardNodes)
+                    : Metadata.GetAllEdges(_searchData.CurrentBackwardNodes);
 
-                if (!Directed)
+                if (Directed)
                 {
-                    foreach (var edges in Metadata.GetInputEdges(_searchData.CurrentForwardNodes))
+                    foreach (var edges in listOfEdges)
                     {
                         foreach (var edge in edges)
                         {
@@ -147,87 +141,93 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                         }
                     }
                 }
+                else
+                {
+                    foreach (var edges in listOfEdges)
+                    {
+                        foreach (var edge in edges)
+                        {
+                            if (_searchData.CurrentBackwardNodes.Contains(edge.TargetId))
+                            {
+                                VisitForwardEdge(nextLayerNodes, edge.Reversed());
+                            }
 
-                _searchData.UpdateCurrentForwardNodes(nextLayerNodes);
+                            if (_searchData.CurrentBackwardNodes.Contains(edge.SourceId))
+                            {
+                                VisitForwardEdge(nextLayerNodes, edge);
+                            }
+                        }
+                    }
+                }
+                _searchData.UpdateCurrentBackwardNodes(nextLayerNodes);
             }
+            _searchData.ClearCurrentBackwardNodes();
         }
 
-        private void VisitBackwardEdge(int backwardLayer, HashSet<Guid> nextLayerNodes, Edge edge)
+        private void VisitBackwardEdge(ISet<Guid> nextLayerNodes, Edge edge)
         {
+            NodeData sourceNode,targetNode;
             lock (_searchData)
             {
-                if (_searchData.GetNode(edge.SourceId) == null)
+                sourceNode = _searchData.GetNode(edge.SourceId);
+                targetNode= _searchData.GetNode(edge.TargetId);
+                if (sourceNode == null)
                 {
-                    VisitBackwardNode(backwardLayer, nextLayerNodes, edge.SourceId);
+                    _searchData.AddToNodeSet(new NodeData(edge.SourceId, _backwardDepth, Seen.Backward));
+                    nextLayerNodes.Add(edge.SourceId);
+                    sourceNode = _searchData.GetNode(edge.SourceId);
                 }
             }
 
-            if (_searchData.GetNode(edge.SourceId).Distance == backwardLayer &&
-                _searchData.GetNode(edge.TargetId).Seen == Seen.Backward)
+            if (Math.Abs(sourceNode.Distance - _backwardDepth) < 0.01 &&
+                targetNode.Seen == Seen.Backward)
             {
-                _searchData.GetNode(edge.SourceId).AddForwardAdjacent(edge);
+                sourceNode.AddForwardAdjacent(edge);
             }
 
-            if (_searchData.GetNode(edge.SourceId).Seen == Seen.Forward &&
-                (PathDistance == _searchData.GetNode(edge.SourceId).Distance +
-                 _searchData.GetNode(edge.TargetId).Distance + 1 || PathDistance == 0))
+            if (sourceNode.Seen == Seen.Forward &&
+                (Math.Abs(PathDistance - (sourceNode.Distance + targetNode.Distance + 1)) < 0.01 || PathDistance == 0))
             {
                 _searchData.Joints.Add(edge.SourceId);
-                _searchData.GetNode(edge.SourceId).AddForwardAdjacent(edge);
+                sourceNode.AddForwardAdjacent(edge);
                 ReachedToTarget = true;
-                PathDistance = (int) _searchData.GetNode(edge.SourceId).Distance +
-                               (int) _searchData.GetNode(edge.TargetId).Distance + 1;
+                PathDistance = (int) sourceNode.Distance +
+                               (int) targetNode.Distance + 1;
+                MaxDistance = PathDistance;
             }
         }
 
-        private void VisitBackwardNode(int backwardLayer, HashSet<Guid> nextLayerNodes, Guid sourceId)
+        private void VisitForwardEdge(ISet<Guid> nextLayerNodes, Edge edge)
         {
-            if (nextLayerNodes == null)
-            {
-                throw new ArgumentNullException(nameof(nextLayerNodes));
-            }
-
-            _searchData.AddToNodeSet(new NodeData(sourceId, backwardLayer, Seen.Backward));
-            nextLayerNodes.Add(sourceId);
-        }
-
-        private void VisitForwardEdge(HashSet<Guid> nextLayerNodes, Edge edge)
-        {
+            NodeData sourceNode, targetNode;
             lock (_searchData)
             {
-                if (_searchData.GetNode(edge.TargetId) == null)
+                sourceNode = _searchData.GetNode(edge.SourceId);
+                targetNode = _searchData.GetNode(edge.TargetId);
+                if (targetNode == null)
                 {
-                    VisitForwardNode(_forwardLayer, nextLayerNodes, edge.TargetId);
+                    _searchData.AddToNodeSet(new NodeData(edge.TargetId, _forwardDepth, Seen.Forward));
+                    nextLayerNodes.Add(edge.TargetId);
+                    targetNode = _searchData.GetNode(edge.TargetId);
                 }
             }
 
-            if (_searchData.GetNode(edge.TargetId).Distance == _forwardLayer &&
-                _searchData.GetNode(edge.TargetId).Seen == Seen.Forward)
+            if (Math.Abs(targetNode.Distance - _forwardDepth) < 0.01 &&
+                sourceNode.Seen == Seen.Forward)
             {
-                _searchData.GetNode(edge.TargetId).AddBackwardAdjacent(edge);
+                targetNode.AddBackwardAdjacent(edge);
             }
 
-            if (_searchData.GetNode(edge.TargetId).Seen == Seen.Backward &&
-                (PathDistance == _searchData.GetNode(edge.SourceId).Distance +
-                 _searchData.GetNode(edge.TargetId).Distance + 1 || PathDistance == 0))
+            if (targetNode.Seen == Seen.Backward &&
+                (Math.Abs(PathDistance - (sourceNode.Distance + targetNode.Distance + 1)) < 0.01 || PathDistance == 0))
             {
                 _searchData.Joints.Add(edge.TargetId);
-                _searchData.GetNode(edge.TargetId).AddBackwardAdjacent(edge);
+                targetNode.AddBackwardAdjacent(edge);
                 ReachedToTarget = true;
-                PathDistance = (int) _searchData.GetNode(edge.SourceId).Distance +
-                               (int) _searchData.GetNode(edge.TargetId).Distance + 1;
+                PathDistance = (int) sourceNode.Distance +
+                               (int) targetNode.Distance + 1;
+                MaxDistance = PathDistance;
             }
-        }
-
-        private void VisitForwardNode(int layer, HashSet<Guid> nextLayerNodes, Guid targetId)
-        {
-            if (nextLayerNodes == null)
-            {
-                throw new ArgumentNullException(nameof(nextLayerNodes));
-            }
-
-            _searchData.AddToNodeSet(new NodeData(targetId, layer, Seen.Forward));
-            nextLayerNodes.Add(targetId);
         }
 
         public override ISearchData GetSearchData()

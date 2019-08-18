@@ -10,7 +10,7 @@ namespace BigDataPathFinding
 {
     internal static class Program
     {
-        private const Source Source = BigDataPathFinding.Source.Elastic;
+        private const Source Source = BigDataPathFinding.Source.File;
         private const string TestFilesPath = @"../../../TestFiles/";
         private static readonly Stopwatch StopWatch = new Stopwatch();
         private static IDatabase _database;
@@ -27,7 +27,7 @@ namespace BigDataPathFinding
                     _metadata = new ElasticMetadata("hard1_connections");
                     break;
                 case Source.File:
-                    _database = new FileGraph(TestFilesPath + "Hard1.txt");
+                    _database = new FileGraph(TestFilesPath + "NewTest1.test");
                     _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }
@@ -70,7 +70,7 @@ namespace BigDataPathFinding
                 StopWatch.Start();
 
                 AbstractPathFinder pathFinder =
-                    new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
+                    new MultiThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
                 if (Source == Source.Elastic)
                 {
                     ((ElasticMetadata) _metadata).NumberOfRequests = 0;
