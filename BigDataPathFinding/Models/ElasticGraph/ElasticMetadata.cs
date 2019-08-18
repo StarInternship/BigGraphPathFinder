@@ -12,7 +12,7 @@ namespace BigDataPathFinding.Models.ElasticGraph
     {
         private static readonly Uri Uri = new Uri($"http://localhost:9200");
         private const int Size = 10000;
-        private const string Scroll = "5s";
+        private const string Scroll = "500s";
         private readonly ElasticClient _client;
         private readonly Stopwatch _sw = new Stopwatch();
 
@@ -93,6 +93,11 @@ namespace BigDataPathFinding.Models.ElasticGraph
             _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
         }
 
+        public IEnumerable<IEnumerable<Adjacent>> GetAllAdjacent(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IEnumerable<Edge>> GetOutputEdges(IEnumerable<Guid> ids)
         {
 #if DEBUG
@@ -147,6 +152,50 @@ namespace BigDataPathFinding.Models.ElasticGraph
                     .Bool(b => b
                         .Should(sh => sh
                             .Terms(t => t.Field(edge => edge.TargetId).Terms(ids))
+                        )
+                    )
+                )
+                .Size(Size)
+                .Scroll(Scroll)
+            ).Validate();
+
+            var remaining = search.Total - search.Hits.Count;
+#if DEBUG
+            Console.WriteLine("result count: " + search.Total);
+            Console.WriteLine("search time: " + _sw.ElapsedMilliseconds + " ms.");
+#endif
+            yield return search.Documents;
+
+            while (remaining > 0)
+            {
+                _sw.Restart();
+                search = _client.Scroll<Edge>(Scroll, search.ScrollId).Validate();
+                remaining -= search.Hits.Count;
+#if DEBUG
+                Console.WriteLine("scroll time: " + _sw.ElapsedMilliseconds + " ms.");
+#endif
+                yield return search.Documents;
+            }
+#if DEBUG
+            Console.WriteLine();
+#endif
+
+            _client.ClearScroll(c => c.ScrollId(search.ScrollId)).Validate();
+        }
+
+        public IEnumerable<IEnumerable<Edge>> GetAllEdges(IEnumerable<Guid> ids)
+        {
+#if DEBUG
+            Console.WriteLine("input-output source count: " + ids.Count());
+#endif
+            NumberOfRequests++;
+            _sw.Restart();
+            var search = _client.Search<Edge>(s => s
+                .Query(q => q
+                    .Bool(b => b
+                        .Should(
+                            sh => sh.Terms(t => t.Field(edge => edge.TargetId).Terms(ids)),
+                            sh => sh.Terms(t => t.Field(edge => edge.SourceId).Terms(ids))
                         )
                     )
                 )

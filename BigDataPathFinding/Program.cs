@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using BigDataPathFinding.Models;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
@@ -11,7 +10,7 @@ namespace BigDataPathFinding
 {
     internal static class Program
     {
-        private const Source Source = BigDataPathFinding.Source.Elastic;
+        private const Source Source = BigDataPathFinding.Source.File;
         private const string TestFilesPath = @"../../../TestFiles/";
         private static readonly Stopwatch StopWatch = new Stopwatch();
         private static IDatabase _database;
@@ -24,11 +23,11 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    _database = new ElasticDatabase("permutation10_node_set");
-                    _metadata = new ElasticMetadata("permutation10_connections");
+                    _database = new ElasticDatabase("newtest1_node_set");
+                    _metadata = new ElasticMetadata("newtest1_connections");
                     break;
                 case Source.File:
-                    _database = new FileGraph(TestFilesPath + "hosein2.txt");
+                    _database = new FileGraph(TestFilesPath + "NewTest1.txt");
                     _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }
@@ -67,64 +66,36 @@ namespace BigDataPathFinding
                 Console.Write("max distance: ");
                 var maxDistance = int.Parse(Console.ReadLine());
 
-                long totalTime = 0;
-                long sumOfSquares = 0;
-                int pathDistance = 0;
-                int edgesCount = 0;
-                const double searchCount = 10;
-                for (int i = 0; i < searchCount; i++)
-                {
-                    Console.Write(".");
-                    StopWatch.Restart();
-                    var pathFinder =
-                        new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
-                    (long t, int c, int d) = FindPath(pathFinder);
-                    pathDistance = d;
-                    edgesCount = c;
-                    totalTime += t;
-                    sumOfSquares += t * t;
+                StopWatch.Reset();
+                StopWatch.Start();
 
-                    Thread.Sleep(5000);
-                }
+                AbstractPathFinder pathFinder=new SingleThreadPathFinder(_metadata,sourceId,targetId,directed,maxDistance,0);
+                if (Source == Source.Elastic)
+                    ((ElasticMetadata)_metadata).NumberOfRequests = 0;
 
-                var average = totalTime / searchCount;
-                Console.WriteLine();
-                Console.WriteLine("edges count : " + edgesCount);
-                Console.WriteLine("path distance : " + pathDistance);
-                Console.WriteLine("Average time: " + average + " ms.");
-                Console.WriteLine("Standard deviation of time: " +
-                                  Math.Sqrt(((sumOfSquares / searchCount) - average * average)));
+                pathFinder.FindPath();
+
+                StopWatch.Stop();
+                Console.WriteLine("Finding Path Finished In " + StopWatch.ElapsedMilliseconds + "ms.");
+                StopWatch.Reset();
+                StopWatch.Start();
+
+                var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
+                var edges = resultBuilder.Build().Edges;
+
+                StopWatch.Stop();
+                Console.WriteLine("Generating Graph Finished In " + StopWatch.ElapsedMilliseconds + "ms.");
+
+                Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
+
+                if (Source == Source.Elastic)
+                    Console.WriteLine("number of requests: " + ((ElasticMetadata)_metadata).NumberOfRequests);
+                Console.WriteLine("number of edges: " + edges.Count);
+                foreach (var edge in edges)
+                    Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," + _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
+
                 Console.WriteLine();
             }
-        }
-
-        private static (long, int, int) FindPath(AbstractPathFinder pathFinder)
-        {
-            if (Source == Source.Elastic)
-                ((ElasticMetadata) _metadata).NumberOfRequests = 0;
-
-            pathFinder.FindPath();
-            StopWatch.Stop();
-            long time = StopWatch.ElapsedMilliseconds;
-#if DEBUG
-            Console.WriteLine("Finding Path Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-#endif
-            StopWatch.Reset();
-            StopWatch.Start();
-            var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
-            var edges = resultBuilder.Build().Edges;
-            StopWatch.Stop();
-#if DEBUG
-            Console.WriteLine("Generating Graph Finished In " + stopWatch.ElapsedMilliseconds + "ms.");
-            Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
-
-            if (Source == Source.Elastic)
-                Console.WriteLine("number of requests: " + ((ElasticMetadata)metadata).NumberOfRequests);
-            Console.WriteLine("number of edges: " + edges.Count);
-            foreach (var edge in edges)
-                Console.WriteLine(database.GetNode(edge.SourceId).Data.MakeString() + "," + database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
-#endif
-            return (time, edges.Count, pathFinder.GetSearchData().GetPathDistance());
         }
     }
 

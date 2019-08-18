@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
-    public class SearchData : ISearchData
+    internal class SearchData : ISearchData
     {
         private Dictionary<Guid, NodeData> NodeSet { get; } = new Dictionary<Guid, NodeData>();
         public HashSet<Guid> CurrentBackwardNodes { get; private set; } = new HashSet<Guid>();
@@ -31,7 +32,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         public HashSet<Guid> GetJoints() => Joints;
 
-        public int GetPathDistance() => PathDistance;
+        public double GetPathDistance() => PathDistance;
 
         public void AddJoint(Guid id) => Joints.Add(id);
     }

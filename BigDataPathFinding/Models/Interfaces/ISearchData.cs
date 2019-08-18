@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.Interfaces
 {
     public interface ISearchData
     {
@@ -11,6 +11,6 @@ namespace BigDataPathFinding.Models
 
         void AddJoint(Guid id);
 
-        int GetPathDistance();
+        double GetPathDistance();
     }
 }
