@@ -10,7 +10,7 @@ namespace BigDataPathFinding
 {
     internal static class Program
     {
-        private const Source Source = BigDataPathFinding.Source.Elastic;
+        private const Source Source = BigDataPathFinding.Source.File;
         private const string TestFilesPath = @"../../../TestFiles/";
         private static readonly Stopwatch StopWatch = new Stopwatch();
         private static IDatabase _database;
@@ -90,11 +90,11 @@ namespace BigDataPathFinding
                 }
 
                 Console.WriteLine("number of edges: " + edges.Count);
-                foreach (var edge in edges)
+                /*foreach (var edge in edges)
                 {
                     Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
                                       _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
-                }
+                }*/
 
                 Console.WriteLine();
             }

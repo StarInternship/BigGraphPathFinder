@@ -26,7 +26,7 @@ namespace BigDataPathFinding.Models
 
         public void AddNode(NodeInfo nodeInfo)
         {
-            Nodes[nodeInfo.Id] = nodeInfo;
+            Nodes.Add(nodeInfo.Id, nodeInfo);
         }
 
         private void AddEdge(NodeInfo source, NodeInfo target, double weight)

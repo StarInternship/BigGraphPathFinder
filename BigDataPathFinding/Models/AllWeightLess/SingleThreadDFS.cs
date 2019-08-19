@@ -11,13 +11,12 @@ namespace BigDataPathFinding.Models.AllWeightLess
         private readonly MyNode _origin;
         private readonly LinkedList<MyNode> _path = new LinkedList<MyNode>();
         private readonly HashSet<MyNode> _usedVertices = new HashSet<MyNode>();
-        private readonly MyGraph inputGraph;
-        private readonly Graph resultGraph = new Graph();
+        private readonly Graph _resultGraph = new Graph();
 
         public SingleThreadDFS(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance,
             int minDistance) : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
         {
-            inputGraph = MyGraph.ReadGraph(sourceId, targetId, maxDistance, metadata, directed);
+            var inputGraph = MyGraph.ReadGraph(sourceId, targetId, maxDistance, metadata, directed);
             _destination = inputGraph.GetNode(targetId);
             _origin = inputGraph.GetNode(sourceId);
         }
@@ -25,7 +24,7 @@ namespace BigDataPathFinding.Models.AllWeightLess
         public override Graph FindPath(IDatabase database)
         {
             GoThrough(_origin, MaxDistance, database);
-            return resultGraph;
+            return _resultGraph;
         }
 
         private void GoThrough(MyNode next, int availableDepth, IDatabase database)
@@ -54,6 +53,19 @@ namespace BigDataPathFinding.Models.AllWeightLess
 
         private void AddResult(IDatabase database)
         {
+            var list = _path.ToList();
+            for (int i = 0; i < list.Count - 1; i++)
+            {
+                if (!_resultGraph.ContainsNode(list[i].Id))
+                {
+                    _resultGraph.AddNode(database.GetNode(list[i].Id));
+                }
+                if (!_resultGraph.ContainsNode(list[i+1].Id))
+                {
+                    _resultGraph.AddNode(database.GetNode(list[i+1].Id));
+                }
+                _resultGraph.AddEdge(list[i].Id, list[i+1].Id, 1);
+            }
             /*foreach (var node in _path)
             {
                 Console.Write(database.GetNode(node.Id).Data.MakeString() + " - ");
