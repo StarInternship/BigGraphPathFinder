@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.AllWeightLess
 {
-    class SingleThreadDFS : AbstractPathFinder
+    internal class SingleThreadDFS : AbstractPathFinder
     {
         private readonly MyNode _destination;
         private readonly MyNode _origin;
@@ -26,7 +24,7 @@ namespace BigDataPathFinding.Models.AllWeightLess
 
         public override Graph FindPath(IDatabase database)
         {
-            GoThrough(_origin, MaxDistance,database);
+            GoThrough(_origin, MaxDistance, database);
             return resultGraph;
         }
 
@@ -42,8 +40,12 @@ namespace BigDataPathFinding.Models.AllWeightLess
             {
                 availableDepth--;
                 foreach (var vertex in _path.Last().Outputs.Keys)
+                {
                     if (!_usedVertices.Contains(vertex))
-                        GoThrough(vertex, availableDepth,database);
+                    {
+                        GoThrough(vertex, availableDepth, database);
+                    }
+                }
             }
 
             _path.RemoveLast();

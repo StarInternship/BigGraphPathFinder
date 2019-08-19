@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BigDataPathFinding.Models.Elastic;
 using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.AllWeightLess
@@ -15,9 +11,15 @@ namespace BigDataPathFinding.Models.AllWeightLess
         public void AddEdge(Guid firstId, Guid secondId, double weight)
         {
             if (!_nodes.ContainsKey(firstId))
+            {
                 _nodes.Add(firstId, new MyNode(firstId));
+            }
+
             if (!_nodes.ContainsKey(secondId))
+            {
                 _nodes.Add(secondId, new MyNode(secondId));
+            }
+
             var firstNode = _nodes[firstId];
             var secondNode = _nodes[secondId];
             firstNode.AddOutput(secondNode, weight);
@@ -44,7 +46,9 @@ namespace BigDataPathFinding.Models.AllWeightLess
                         {
                             graph.AddEdge(edge.SourceId, edge.TargetId, edge.Weight);
                             if (!currentLevelNodes.Contains(edge.TargetId))
+                            {
                                 nextLevelNodes.Add(edge.TargetId);
+                            }
                         }
                     }
                 }
@@ -86,7 +90,9 @@ namespace BigDataPathFinding.Models.AllWeightLess
                         {
                             graph.AddEdge(edge.SourceId, edge.TargetId, edge.Weight);
                             if (!currentLevelNodes.Contains(edge.SourceId))
+                            {
                                 nextLevelNodes.Add(edge.SourceId);
+                            }
                         }
                     }
                 }

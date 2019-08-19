@@ -45,7 +45,10 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
 
             if (_reachedToTarget)
+            {
                 _searchData.PathDistance = _forwardDepth + _backwardDepth;
+            }
+
             return new ResultBuilder(database, _searchData).Build();
         }
 
@@ -196,6 +199,5 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             _reachedToTarget = true;
             MaxDistance = _forwardDepth + _backwardDepth;
         }
-
     }
 }

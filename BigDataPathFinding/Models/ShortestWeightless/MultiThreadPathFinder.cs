@@ -10,9 +10,9 @@ namespace BigDataPathFinding.Models.ShortestWeightless
     public class MultiThreadPathFinder : AbstractPathFinder
     {
         private readonly object _distanceLock = new object();
-        private readonly object _targetLock = new object();
 
         private readonly SearchData _searchData = new SearchData();
+        private readonly object _targetLock = new object();
         private int _backwardDepth;
         private int _forwardDepth;
         private bool _reachedToTarget;
@@ -80,7 +80,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
         private void ExpandBackward()
         {
-            while (!ReachedToTarget && _searchData.CurrentBackwardNodes.Count > 0 && _backwardDepth + _forwardDepth < MaxDistance)
+            while (!ReachedToTarget && _searchData.CurrentBackwardNodes.Count > 0 &&
+                   _backwardDepth + _forwardDepth < MaxDistance)
             {
                 _backwardDepth++;
                 var nextLayerNodes = new HashSet<Guid>();
@@ -120,12 +121,14 @@ namespace BigDataPathFinding.Models.ShortestWeightless
 
                 _searchData.UpdateCurrentBackwardNodes(nextLayerNodes);
             }
+
             _searchData.ClearCurrentBackwardNodes();
         }
 
         private void ExpandForward()
         {
-            while (!ReachedToTarget && _searchData.CurrentForwardNodes.Count > 0 && _backwardDepth + _forwardDepth < MaxDistance)
+            while (!ReachedToTarget && _searchData.CurrentForwardNodes.Count > 0 &&
+                   _backwardDepth + _forwardDepth < MaxDistance)
             {
                 _forwardDepth++;
                 var nextLayerNodes = new HashSet<Guid>();
@@ -162,18 +165,20 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                         }
                     }
                 }
+
                 _searchData.UpdateCurrentBackwardNodes(nextLayerNodes);
             }
+
             _searchData.ClearCurrentBackwardNodes();
         }
 
         private void VisitBackwardEdge(ISet<Guid> nextLayerNodes, Edge edge)
         {
-            NodeData sourceNode,targetNode;
+            NodeData sourceNode, targetNode;
             lock (_searchData)
             {
                 sourceNode = _searchData.GetNode(edge.SourceId);
-                targetNode= _searchData.GetNode(edge.TargetId);
+                targetNode = _searchData.GetNode(edge.TargetId);
                 if (sourceNode == null)
                 {
                     _searchData.AddToNodeSet(new NodeData(edge.SourceId, _backwardDepth, Seen.Backward));
