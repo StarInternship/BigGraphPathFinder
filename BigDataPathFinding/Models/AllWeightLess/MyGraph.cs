@@ -8,7 +8,7 @@ using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.AllWeightLess
 {
-    class MyGraph
+    public class MyGraph
     {
         private readonly Dictionary<Guid, MyNode> _nodes = new Dictionary<Guid, MyNode>();
 
@@ -24,14 +24,14 @@ namespace BigDataPathFinding.Models.AllWeightLess
             secondNode.AddInput(firstNode, weight);
         }
 
-        public MyNode GetVertex(Guid id)
+        public MyNode GetNode(Guid id)
         {
             return _nodes[id];
         }
 
-        public static Graph ReadGraph(Guid firstId, Guid secondId, int depth, IMetadata metadata, bool isDirected)
+        public static MyGraph ReadGraph(Guid firstId, Guid secondId, int depth, IMetadata metadata, bool isDirected)
         {
-            var graph = new Graph();
+            var graph = new MyGraph();
             var currentLevelNodes = new HashSet<Guid> {firstId};
             for (var i = 1; i <= depth / 2; i++)
             {

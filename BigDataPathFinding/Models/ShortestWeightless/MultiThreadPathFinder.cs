@@ -59,7 +59,7 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             }
         }
 
-        public override void FindPath()
+        public override Graph FindPath(IDatabase database)
         {
             _searchData.AddToNodeSet(new NodeData(SourceId, _forwardDepth, Seen.Forward));
             _searchData.AddToCurrentForwardNodes(SourceId);
@@ -74,6 +74,8 @@ namespace BigDataPathFinding.Models.ShortestWeightless
             backwardTask.Start();
 
             Task.WaitAll(forwardTask, backwardTask);
+
+            return new ResultBuilder(database, _searchData).Build();
         }
 
         private void ExpandBackward()
@@ -229,11 +231,6 @@ namespace BigDataPathFinding.Models.ShortestWeightless
                                (int) targetNode.Distance + 1;
                 MaxDistance = PathDistance;
             }
-        }
-
-        public override ISearchData GetSearchData()
-        {
-            return _searchData;
         }
     }
 }

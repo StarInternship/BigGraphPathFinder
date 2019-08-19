@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using BigDataPathFinding.Models;
+using BigDataPathFinding.Models.AllWeightLess;
 using BigDataPathFinding.Models.ElasticGraph;
 using BigDataPathFinding.Models.FileGraph;
 using BigDataPathFinding.Models.Interfaces;
@@ -10,7 +11,7 @@ namespace BigDataPathFinding
 {
     internal static class Program
     {
-        private const Source Source = BigDataPathFinding.Source.File;
+        private const Source Source = BigDataPathFinding.Source.Elastic;
         private const string TestFilesPath = @"../../../TestFiles/";
         private static readonly Stopwatch StopWatch = new Stopwatch();
         private static IDatabase _database;
@@ -23,11 +24,11 @@ namespace BigDataPathFinding
             switch (Source)
             {
                 case Source.Elastic:
-                    _database = new ElasticDatabase("hard1_node_set");
-                    _metadata = new ElasticMetadata("hard1_connections");
+                    _database = new ElasticDatabase("hosein2_node_set");
+                    _metadata = new ElasticMetadata("hosein2_connections");
                     break;
                 case Source.File:
-                    _database = new FileGraph(TestFilesPath + "NewTest1.test");
+                    _database = new FileGraph(TestFilesPath + "hosein2.txt");
                     _metadata = new FileMetadata((FileGraph) _database);
                     break;
             }
@@ -70,26 +71,19 @@ namespace BigDataPathFinding
                 StopWatch.Start();
 
                 AbstractPathFinder pathFinder =
-                    new MultiThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
+                    new SingleThreadDFS(_metadata, sourceId, targetId, directed, maxDistance, 0);
                 if (Source == Source.Elastic)
                 {
                     ((ElasticMetadata) _metadata).NumberOfRequests = 0;
                 }
 
-                pathFinder.FindPath();
+
+                var resultGraph = pathFinder.FindPath(_database);
+                var edges = resultGraph.Edges;
 
                 StopWatch.Stop();
-                Console.WriteLine("Finding Path Finished In " + StopWatch.ElapsedMilliseconds + "ms.");
-                StopWatch.Reset();
-                StopWatch.Start();
+                Console.WriteLine("Finding Result Graph Finished In " + StopWatch.ElapsedMilliseconds + "ms.");
 
-                var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
-                var edges = resultBuilder.Build().Edges;
-
-                StopWatch.Stop();
-                Console.WriteLine("Generating Graph Finished In " + StopWatch.ElapsedMilliseconds + "ms.");
-
-                Console.WriteLine("path distance: " + pathFinder.GetSearchData().GetPathDistance());
 
                 if (Source == Source.Elastic)
                 {
@@ -97,11 +91,11 @@ namespace BigDataPathFinding
                 }
 
                 Console.WriteLine("number of edges: " + edges.Count);
-                /*foreach (var edge in edges)
+                foreach (var edge in edges)
                 {
                     Console.WriteLine(_database.GetNode(edge.SourceId).Data.MakeString() + "," +
                                       _database.GetNode(edge.TargetId).Data.MakeString() + "," + edge.Weight);
-                }*/
+                }
 
                 Console.WriteLine();
             }

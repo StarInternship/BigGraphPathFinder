@@ -32,12 +32,10 @@ namespace BigDataPathFindingTests
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
 
-            pathFinder.FindPath();
 
-            var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
-            var edges = resultBuilder.Build().Edges;
+            var resultGraph = pathFinder.FindPath(_database);
+            var edges = resultGraph.Edges;
 
-            Assert.IsTrue(Math.Abs(pathFinder.GetSearchData().GetPathDistance() - 2) < 0.01);
             Assert.IsTrue(edges.Count == 4);
             var results = new HashSet<string>();
             foreach (var edge in edges)
@@ -66,12 +64,9 @@ namespace BigDataPathFindingTests
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
 
-            pathFinder.FindPath();
+            var resultBuilder = pathFinder.FindPath(_database);
+            var edges = resultBuilder.Edges;
 
-            var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
-            var edges = resultBuilder.Build().Edges;
-
-            Assert.IsTrue(Math.Abs(pathFinder.GetSearchData().GetPathDistance() - 5) < 0.01);
             Assert.IsTrue(edges.Count == 5);
             var results = new HashSet<string>();
             foreach (var edge in edges)
@@ -101,12 +96,9 @@ namespace BigDataPathFindingTests
 
             var pathFinder = new SingleThreadPathFinder(_metadata, sourceId, targetId, directed, maxDistance, 0);
 
-            pathFinder.FindPath();
+            var resultBuilder = pathFinder.FindPath(_database);
+            var edges = resultBuilder.Edges;
 
-            var resultBuilder = new ResultBuilder(_database, pathFinder.GetSearchData());
-            var edges = resultBuilder.Build().Edges;
-
-            Assert.IsTrue(Math.Abs(pathFinder.GetSearchData().GetPathDistance() - 0) < 0.01);
             Assert.IsTrue(edges.Count == 0);
         }
     }

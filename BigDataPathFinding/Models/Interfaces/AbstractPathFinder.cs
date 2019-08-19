@@ -1,7 +1,6 @@
 ﻿using System;
-using BigDataPathFinding.Models.Interfaces;
 
-namespace BigDataPathFinding.Models
+namespace BigDataPathFinding.Models.Interfaces
 {
     public abstract class AbstractPathFinder
     {
@@ -23,8 +22,6 @@ namespace BigDataPathFinding.Models
             MinDistance = minDistance;
         }
 
-        public abstract void FindPath();
-
-        public abstract ISearchData GetSearchData();
+        public abstract Graph FindPath(IDatabase _database);
     }
 }

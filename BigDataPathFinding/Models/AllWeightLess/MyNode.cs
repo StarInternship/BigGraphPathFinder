@@ -9,7 +9,7 @@ using Nest;
 namespace BigDataPathFinding.Models.AllWeightLess
 {
     [DebuggerDisplay("{" + nameof(Id) + "}")]
-    internal class MyNode
+    public class MyNode
     {
         internal MyNode(Guid id)
         {
