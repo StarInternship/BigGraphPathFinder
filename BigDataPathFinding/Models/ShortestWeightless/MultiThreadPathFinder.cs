@@ -6,6 +6,7 @@ using BigDataPathFinding.Models.Interfaces;
 
 namespace BigDataPathFinding.Models.ShortestWeightless
 {
+    //has bugs
     public class MultiThreadPathFinder : AbstractPathFinder
     {
         private readonly object _distanceLock = new object();
