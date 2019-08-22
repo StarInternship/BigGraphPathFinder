@@ -53,19 +53,23 @@ namespace BigDataPathFinding.Models.AllWeightLess
 
         private void AddResult(IDatabase database)
         {
-            var list = _path.ToList();
-            for (int i = 0; i < list.Count - 1; i++)
+            var currentNode = _path.First;
+            var nextNode = currentNode.Next;
+            while (nextNode!=null)
             {
-                if (!_resultGraph.ContainsNode(list[i].Id))
+                if (!_resultGraph.ContainsNode(currentNode.Value.Id))
                 {
-                    _resultGraph.AddNode(database.GetNode(list[i].Id));
+                    _resultGraph.AddNode(database.GetNode(currentNode.Value.Id));
                 }
-                if (!_resultGraph.ContainsNode(list[i+1].Id))
+                if (!_resultGraph.ContainsNode(nextNode.Value.Id))
                 {
-                    _resultGraph.AddNode(database.GetNode(list[i+1].Id));
+                    _resultGraph.AddNode(database.GetNode(nextNode.Value.Id));
                 }
-                _resultGraph.AddEdge(list[i].Id, list[i+1].Id, 1);
+                _resultGraph.AddEdge(currentNode.Value.Id, nextNode.Value.Id, 1);
+                currentNode = nextNode;
+                nextNode = nextNode.Next;
             }
+
             /*foreach (var node in _path)
             {
                 Console.Write(database.GetNode(node.Id).Data.MakeString() + " - ");
