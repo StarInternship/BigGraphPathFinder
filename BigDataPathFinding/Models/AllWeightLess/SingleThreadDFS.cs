@@ -10,8 +10,8 @@ namespace BigDataPathFinding.Models.AllWeightLess
         private readonly MyNode _destination;
         private readonly MyNode _origin;
         private readonly LinkedList<MyNode> _path = new LinkedList<MyNode>();
-        private readonly HashSet<MyNode> _usedVertices = new HashSet<MyNode>();
         private readonly Graph _resultGraph = new Graph();
+        private readonly HashSet<MyNode> _usedVertices = new HashSet<MyNode>();
 
         public SingleThreadDFS(IMetadata metadata, Guid sourceId, Guid targetId, bool directed, int maxDistance,
             int minDistance) : base(metadata, sourceId, targetId, directed, maxDistance, minDistance)
@@ -55,16 +55,18 @@ namespace BigDataPathFinding.Models.AllWeightLess
         {
             var currentNode = _path.First;
             var nextNode = currentNode.Next;
-            while (nextNode!=null)
+            while (nextNode != null)
             {
                 if (!_resultGraph.ContainsNode(currentNode.Value.Id))
                 {
                     _resultGraph.AddNode(database.GetNode(currentNode.Value.Id));
                 }
+
                 if (!_resultGraph.ContainsNode(nextNode.Value.Id))
                 {
                     _resultGraph.AddNode(database.GetNode(nextNode.Value.Id));
                 }
+
                 _resultGraph.AddEdge(currentNode.Value.Id, nextNode.Value.Id, 1);
                 currentNode = nextNode;
                 nextNode = nextNode.Next;
